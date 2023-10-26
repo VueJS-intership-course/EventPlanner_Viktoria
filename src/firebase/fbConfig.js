@@ -1,7 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-import { setPersistence, inMemoryPersistence } from 'firebase/auth';
 
 
 const firebaseConfig = {

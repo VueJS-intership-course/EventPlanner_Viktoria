@@ -1,6 +1,4 @@
 import fb from "@/firebase/fbConfig.js";
-import { useUserStore } from "@/store/userStore.js";
-
 
 export const authService = {
   async register(user, password) {
@@ -29,8 +27,6 @@ export const authService = {
   async getUser(id) {
     try {
         const userDoc = await fb.fireStore.collection('users').doc(id).get();
-
-        const userData = userDoc.data();
         if (userDoc) {
             const userData = userDoc.data();
             console.log(userData)
@@ -49,12 +45,6 @@ export const authService = {
   async login(email, password) {
     try {
       const userCredential = await fb.auth.signInWithEmailAndPassword(email, password);
-
-      if (userCredential.user) {
-        console.log(userCredential.user.uid);
-        const user = await this.getUser(userCredential.user.uid);
-        useUserStore().setUser(user);
-      }
     } catch (error) {
       console.error("Error signing in:", error);
       throw error;

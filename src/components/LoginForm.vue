@@ -48,6 +48,7 @@ const password = ref("");
 const loginUser = async () => {
   try {
     await authService.login(email.value, password.value);
+    router.push("/");
   } catch (error) {
     console.error("Error signing in:", error);
   }
