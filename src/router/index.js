@@ -52,8 +52,9 @@ const routes = [
     component: Login,
     beforeEnter: () => {
       const store = useUserStore();
-      if (store.user) {
-        router.push({ name: "profile" });
+      console.log(store.isLogged);
+      if (store.isLogged) {
+        router.push({ name: "home" });
       }
     },
   },

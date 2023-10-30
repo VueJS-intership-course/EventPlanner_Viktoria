@@ -69,7 +69,6 @@ const handleMapClick = (lonLat, vectorSourceInstance) => {
 
   const [lon, lat] = lonLat;
   eventStore.setNewEventLocation(lon, lat);
-  console.log(`Latitude: ${lat}, Longitude: ${lon}`);
 };
 
 onMounted(() => {

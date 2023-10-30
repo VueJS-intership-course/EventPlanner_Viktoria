@@ -49,20 +49,19 @@
                 />
               </div>
               <div class="mb-3">
-                <!-- TODO:fix -->
-                <label for="timezone" class="form-label">Timezone</label>
+                <label for="timezone">Timezone:</label>
                 <input
-                  type="text"
                   class="form-control"
-                  id="timezone"
-                  v-model="searchQuery"
-                  placeholder="Search Timezones"
+                  v-model="timezone"
+                  @input="filterTimezones"
+                  @focus="isVisible = true"
+                  placeholder="Start typing..."
                 />
-                <select class="form-select" v-model="timezone">
-                  <option v-for="tz in filteredTimezones" :key="tz" :value="tz">
+                <ul v-show="isVisible" class="options-list">
+                  <li v-for="tz in filteredTimezones" @click="selectTimezone(tz)" :key="tz">
                     {{ tz }}
-                  </option>
-                </select>
+                  </li>
+                </ul>
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
@@ -77,17 +76,30 @@
 import { ref, computed } from "vue";
 import { authService } from "@/services/userAuthentication.js";
 import {timezones} from "@/utils/timezones.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const email = ref("");
 const password = ref("");
 const username = ref("");
 const repeatPassword = ref("");
-const timezone = ref("CET");
-const searchQuery = ref("");
+const timezone = ref("");
+const isVisible = ref(false);
+
+
 const filteredTimezones = computed(() => {
-  const query = searchQuery.value.toLowerCase();
-  return timezones.filter((tz) => tz.toLowerCase().includes(query));
+  return timezones.filter((tz) => tz.toLowerCase().includes(timezone.value.toLowerCase()));
 });
+
+const filterTimezones = () => {
+  isVisible.value = true;
+};
+
+const selectTimezone = (tz) => {
+  timezone.value = tz;
+  isVisible.value = false;
+};
 
 const registerUser = async () => {
   try {
@@ -103,10 +115,31 @@ const registerUser = async () => {
     };
 
     await authService.register(user, password.value);
-    console.log("registered");
+    router.push("/");
   } catch (error) {
     console.error(error.message);
   }
 };
 
 </script>
+
+<style scoped>
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px; 
+    overflow-y: auto;
+  }
+
+  .options-list li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .options-list li:hover {
+    background-color: #ccc;
+  }
+</style>

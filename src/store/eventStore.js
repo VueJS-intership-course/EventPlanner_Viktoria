@@ -6,6 +6,17 @@ export const useEventStore = defineStore({
   state: () => ({
     events: [],
     coords: [],
+    isEditing: false,
+    editedEvent: {
+      id: "",
+      name: "",
+      description: "",
+      date: "",
+      time: "",
+      location: "",
+      ticketCount: "",
+      price: "",
+    },
   }),
 
   actions: {
@@ -17,9 +28,9 @@ export const useEventStore = defineStore({
       }
     },
 
-    async getEventByID(id) {
+    async getEventById(id) {
       try {
-        const event = await eventService.getEventByID(id);
+        const event = await eventService.getEventById(id);
         return event;
       } catch (error) {
         console.error("Error fetching event:", error);

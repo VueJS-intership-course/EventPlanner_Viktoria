@@ -37,15 +37,14 @@ export const eventService = {
     }
   },
 
-  async getEventByID(id) {
+  async getEventById(id) {
     try {
       const querySnapshot = await fb.fireStore
         .collection("events")
         .where("id", "==", id)
         .get();
       if (querySnapshot.docs.length > 0) {
-        const eventData = querySnapshot.data();
-        console.log(eventData);
+        const eventData = querySnapshot.docs[0].data();
         return eventData;
       } else {
         console.log("Event document does not exist.");
@@ -59,7 +58,7 @@ export const eventService = {
 
   async addEvent(event) {
     try {
-        event.id = generateUniqueKey();
+      event.id = generateUniqueKey();
       await fb.fireStore.collection("events").add({
         id: event.id,
         name: event.name,

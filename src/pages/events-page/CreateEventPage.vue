@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 50%;" class="container mt-4">
+  <div style="width: 50%" class="container mt-4">
     <h2>Create Event</h2>
     <form @submit.prevent="createEvent">
       <div class="mb-3">
@@ -100,8 +100,6 @@ const createEvent = () => {
     location: eventStore.coords,
     price: price.value,
   };
-
-  console.log("Event:", event);
 
   eventStore.addEvent(event);
   router.push("/eventlist");

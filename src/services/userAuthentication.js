@@ -26,36 +26,32 @@ export const authService = {
 
   async getUser(id) {
     try {
-        const userDoc = await fb.fireStore.collection('users').doc(id).get();
-        if (userDoc) {
-            const userData = userDoc.data();
-            console.log(userData)
-            return userData;
-        } else {
-            console.log('User document does not exist.');
-            return null;
-        }
-
+      const userDoc = await fb.fireStore.collection("users").doc(id).get();
+      if (userDoc) {
+        const userData = userDoc.data();
+        return userData;
+      } else {
+        console.log("User document does not exist.");
+        return null;
+      }
     } catch (error) {
-        console.error('Error retrieving user data:', error);
-        throw error;
+      console.error("Error retrieving user data:", error);
+      throw error;
     }
-},
+  },
 
   async login(email, password) {
     try {
-      const userCredential = await fb.auth.signInWithEmailAndPassword(email, password);
+      await fb.auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
       console.error("Error signing in:", error);
       throw error;
     }
   },
 
-
   async logout() {
     await fb.auth.signOut();
   },
-
 
   async getAll() {
     try {
@@ -71,7 +67,6 @@ export const authService = {
 
         data.push(user);
       });
-      console.log(data);
       return data;
     } catch (error) {
       console.error("Error fetching user profiles:", error);

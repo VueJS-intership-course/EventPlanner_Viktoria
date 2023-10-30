@@ -18,15 +18,6 @@ export const useUserStore = defineStore("users", {
       this.user = null;
       await authService.logout();
     },
-
-    // async getAllUsers() {
-    //   try {
-    //     this.allUsers = await authService.getAll();
-    //   } catch (error) {
-    //     console.error("Error retrieving users:", error);
-    //     throw error;
-    //   }
-    // },
   },
 
   getters: {
@@ -34,5 +25,6 @@ export const useUserStore = defineStore("users", {
       if (this.user && this.user.isAdmin)
       return true;
     },
+
   },
 });
