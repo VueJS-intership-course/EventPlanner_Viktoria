@@ -1,45 +1,75 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/pages/home-page/HomePage.vue";
-import EventsPage from "@/pages/events-page/EventsPage.vue";
 import Profile from "@/pages/user-profile/Profile.vue";
 import Login from "@/components/LoginForm.vue";
 import Register from "@/components/RegisterForm.vue";
+import EventList from "@/pages/events-page/EventList.vue";
+import CreateEventPage from "@/pages/events-page/CreateEventPage.vue";
+import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
+import { useUserStore } from "@/store/userStore.js";
+import { authStateChangedPromise } from "@/main.js";
 
-export const routes = [
+const routes = [
   {
     path: "/",
-    name: "entry",
+    name: "home",
     component: HomePage,
   },
   {
     path: "/events",
-    name: "events",
-    component: EventsPage,
+    name: "eventList",
+    component: EventList,
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login,
-
+    path: "/event/:id",
+    name: "event-details",
+    component: EventDetailsPage,
   },
   {
-    path: "/register",
-    name: "register",
-    component: Register,
-
+    path: "/create-event",
+    name: "create-event",
+    component: CreateEventPage,
+    beforeEnter: () => {
+      const store = useUserStore();
+      console.log(store.isAdmin);
+      if (!store.isAdmin) {
+        router.push({ name: "home" });
+      }
+    },
   },
   {
     path: "/profile",
     name: "profile",
     component: Profile,
   },
-  
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  linkActiveClass: "active",
 });
+
+router.beforeEach(async (to, from, next) => {
+  const store = useUserStore();
+  await authStateChangedPromise();
+  if (to.name !== "login" && to.name !== "register" && !store.isLogged) {
+    next({ name: "login" });
+  } else if (to.name === "login" && store.isLogged) {
+    next({ name: "home" });
+  } else {
+    next();
+  }
+});
+
 
 export default router;

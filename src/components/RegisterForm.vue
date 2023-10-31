@@ -8,26 +8,49 @@
             <form @submit.prevent="registerUser">
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" required>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  v-model="email"
+                  required
+                />
               </div>
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" v-model="username" required>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  v-model="username"
+                  required
+                />
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" v-model="password" required>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  v-model="password"
+                  required
+                />
               </div>
               <div class="mb-3">
-                <label for="repeatPassword" class="form-label">Repeat Password</label>
-                <input type="password" class="form-control" id="repeatPassword" v-model="repeatPassword" required>
+                <label for="repeatPassword" class="form-label"
+                  >Repeat Password</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="repeatPassword"
+                  v-model="repeatPassword"
+                  required
+                />
               </div>
               <div class="mb-3">
-                <label for="timezone" class="form-label">Timezone</label>
-                <input type="text" class="form-control" id="timezone" v-model="searchQuery" @input="filterTimezones" placeholder="Search Timezones">
-                <select class="form-select" v-model="timezone">
-                  <option v-for="tz in filteredTimezones" :key="tz" :value="tz">{{ tz }}</option>
-                </select>
+                <time-zone-dropdown v-model="timezone"></time-zone-dropdown>
+               
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
@@ -39,21 +62,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { authService } from '@/services/userAuthentication.js';
-import moment from 'moment-timezone';
+import { ref, computed } from "vue";
+import { authService } from "@/services/userAuthentication.js";
+// import {timezones} from "@/utils/timezones.js";
+import { useRouter } from "vue-router";
+import TimeZoneDropdown from "./TimeZoneDropdown.vue";
 
-const email = ref('');
-const password = ref('');
-const username = ref('');
-const repeatPassword = ref('');
-const timezone = ref('CET');
-const timezones = moment.tz.names();
-const searchQuery = ref('');
-const filteredTimezones = computed(() => {
-  const query = searchQuery.value.toLowerCase();
-  return timezones.filter(tz => tz.toLowerCase().includes(query));
-});
+const router = useRouter();
+
+const email = ref("");
+const password = ref("");
+const username = ref("");
+const repeatPassword = ref("");
+const timezone = ref("");
+// const isVisible = ref(false);
+
 
 const registerUser = async () => {
   try {
@@ -65,17 +88,35 @@ const registerUser = async () => {
       email: email.value,
       username: username.value,
       timezone: timezone.value,
+      isAdmin: false,
     };
 
     await authService.register(user, password.value);
-    console.log("registered");
+    router.push("/");
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const filterTimezones = () => {
-  // Filter the timezones based on the search query
-  // The filtered timezones will automatically update in the dropdown
-};
 </script>
+
+<style scoped>
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px; 
+    overflow-y: auto;
+  }
+
+  .options-list li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .options-list li:hover {
+    background-color: #ccc;
+  }
+</style>

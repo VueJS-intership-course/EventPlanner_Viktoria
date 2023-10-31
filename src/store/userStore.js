@@ -14,24 +14,19 @@ export const useUserStore = defineStore("users", {
       }
     },
 
-    logout() {
+    async logout() {
       this.user = null;
-      authService.logout();
-    },
-
-    async getAllUsers() {
-      try {
-        this.allUsers = await authService.getAll();
-      } catch (error) {
-        console.error("Error retrieving users:", error);
-        throw error;
-      }
+      await authService.logout();
     },
   },
 
-  getters:{
-    isAdmin(){
-        return this.user.isAdmin;
-    }
-  }
+  getters: {
+    isAdmin() {
+      if (this.user && this.user.isAdmin) return true;
+    },
+
+    isLogged() {
+      if (this.user) return true;
+    },
+  },
 });
