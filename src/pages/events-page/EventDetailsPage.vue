@@ -27,26 +27,36 @@
           <strong>Tickets Left:</strong> {{ event.ticketCount }}
         </p>
         <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
-        <p class="mb-2"><strong>Budget:</strong> ${{ event.budget }}</p>
+        <p v-if="userStore.isAdmin" class="mb-2">
+          <strong>Budget:</strong> ${{ event.budget }}
+        </p>
         <div class="mt-4">
           <button
+      
             v-if="userStore.isAdmin"
             @click="deleteEvent"
-            class="btn btn-danger mr-2"
+            class="btn btn-danger m-2"
           >
             Delete Event
           </button>
           <button
             v-if="userStore.isAdmin"
             @click="editEvent"
-            class="btn btn-primary mr-2"
+            class="btn btn-primary m-2"
           >
             Edit Event
           </button>
           <button
+            v-if="userStore.isAdmin"
+            @click="viewBudget"
+            class="btn btn-primary m-2"
+          >
+            View Budget
+          </button>
+          <button
             v-if="userStore.user && !userStore.isAdmin"
             @click="buyTicket"
-            class="btn btn-primary mr-2"
+            class="btn btn-primary m-2"
           >
             Buy a Ticket
           </button>
@@ -88,4 +98,11 @@ const deleteEvent = () => {
   eventStore.removeEvent(event.value);
   router.push("/events");
 };
+
+const viewBudget = () => {
+  router.push(`/events/${eventId.value}/budget`);
+};
+
+
 </script>
+

@@ -8,6 +8,7 @@ import CreateEventPage from "@/pages/events-page/CreateEventPage.vue";
 import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
 import { useUserStore } from "@/store/userStore.js";
 import { authStateChangedPromise } from "@/main.js";
+import EventBudgetPage from "@/pages/budget-page/BudgetPage.vue";
 
 const routes = [
   {
@@ -52,6 +53,12 @@ const routes = [
     name: "register",
     component: Register,
   },
+  {
+    path: '/events/:id/budget',
+    name: 'event-budget',
+    component: EventBudgetPage,
+  }
+  
 ];
 
 const router = createRouter({
