@@ -64,6 +64,16 @@
         />
       </div>
       <div class="mb-3">
+        <label for="ticketBudget" class="form-label">Event Budget</label>
+        <input
+          type="number"
+          class="form-control"
+          id="ticketPrice"
+          v-model="budget"
+          required
+        />
+      </div>
+      <div class="mb-3">
         <label class="form-label">Event Location</label>
         <MapComponent />
       </div>
@@ -76,7 +86,7 @@
 <script setup>
 import MapComponent from "@/components/MapComponent.vue";
 import { useEventStore } from "@/store/eventStore.js";
-import { ref, onMounted } from "vue";
+import { ref,computed } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -89,6 +99,8 @@ const eventDate = ref("");
 const eventTime = ref("");
 const ticketCount = ref("");
 const price = ref("");
+const budget = ref("");
+const location = computed(() => eventStore.coords);
 
 const createEvent = () => {
   const event = {
@@ -97,11 +109,12 @@ const createEvent = () => {
     date: eventDate.value,
     time: eventTime.value,
     ticketCount: ticketCount.value,
-    location: eventStore.coords,
+    location: location.value,
     price: price.value,
+    budget: budget.value,
   };
 
   eventStore.addEvent(event);
-  router.push("/eventlist");
+  router.push("/events");
 };
 </script>

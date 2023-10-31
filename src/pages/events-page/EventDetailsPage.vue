@@ -14,14 +14,20 @@
       <div class="col-md-6">
         <h1 class="display-4">{{ event.name }}</h1>
         <p class="lead">{{ event.description }}</p>
-        <p class="mb-2"><strong>Date:</strong> {{ event.date }}</p>
-        <p class="mb-2"><strong>Time:</strong> {{ event.time }}</p>
-        <p class="mb-2"><strong>Location:</strong> {{ event.location }}</p>
+        <p class="mb-2"><strong>Date:</strong></p>
+        <p class="mb-2">
+          <strong>Event Time:</strong> {{ event.time }} / {{ event.date }}
+        </p>
+        <p class="mb-2">
+          <strong>Your Time:</strong>
+          {{ getUserTime(event.date, event.time, event.location) }}
+        </p>
+
         <p class="mb-2">
           <strong>Tickets Left:</strong> {{ event.ticketCount }}
         </p>
         <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
-
+        <p class="mb-2"><strong>Budget:</strong> ${{ event.budget }}</p>
         <div class="mt-4">
           <button
             v-if="userStore.isAdmin"
@@ -52,30 +58,26 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
-import EditEventModal from "../../components/EditEventModal.vue";
+import EditEventModal from "@/components/EditEventModal.vue";
+import getUserTime from "@/utils/transformTime.js";
 
 const route = useRoute();
 const router = useRouter();
 const eventStore = useEventStore();
 const userStore = useUserStore();
 const eventId = computed(() => route.params.id);
-const event = ref(null);
+const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
 
-onMounted(async () => {
-  try {
-    event.value = await eventStore.getEventById(eventId.value);
-    isLoading.value = false;
-  } catch (error) {
-    console.error("Error fetching event:", error);
-    isLoading.value = false;
-  }
-});
+eventStore.getEventById(eventId.value);
+if (eventId.value) {
+  isLoading.value = false;
+}
 
 const editEvent = () => {
   eventStore.isEditing = true;
@@ -84,7 +86,6 @@ const editEvent = () => {
 
 const deleteEvent = () => {
   eventStore.removeEvent(event.value);
-  router.push("/eventlist");
+  router.push("/events");
 };
-
 </script>

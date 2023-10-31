@@ -21,7 +21,7 @@
             >
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/eventlist">Events</RouterLink>
+            <RouterLink class="nav-link" to="/events">Events</RouterLink>
           </li>
           <li v-if="store.user" class="nav-item">
             <a class="nav-link" href="#">Overview</a>

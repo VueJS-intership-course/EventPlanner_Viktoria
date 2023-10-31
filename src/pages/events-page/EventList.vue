@@ -1,14 +1,19 @@
 <template>
   <div class="card-container">
     <div v-for="event in allEvents" :key="generateUniqueKey" class="card">
-      <img class="card-img-top" src="https://picsum.photos/280/200" alt="Event image top">
+      <img
+        class="card-img-top"
+        src="https://picsum.photos/280/200"
+        alt="Event image top"
+      />
       <div class="card-body">
         <h5 class="card-title">{{ event.name }}</h5>
         <p class="card-text">{{ event.description }}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{ event.date }} <br> {{ event.time }}</li>
-        <!-- <li class="list-group-item"></li> -->
+        <li class="list-group-item">
+          {{ getUserTime(event.date, event.time, event.location ) }}
+        </li>
         <li class="list-group-item">${{ event.price }}</li>
         <li class="list-group-item">Tickets left: {{ event.ticketCount }}</li>
       </ul>
@@ -38,6 +43,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import generateUniqueKey from "../../utils/randomId";
 import { useUserStore } from "../../store/userStore";
 import { useRouter } from "vue-router";
+import getUserTime from "@/utils/transformTime.js";
 
 const router = useRouter();
 

@@ -17,6 +17,7 @@ export const eventService = {
           location,
           ticketCount,
           price,
+          budget
         } = doc.data();
         const event = {
           id,
@@ -27,6 +28,7 @@ export const eventService = {
           location,
           ticketCount,
           price,
+          budget
         };
         data.push(event);
       });
@@ -36,6 +38,7 @@ export const eventService = {
       throw error;
     }
   },
+
 
   async getEventById(id) {
     try {
@@ -68,6 +71,7 @@ export const eventService = {
         location: event.location,
         ticketCount: event.ticketCount,
         price: event.price,
+        budget: event.budget,
       });
     } catch (error) {
       console.error("Error adding an event:", error);
@@ -107,6 +111,7 @@ export const eventService = {
         location: event.location,
         ticketCount: event.ticketCount,
         price: event.price,
+        budget: event.budget,
       });
     } catch (error) {
       console.error("Error editing event: ", error);

@@ -7,21 +7,39 @@ import { useUserStore } from "@/store/userStore.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
-import HighchartsVue from 'highcharts-vue'
-import Highcharts from 'highcharts'
+import HighchartsVue from "highcharts-vue";
+import Highcharts from "highcharts";
+import { authService } from "@/services/userAuthentication.js";
 
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
-app.use(router);
-app.use(HighchartsVue)
+app.use(HighchartsVue);
 
 const store = useUserStore();
 
-fb.auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    await store.setUser(user);
-  }
-});
+export function authStateChangedPromise() {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = fb.auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const userData = await store.setUser(user);
+          store.setUser(userData);
+          unsubscribe();
+          resolve(userData);
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        store.setUser(null);
+        unsubscribe();
+        resolve(null);
+      }
+    });
+  });
+}
+
+authStateChangedPromise();
+app.use(router);
 
 app.mount("#app");

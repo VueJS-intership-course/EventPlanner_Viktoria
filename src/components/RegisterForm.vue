@@ -49,19 +49,8 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="timezone">Timezone:</label>
-                <input
-                  class="form-control"
-                  v-model="timezone"
-                  @input="filterTimezones"
-                  @focus="isVisible = true"
-                  placeholder="Start typing..."
-                />
-                <ul v-show="isVisible" class="options-list">
-                  <li v-for="tz in filteredTimezones" @click="selectTimezone(tz)" :key="tz">
-                    {{ tz }}
-                  </li>
-                </ul>
+                <time-zone-dropdown v-model="timezone"></time-zone-dropdown>
+               
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
@@ -75,8 +64,9 @@
 <script setup>
 import { ref, computed } from "vue";
 import { authService } from "@/services/userAuthentication.js";
-import {timezones} from "@/utils/timezones.js";
+// import {timezones} from "@/utils/timezones.js";
 import { useRouter } from "vue-router";
+import TimeZoneDropdown from "./TimeZoneDropdown.vue";
 
 const router = useRouter();
 
@@ -85,21 +75,8 @@ const password = ref("");
 const username = ref("");
 const repeatPassword = ref("");
 const timezone = ref("");
-const isVisible = ref(false);
+// const isVisible = ref(false);
 
-
-const filteredTimezones = computed(() => {
-  return timezones.filter((tz) => tz.toLowerCase().includes(timezone.value.toLowerCase()));
-});
-
-const filterTimezones = () => {
-  isVisible.value = true;
-};
-
-const selectTimezone = (tz) => {
-  timezone.value = tz;
-  isVisible.value = false;
-};
 
 const registerUser = async () => {
   try {

@@ -22,9 +22,11 @@ export const useUserStore = defineStore("users", {
 
   getters: {
     isAdmin() {
-      if (this.user && this.user.isAdmin)
-      return true;
+      if (this.user && this.user.isAdmin) return true;
     },
 
+    isLogged() {
+      if (this.user) return true;
+    },
   },
 });

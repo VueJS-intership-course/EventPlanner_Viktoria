@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { eventService } from "../services/eventServices.js";
+import { eventService } from "@/services/eventServices.js";
+import tzlookup from "tz-lookup";
 
 export const useEventStore = defineStore({
   id: "eventStore",
@@ -13,10 +14,12 @@ export const useEventStore = defineStore({
       description: "",
       date: "",
       time: "",
-      location: "",
+      location: [],
       ticketCount: "",
       price: "",
+      budget: "",
     },
+    selectedEvent:{},
   }),
 
   actions: {
@@ -30,8 +33,7 @@ export const useEventStore = defineStore({
 
     async getEventById(id) {
       try {
-        const event = await eventService.getEventById(id);
-        return event;
+        this.selectedEvent = await eventService.getEventById(id);
       } catch (error) {
         console.error("Error fetching event:", error);
       }
@@ -71,7 +73,7 @@ export const useEventStore = defineStore({
   },
 
   getters: {
-    // TODO
+    // TODOz
     // filteredProducts() {
     //   if (!this.events || this.selectedCategory === "all") {
     //     return this.events.filter(
@@ -92,5 +94,6 @@ export const useEventStore = defineStore({
     //   );
     // },
     // TODO
-  },
+      
+    },
 });
