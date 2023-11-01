@@ -26,7 +26,7 @@
               </button>
               <div class="d-flex justify-content-between text-center mt-5 mb-2">
                 <div>
-                  <p class="mb-2 h5">2</p>
+                  <p class="mb-2 h5">{{ pastEvents.length }}</p>
                   <p class="text-muted mb-0">Past Events</p>
                 </div>
                 <div class="px-3">
@@ -34,7 +34,7 @@
                   <p class="text-muted mb-0">Total Events</p>
                 </div>
                 <div>
-                  <p class="mb-2 h5">6</p>
+                  <p class="mb-2 h5">{{ upcomingEvents.length }}</p>
                   <p class="text-muted mb-0">Upcoming events</p>
                 </div>
               </div>
@@ -42,17 +42,30 @@
           </div>
         </div>
         <div class="col-md-12 col-xl-4">
-          <div class="card-body text-center">
+          <div class="card text-center" style="border-radius: 15px">
             <div class="mt-3 mb-4"></div>
             <h4 class="mb-2">My Events</h4>
             <p class="text-muted mb-4">
-              <a @click="selectEventType('past')">Past Events</a>
+              <a
+                href="#"
+                class="link-opacity-50-hover"
+                @click="selectEventType('past')"
+                >Past Events</a
+              >
               <span class="mx-2">|</span>
-              <a @click="selectEventType('upcoming')">Upcoming Events</a>
+              <a
+                href="#"
+                class="link-opacity-50-hover"
+                @click="selectEventType('upcoming')"
+                >Upcoming Events</a
+              >
             </p>
 
             <div>
-              <ul class="list-group">
+              <ul
+                class="list-group"
+                style="max-height: 300px; overflow-y: auto"
+              >
                 <li v-for="event in filteredEvents" class="list-group-item">
                   <p class="text-">{{ event.name }}</p>
                   <RouterLink :to="'/event/' + event.id" class="btn btn-primary"
@@ -94,18 +107,24 @@ const currentUserEvents = computed(() => {
 
 const selectedEventType = ref("upcoming");
 
-
-
 const selectEventType = (eventType) => {
   selectedEventType.value = eventType;
 };
 
+const upcomingEvents = computed(() => {
+  return currentUserEvents.value.filter((event) => isEventUpcoming(event));
+});
+
+const pastEvents = computed(() => {
+  return currentUserEvents.value.filter((event) => !isEventUpcoming(event));
+});
+
 const filteredEvents = computed(() => {
   if (selectedEventType.value === "upcoming") {
-    return currentUserEvents.value.filter((event) => isEventUpcoming(event));
+    return upcomingEvents.value;
   }
   if (selectedEventType.value === "past") {
-    return currentUserEvents.value.filter((event) => !isEventUpcoming(event));
+    return pastEvents.value;
   }
   return [];
 });
@@ -113,7 +132,6 @@ const filteredEvents = computed(() => {
 const isEventUpcoming = (event) => {
   return new Date(event.date) > new Date();
 };
-
 
 // TODO
 const editProfile = () => {

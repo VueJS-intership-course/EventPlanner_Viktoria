@@ -4,7 +4,6 @@ import { authService } from "@/services/userAuthentication.js";
 export const useUserStore = defineStore("users", {
   state: () => ({
     user: null,
-    allUsers: [],
   }),
 
   actions: {

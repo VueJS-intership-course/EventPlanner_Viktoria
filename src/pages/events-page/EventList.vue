@@ -49,16 +49,15 @@
         <li class="list-group-item">${{ event.price }}</li>
         <li class="list-group-item">Tickets left: {{ event.ticketCount }}</li>
       </ul>
-      <div class="card-body">
+      <div v-if="userStore.user" class="card-body" >
         <button
-          v-if="userStore.user"
           @click="goToEventDetails(event.id)"
           class="btn btn-primary"
         >
           Details
         </button>
         <button
-          v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
+          v-if="!userStore.isAdmin && !event.users.includes(userStore.user.email)"
           @click="buyTicket(event)"
           class="btn btn-primary m-2"
         >
