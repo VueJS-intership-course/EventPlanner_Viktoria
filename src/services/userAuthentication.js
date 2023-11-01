@@ -53,24 +53,20 @@ export const authService = {
     await fb.auth.signOut();
   },
 
-  async getAll() {
+  async editUser(user) {
+    const querySnapshot = await fb.fireStore
+      .collection("users")
+      .where("email", "==", user.email)
+      .get();
+
+    const doc = querySnapshot.docs[0];
     try {
-      const data = [];
-      const querySnapshot = await fb.fireStore.collection("users").get();
-
-      querySnapshot.forEach((doc) => {
-        const { username, email, timezone } = doc.data();
-
-        const id = doc.id;
-
-        const user = { username, email, id, timezone };
-
-        data.push(user);
+      await doc.ref.update({
+        username: user.username,
+        timezone: user.timezone,
       });
-      return data;
     } catch (error) {
-      console.error("Error fetching user profiles:", error);
-      throw error;
+      console.error("Error editing event: ", error);
     }
   },
 };

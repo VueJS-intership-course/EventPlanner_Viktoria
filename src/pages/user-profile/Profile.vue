@@ -85,19 +85,23 @@
     <RouterLink to="/login" class="btn btn-primary">Log In</RouterLink> or
     <RouterLink to="/register" class="btn btn-secondary">Sign up</RouterLink>
   </section>
+  <EditUserModal v-if="isEditing" />
+
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useEventStore } from "@/store/eventStore.js";
+import EditUserModal from "./EditUserModal.vue";
 
-const store = useUserStore();
+const userStore = useUserStore();
 const eventStore = useEventStore();
 eventStore.getEventList();
 
-const currentUser = computed(() => store.user);
+const currentUser = computed(() => userStore.user);
 const allEvents = computed(() => eventStore.events);
+const isEditing = computed(() => userStore.isEditing);
 
 const currentUserEvents = computed(() => {
   return allEvents.value.filter((event) =>
@@ -135,10 +139,8 @@ const isEventUpcoming = (event) => {
 
 // TODO
 const editProfile = () => {
-  editedUser.value = { ...currentUser.value };
+  userStore.isEditing = true;
+  userStore.editedUser = { ...currentUser.value };
 };
-const editedUser = ref({});
-const saveProfileChanges = () => {
-  // todo
-};
+
 </script>

@@ -18,7 +18,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { timezones } from "@/utils/timezones.js";
+import { timezones } from "@/utils/constants.js";
 
 const timezone = ref("");
 const isVisible = ref(false);

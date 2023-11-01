@@ -4,6 +4,12 @@ import { authService } from "@/services/userAuthentication.js";
 export const useUserStore = defineStore("users", {
   state: () => ({
     user: null,
+    isEditing: false,
+    editedUser: {
+      email: "",
+      username: "",
+      timezone: "",
+    },
   }),
 
   actions: {
@@ -17,6 +23,16 @@ export const useUserStore = defineStore("users", {
       this.user = null;
       await authService.logout();
     },
+
+    async editUser(user) {
+      try {
+        await authService.editUser(user);
+        this.user = user;
+      } catch (error) {
+        console.error("Error editing user:", error);
+      }
+    },
+
   },
 
   getters: {
