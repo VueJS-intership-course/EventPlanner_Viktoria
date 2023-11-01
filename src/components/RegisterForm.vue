@@ -49,7 +49,7 @@
                 />
               </div>
               <div class="mb-3">
-                <time-zone-dropdown v-model="timezone"></time-zone-dropdown>
+                <time-zone-dropdown @selected="handleSelectedTimezone"></time-zone-dropdown>
                
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
@@ -62,9 +62,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { authService } from "@/services/userAuthentication.js";
-// import {timezones} from "@/utils/timezones.js";
 import { useRouter } from "vue-router";
 import TimeZoneDropdown from "./TimeZoneDropdown.vue";
 
@@ -77,6 +76,9 @@ const repeatPassword = ref("");
 const timezone = ref("");
 // const isVisible = ref(false);
 
+const handleSelectedTimezone = (selectedTimezone) => {
+    timezone.value = selectedTimezone; 
+  };
 
 const registerUser = async () => {
   try {

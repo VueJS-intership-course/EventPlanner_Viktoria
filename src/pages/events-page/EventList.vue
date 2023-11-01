@@ -51,19 +51,20 @@
       </ul>
       <div class="card-body">
         <button
-          v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
-          @click="buyTicket(event)"
-          class="btn btn-primary m-2"
-        >
-          Buy a ticket
-        </button>
-        <button
           v-if="userStore.user"
           @click="goToEventDetails(event.id)"
           class="btn btn-primary"
         >
           Details
         </button>
+        <button
+          v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
+          @click="buyTicket(event)"
+          class="btn btn-primary m-2"
+        >
+          Buy a ticket
+        </button>
+       
       </div>
     </div>
   </div>

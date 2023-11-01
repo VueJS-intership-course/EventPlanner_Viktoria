@@ -74,7 +74,7 @@ export const eventService = {
         ticketCount: event.ticketCount,
         price: event.price,
         budget: event.budget,
-        users: [],
+        users: event.users,
       });
     } catch (error) {
       console.error("Error adding an event:", error);

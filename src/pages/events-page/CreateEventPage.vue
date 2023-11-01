@@ -112,6 +112,7 @@ const createEvent = () => {
     location: location.value,
     price: price.value,
     budget: budget.value,
+    users:[]
   };
 
   eventStore.addEvent(event);

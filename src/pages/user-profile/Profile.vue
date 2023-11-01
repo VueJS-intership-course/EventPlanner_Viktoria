@@ -93,33 +93,34 @@ const currentUserEvents = computed(() => {
 });
 
 const selectedEventType = ref("upcoming");
-  const currentPage = ref(1); 
-  const eventsPerPage = 5;
-  
+
+
+
 const selectEventType = (eventType) => {
-    selectedEventType.value = eventType;
-  };
+  selectedEventType.value = eventType;
+};
 
-  const filteredEvents = computed(() => {
-    if (selectedEventType.value === "upcoming") {
-      return currentUserEvents.value.filter((event) => isEventUpcoming(event));
-    } 
-    if (selectedEventType.value === "past") {
-      return currentUserEvents.value.filter((event) => !isEventUpcoming(event));
-    }
-    return [];
-  });
+const filteredEvents = computed(() => {
+  if (selectedEventType.value === "upcoming") {
+    return currentUserEvents.value.filter((event) => isEventUpcoming(event));
+  }
+  if (selectedEventType.value === "past") {
+    return currentUserEvents.value.filter((event) => !isEventUpcoming(event));
+  }
+  return [];
+});
 
-  const isEventUpcoming = (event) => {
-    return new Date(event.date) > new Date();
-  };
+const isEventUpcoming = (event) => {
+  return new Date(event.date) > new Date();
+};
 
+
+// TODO
 const editProfile = () => {
-  //TODO
   editedUser.value = { ...currentUser.value };
 };
 const editedUser = ref({});
 const saveProfileChanges = () => {
-  //TODO
+  // todo
 };
 </script>

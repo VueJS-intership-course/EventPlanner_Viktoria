@@ -14,7 +14,6 @@
       <div class="col-md-6">
         <h1 class="display-4">{{ event.name }}</h1>
         <p class="lead">{{ event.description }}</p>
-        <p class="mb-2"><strong>Date:</strong></p>
         <p class="mb-2">
           <strong>Event Time:</strong> {{ event.time }} / {{ event.date }}
         </p>
