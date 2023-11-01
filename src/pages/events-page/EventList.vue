@@ -1,7 +1,7 @@
 <template>
-   <div>
-    <!-- Filter Form -->
-    <form @submit.prevent="applyFilters" class="row g-3">
+  <!-- <div> -->
+  <!-- Filter Form -->
+  <!-- <form @submit.prevent="applyFilters" class="row g-3">
       <div class="col-md-2">
         <label for="fromDate" class="form-label">From Date:</label>
         <input type="date" class="form-control" id="fromDate" v-model="filterOptions.fromDate" />
@@ -30,7 +30,7 @@
         <button type="submit" class="btn btn-primary">Apply Filters</button>
       </div>
     </form>
-  </div>
+  </div> -->
   <div class="card-container">
     <div v-for="event in filteredEvents" :key="generateUniqueKey" class="card">
       <img
@@ -51,9 +51,9 @@
       </ul>
       <div class="card-body">
         <button
-          v-if="userStore.user && !userStore.isAdmin"
-          @click="buy"
-          class="btn btn-primary"
+          v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
+          @click="buyTicket(event)"
+          class="btn btn-primary m-2"
         >
           Buy a ticket
         </button>
@@ -88,23 +88,28 @@ const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
 
-const filterOptions = ref({
-  fromDate: null,
-  toDate: null,
-  minPrice: null,
-  maxPrice: null,
-  availableTickets: true,
-  soldOut: false,
-});
+// const filterOptions = ref({
+//   fromDate: null,
+//   toDate: null,
+//   minPrice: null,
+//   maxPrice: null,
+//   availableTickets: true,
+//   soldOut: false,
+// });
 
-const searchQuery = ref("");
+// const searchQuery = ref("");
 
-const applyFilters = () => {
-  eventStore.setFilterOptions(filterOptions.value);
-  eventStore.setSearchQuery(searchQuery.value);
-};
+// const applyFilters = () => {
+//   eventStore.setFilterOptions(filterOptions.value);
+//   eventStore.setSearchQuery(searchQuery.value);
+// };
 
 const filteredEvents = computed(() => eventStore.filteredEvents);
+
+const buyTicket = (event) => {
+  eventStore.buyTicket(event);
+  router.push("/events");
+};
 </script>
 
 <style scoped>

@@ -1,5 +1,6 @@
 import fb from "@/firebase/fbConfig.js";
 import generateUniqueKey from "@/utils/randomId.js";
+import { useUserStore } from "@/store/userStore.js";
 
 export const eventService = {
   async getAll() {
@@ -17,7 +18,8 @@ export const eventService = {
           location,
           ticketCount,
           price,
-          budget
+          budget,
+          users,
         } = doc.data();
         const event = {
           id,
@@ -28,7 +30,8 @@ export const eventService = {
           location,
           ticketCount,
           price,
-          budget
+          budget,
+          users,
         };
         data.push(event);
       });
@@ -38,7 +41,6 @@ export const eventService = {
       throw error;
     }
   },
-
 
   async getEventById(id) {
     try {
@@ -72,6 +74,7 @@ export const eventService = {
         ticketCount: event.ticketCount,
         price: event.price,
         budget: event.budget,
+        users: [],
       });
     } catch (error) {
       console.error("Error adding an event:", error);
@@ -115,6 +118,29 @@ export const eventService = {
       });
     } catch (error) {
       console.error("Error editing event: ", error);
+    }
+  },
+
+  async buyTicket(event) {
+    const querySnapshot = await fb.fireStore
+      .collection("events")
+      .where("id", "==", event.id)
+      .get();
+
+    const doc = querySnapshot.docs[0];
+    try {
+      if (Array.isArray(event.users)) {
+        const updatedUsers = [...event.users, useUserStore().user.email];
+
+        await doc.ref.update({
+          ticketCount: event.ticketCount - 1,
+          users: updatedUsers,
+        });
+      } else {
+        console.error("event.users is not an array");
+      }
+    } catch (error) {
+      console.error("Error buying ticket: ", error);
     }
   },
 };

@@ -30,6 +30,8 @@
         <p v-if="userStore.isAdmin" class="mb-2">
           <strong>Budget:</strong> ${{ event.budget }}
         </p>
+        <p class="mb-2"><strong>User:</strong> ${{ event.users }}</p>
+
         <div class="mt-4">
           <button
       
@@ -54,7 +56,7 @@
             View Budget
           </button>
           <button
-            v-if="userStore.user && !userStore.isAdmin"
+            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
             @click="buyTicket"
             class="btn btn-primary m-2"
           >
@@ -79,6 +81,7 @@ const route = useRoute();
 const router = useRouter();
 const eventStore = useEventStore();
 const userStore = useUserStore();
+
 const eventId = computed(() => route.params.id);
 const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
@@ -101,6 +104,11 @@ const deleteEvent = () => {
 
 const viewBudget = () => {
   router.push(`/events/${eventId.value}/budget`);
+};
+
+const buyTicket = () => {
+  eventStore.buyTicket(event.value);
+  router.push("/events");
 };
 
 

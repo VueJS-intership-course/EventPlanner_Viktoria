@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { eventService } from "@/services/eventServices.js";
-import tzlookup from "tz-lookup";
-import { get } from "ol/proj";
+
 
 export const useEventStore = defineStore({
   id: "eventStore",
@@ -77,6 +76,16 @@ export const useEventStore = defineStore({
       }
     },
 
+    async buyTicket(event) {
+      try {
+        await eventService.buyTicket(event);
+        await this.getEventList();
+
+      } catch (error) {
+        console.error("Error buying a ticket:", error);
+      }
+    },
+
     setNewEventLocation(lon, lat) {
       this.coords = [lon, lat];
     },
@@ -101,20 +110,16 @@ export const useEventStore = defineStore({
         soldOut,
       } = this.filterOptions;
       const filteredEvents = this.events.filter((event) => {
-        // Filter by date range
         const eventDate = new Date(event.date);
         if (fromDate && eventDate < fromDate) return false;
         if (toDate && eventDate > toDate) return false;
 
-        // Filter by ticket price range
         if (minPrice !== null && event.price < minPrice) return false;
         if (maxPrice !== null && event.price > maxPrice) return false;
 
-        // Filter by availability
         if (availableTickets && event.ticketCount <= 0) return false;
         if (soldOut && event.ticketCount > 0) return false;
 
-        // Filter by search query
         if (this.searchQuery) {
           const lowerCaseQuery = this.searchQuery.toLowerCase();
           if (
