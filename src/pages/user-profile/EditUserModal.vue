@@ -1,58 +1,35 @@
 <template>
-  <div class="modal show" style="display: block">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editProductModalLabel">Edit User</h5>
-          <button type="button" class="close" @click="cancelClicked">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="username">New Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              v-model="editedUser.username"
-            />
-          </div>
-          <div class="form-group">
-            <label for="eventDescription">New timezone</label>
-            <time-zone-dropdown
-              @selected="handleSelectedTimezone"
-            ></time-zone-dropdown>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="saveClicked">
-            Save
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-            @click="cancelClicked"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
+  <modal :title="modalTitle" :modalId="modalId" @save="saveClicked" @cancel="cancelClicked">
+    <div class="form-group">
+      <label for="username">New Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        v-model="editedUser.username"
+      />
     </div>
-  </div>
+    <div class="form-group">
+      <label for="timezone">New Timezone</label>
+      <time-zone-dropdown @selected="handleSelectedTimezone"></time-zone-dropdown>
+    </div>
+  </modal>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import Modal from "@/components/Modal.vue"; 
 
 const router = useRouter();
 
 const store = useUserStore();
 const editedUser = computed(() => store.editedUser);
+
+const modalTitle = "Edit Profile";
+const modalId = "editProfileModal";
 
 const handleSelectedTimezone = (selectedTimezone) => {
   editedUser.value.timezone = selectedTimezone;

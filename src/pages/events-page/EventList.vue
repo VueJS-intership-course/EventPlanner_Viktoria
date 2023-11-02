@@ -32,7 +32,7 @@
     </form>
   </div> -->
   <div class="card-container">
-    <div v-for="event in filteredEvents" :key="generateUniqueKey" class="card">
+    <div v-for="event in allEvents" :key="generateUniqueKey" class="card">
       <img
         class="card-img-top"
         src="https://picsum.photos/280/200"
@@ -47,23 +47,32 @@
           {{ getUserTime(event.date, event.time, event.location) }}
         </li>
         <li class="list-group-item">${{ event.price }}</li>
-        <li class="list-group-item">Tickets left: {{ event.ticketCount }}</li>
-      </ul>
-      <div v-if="userStore.user" class="card-body" >
-        <button
-          @click="goToEventDetails(event.id)"
-          class="btn btn-primary"
+        <li v-if="event.ticketCount > 0" class="list-group-item">
+          Tickets left: {{ event.ticketCount }}
+        </li>
+        <li
+          v-if="event.ticketCount <= 0"
+          class="list-group-item"
+          style="color: red"
         >
+          SOLD OUT
+        </li>
+      </ul>
+      <div v-if="userStore.user" class="card-body">
+        <button @click="goToEventDetails(event.id)" class="btn btn-primary">
           Details
         </button>
         <button
-          v-if="!userStore.isAdmin && !event.users.includes(userStore.user.email)"
+          v-if="
+            !userStore.isAdmin &&
+            !event.users.includes(userStore.user.email) &&
+            event.ticketCount > 0
+          "
           @click="buyTicket(event)"
           class="btn btn-primary m-2"
         >
           Buy a ticket
         </button>
-       
       </div>
     </div>
   </div>
@@ -84,6 +93,7 @@ const eventStore = useEventStore();
 
 eventStore.getEventList();
 const allEvents = computed(() => eventStore.events);
+
 const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
@@ -104,7 +114,7 @@ const goToEventDetails = (eventId) => {
 //   eventStore.setSearchQuery(searchQuery.value);
 // };
 
-const filteredEvents = computed(() => eventStore.filteredEvents);
+// const filteredEvents = computed(() => eventStore.filteredEvents);
 
 const buyTicket = (event) => {
   eventStore.buyTicket(event);

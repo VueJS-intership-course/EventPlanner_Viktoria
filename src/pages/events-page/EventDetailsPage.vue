@@ -30,6 +30,7 @@
           <strong>Budget:</strong> ${{ event.budget }}
         </p>
         <p class="mb-2"><strong>User:</strong> ${{ event.users }}</p>
+        <p class="mb-2"><strong>Are tickets Available:</strong> {{ ticketAvailable }}</p>
 
         <div class="mt-4">
           <button
@@ -55,7 +56,7 @@
             View Budget
           </button>
           <button
-            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email)"
+            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email) && ticketAvailable"
             @click="buyTicket"
             class="btn btn-primary m-2"
           >
@@ -85,6 +86,7 @@ const eventId = computed(() => route.params.id);
 const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
+const ticketAvailable = computed(() => event.value.ticketCount > 0);
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {

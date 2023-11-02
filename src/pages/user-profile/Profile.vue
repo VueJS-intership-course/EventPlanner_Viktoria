@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 col-xl-4">
+        <div v-if="!userStore.isAdmin" class="col-md-12 col-xl-4">
           <div class="card text-center" style="border-radius: 15px">
             <div class="mt-3 mb-4"></div>
             <h4 class="mb-2">My Events</h4>
@@ -137,7 +137,6 @@ const isEventUpcoming = (event) => {
   return new Date(event.date) > new Date();
 };
 
-// TODO
 const editProfile = () => {
   userStore.isEditing = true;
   userStore.editedUser = { ...currentUser.value };

@@ -6,7 +6,6 @@ export const useEventStore = defineStore({
   id: "eventStore",
   state: () => ({
     events: [],
-    coords: [],
     isEditing: false,
     editedEvent: {
       id: "",
@@ -84,10 +83,6 @@ export const useEventStore = defineStore({
       } catch (error) {
         console.error("Error buying a ticket:", error);
       }
-    },
-
-    setNewEventLocation(lon, lat) {
-      this.coords = [lon, lat];
     },
 
     setFilterOptions(options) {
