@@ -5,55 +5,64 @@
         <div class="card">
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Register</h2>
-            <form @submit.prevent="registerUser">
+            <Form @submit="registerUser" :validation-schema="vSchema">
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input
+                <Field
                   type="email"
                   class="form-control"
                   id="email"
+                  name="email"
                   v-model="email"
                   required
                 />
+                <ErrorMessage name="email" class="text-danger" />
               </div>
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input
+                <Field
                   type="text"
                   class="form-control"
                   id="username"
+                  name="username"
                   v-model="username"
                   required
                 />
+                <ErrorMessage name="username" class="text-danger" />
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input
+                <Field
                   type="password"
                   class="form-control"
                   id="password"
+                  name="password"
                   v-model="password"
                   required
                 />
+                <ErrorMessage name="password" class="text-danger" />
+
               </div>
               <div class="mb-3">
-                <label for="repeatPassword" class="form-label"
-                  >Repeat Password</label
-                >
-                <input
+                <label for="repeatPassword" class="form-label" >Repeat Password</label>
+                <Field
                   type="password"
                   class="form-control"
                   id="repeatPassword"
+                  name="repeatPassword"
                   v-model="repeatPassword"
                   required
                 />
+                <ErrorMessage name="repeatPassword" class="text-danger" />
+
               </div>
               <div class="mb-3">
-                <time-zone-dropdown @selected="handleSelectedTimezone"></time-zone-dropdown>
-               
+                <time-zone-dropdown
+                  @selected="handleSelectedTimezone"
+                ></time-zone-dropdown>
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
@@ -66,7 +75,12 @@ import { ref } from "vue";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
 import TimeZoneDropdown from "./TimeZoneDropdown.vue";
-
+import {
+  Field,
+  Form,
+  ErrorMessage,
+} from "vee-validate";
+import * as Yup from "yup";
 const router = useRouter();
 
 const email = ref("");
@@ -76,8 +90,8 @@ const repeatPassword = ref("");
 const timezone = ref("");
 
 const handleSelectedTimezone = (selectedTimezone) => {
-    timezone.value = selectedTimezone; 
-  };
+  timezone.value = selectedTimezone;
+};
 
 const registerUser = async () => {
   try {
@@ -99,5 +113,19 @@ const registerUser = async () => {
   }
 };
 
-</script>
+const vSchema = Yup.object({
+  email: Yup.string()
+    .required("Email is required")
+    .email("Email must be a valid email address"),
+  username: Yup.string()
+    .required("Username is required")
+    .min(4, "Username must be at least 4 characters"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+  repeatPassword: Yup.string()
+    .required("Repeat Password is required")
+    .oneOf([Yup.ref("password")], "Passwords do not match"),
+});
 
+</script>

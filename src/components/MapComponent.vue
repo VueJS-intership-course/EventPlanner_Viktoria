@@ -13,9 +13,7 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
 import { fromLonLat, toLonLat } from "ol/proj";
-import { useEventStore } from "../store/eventStore";
 
-const eventStore = useEventStore();
 const emit = defineEmits(["onMapClick"]);
 
 const map = ref(null);
