@@ -1,7 +1,7 @@
 <template>
   <div style="width: 50%" class="container mt-4">
     <h2>Create Event</h2>
-    <Form @submit="createEvent" :validationSchema="vSchema">
+    <Form @submit="createEvent" :validationSchema="createEventSchema">
       <div class="mb-3">
         <label for="eventName" class="form-label">Event Name</label>
         <Field
@@ -70,7 +70,7 @@
           class="form-control"
           id="ticketPrice"
           name="ticketPrice"
-          v-model="price"
+          v-model="ticketPrice"
           required
         />
         <ErrorMessage name="ticketPrice" class="text-danger" />
@@ -101,12 +101,14 @@ import MapComponent from "@/components/MapComponent.vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import moment from "moment-timezone"; 
 import {
   Field,
   Form,
   ErrorMessage,
 } from "vee-validate";
-import * as Yup from "yup";
+import { createEventSchema } from "@/utils/validationSchemas.js";
+import convertCoordsToTz from "@/utils/getTzFromCoords.js";
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -116,57 +118,41 @@ const eventDescription = ref("");
 const eventDate = ref("");
 const eventTime = ref("");
 const ticketCount = ref("");
-const price = ref('');
+const ticketPrice = ref('');
 const budget = ref('');
 const location = ref([]);
 
 const onMapClick = (lonLat) => {
+  console.log("map click", lonLat);
   location.value = lonLat;
 };
 
-const createEvent = async () => {
-  const isValid = await form.validate();
-  if (isValid) {
-    const event = {
-      name: eventName.value,
-      description: eventDescription.value,
-      date: eventDate.value,
-      time: eventTime.value,
-      ticketCount: ticketCount.value,
-      location: location.value,
-      price: price.value,
-      budget: budget.value,
-      users: [],
-    };
+
+const createEvent = (formData) => {
+  const event = {
+    name: formData.eventName,
+    description: formData.eventDescription,
+    date: formData.eventDate,
+    time: formData.eventTime,
+    ticketCount: formData.ticketCount,
+    location: location.value,
+    price: formData.ticketPrice,
+    budget: formData.budget,
+    users: [],
+  };
+  try {
+    const eventTimezone = convertCoordsToTz(location.value);
+    const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
+    const eventUtcTime = moment.tz(eventDatetime, eventTimezone).utc();
+    event.date = eventUtcTime.format("YYYY-MM-DD"); 
+    event.time = eventUtcTime.format("HH:mm"); 
+
     eventStore.addEvent(event);
     router.push("/events");
+  } catch (error) {
+    console.error("Error while adding the event:", error);
+    // TODO: handle the error with a toastify message
   }
 };
-
-const vSchema = Yup.object({
-  eventName: Yup.string().required("Event Name is required"),
-  eventDescription: Yup.string().required("Event Description is required"),
-  eventDate: Yup.date().required("Event Date is required")
-    .test(
-      "is-greater-than-today",
-      "Event Date must be in the future",
-      function (value) {
-        return value > new Date();
-      }
-    ),
-  eventTime: Yup.string().required("Event Time is required"),
-  ticketCount: Yup.number()
-    .typeError("Available Tickets must be a number")
-    .required("Available Tickets is required")
-    .min(1, "Available Tickets must be greater than 0"), 
-  price: Yup.number()
-    .typeError("Ticket Price must be a number")
-    .required("Ticket Price is required")
-    .min(0.01, "Ticket Price must be greater than 0"), 
-  budget: Yup.number()
-    .typeError("Event Budget must be a number")
-    .required("Event Budget is required")
-    .min(1, "Event Budget must be greater than 0"),
-});
 
 </script>

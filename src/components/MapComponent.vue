@@ -14,7 +14,7 @@ import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
 import { fromLonLat, toLonLat } from "ol/proj";
 
-const emit = defineEmits(["onMapClick"]);
+const emit = defineEmits(["mapClick"]);
 
 const map = ref(null);
 const vectorSource = ref(null);

@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Register</h2>
-            <Form @submit="registerUser" :validation-schema="vSchema">
+            <Form @submit="registerUser" :validation-schema="registerSchema">
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <Field
@@ -41,10 +41,11 @@
                   required
                 />
                 <ErrorMessage name="password" class="text-danger" />
-
               </div>
               <div class="mb-3">
-                <label for="repeatPassword" class="form-label" >Repeat Password</label>
+                <label for="repeatPassword" class="form-label"
+                  >Repeat Password</label
+                >
                 <Field
                   type="password"
                   class="form-control"
@@ -54,7 +55,6 @@
                   required
                 />
                 <ErrorMessage name="repeatPassword" class="text-danger" />
-
               </div>
               <div class="mb-3">
                 <time-zone-dropdown
@@ -75,12 +75,8 @@ import { ref } from "vue";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
 import TimeZoneDropdown from "./TimeZoneDropdown.vue";
-import {
-  Field,
-  Form,
-  ErrorMessage,
-} from "vee-validate";
-import * as Yup from "yup";
+import { Field, Form, ErrorMessage } from "vee-validate";
+import { registerSchema } from "@/utils/validationSchemas.js";
 const router = useRouter();
 
 const email = ref("");
@@ -112,20 +108,4 @@ const registerUser = async () => {
     console.error(error.message);
   }
 };
-
-const vSchema = Yup.object({
-  email: Yup.string()
-    .required("Email is required")
-    .email("Email must be a valid email address"),
-  username: Yup.string()
-    .required("Username is required")
-    .min(4, "Username must be at least 4 characters"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
-  repeatPassword: Yup.string()
-    .required("Repeat Password is required")
-    .oneOf([Yup.ref("password")], "Passwords do not match"),
-});
-
 </script>

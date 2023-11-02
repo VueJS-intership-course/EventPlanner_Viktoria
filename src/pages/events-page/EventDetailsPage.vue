@@ -15,11 +15,11 @@
         <h1 class="display-4">{{ event.name }}</h1>
         <p class="lead">{{ event.description }}</p>
         <p class="mb-2">
-          <strong>Event Time:</strong> {{ event.time }} / {{ event.date }}
+          <strong>Event Time in {{ eventTz }}:</strong> {{ getEventTime(`${event.date}T${event.time}`, eventTz) }}
         </p>
         <p class="mb-2">
           <strong>Your Time:</strong>
-          {{ getUserTime(event.date, event.time, event.location) }}
+          {{ getUserTime(`${event.date}T${event.time}`) }}
         </p>
 
         <p class="mb-2">
@@ -75,7 +75,9 @@ import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
 import EditEventModal from "@/components/EditEventModal.vue";
-import getUserTime from "@/utils/transformTime.js";
+import {getUserTime, getEventTime} from "@/utils/transformTime.js";
+import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+
 
 const route = useRoute();
 const router = useRouter();
@@ -87,6 +89,7 @@ const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
 const ticketAvailable = computed(() => event.value.ticketCount > 0);
+const eventTz = computed(() => convertCoordsToTz(event.value.location));
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {

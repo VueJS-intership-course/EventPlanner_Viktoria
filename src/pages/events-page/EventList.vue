@@ -44,7 +44,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          {{ getUserTime(event.date, event.time, event.location) }}
+          {{ getUserTime(`${event.date}T${event.time}`) }}
         </li>
         <li class="list-group-item">${{ event.price }}</li>
         <li v-if="event.ticketCount > 0" class="list-group-item">
@@ -84,7 +84,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import generateUniqueKey from "../../utils/randomId";
 import { useUserStore } from "../../store/userStore";
 import { useRouter } from "vue-router";
-import getUserTime from "@/utils/transformTime.js";
+import {getUserTime} from "@/utils/transformTime.js";
 
 const router = useRouter();
 
