@@ -37,7 +37,6 @@
               Admin
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Budgets</a></li>
               <li><a class="dropdown-item" href="#">Add admins</a></li>
               <li>
                 <RouterLink class="dropdown-item" to="/create-event"

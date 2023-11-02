@@ -14,7 +14,6 @@
       <div class="col-md-6">
         <h1 class="display-4">{{ event.name }}</h1>
         <p class="lead">{{ event.description }}</p>
-        <p class="mb-2"><strong>Date:</strong></p>
         <p class="mb-2">
           <strong>Event Time:</strong> {{ event.time }} / {{ event.date }}
         </p>
@@ -27,26 +26,39 @@
           <strong>Tickets Left:</strong> {{ event.ticketCount }}
         </p>
         <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
-        <p class="mb-2"><strong>Budget:</strong> ${{ event.budget }}</p>
+        <p v-if="userStore.isAdmin" class="mb-2">
+          <strong>Budget:</strong> ${{ event.budget }}
+        </p>
+        <p class="mb-2"><strong>User:</strong> ${{ event.users }}</p>
+        <p class="mb-2"><strong>Are tickets Available:</strong> {{ ticketAvailable }}</p>
+
         <div class="mt-4">
           <button
+      
             v-if="userStore.isAdmin"
             @click="deleteEvent"
-            class="btn btn-danger mr-2"
+            class="btn btn-danger m-2"
           >
             Delete Event
           </button>
           <button
             v-if="userStore.isAdmin"
             @click="editEvent"
-            class="btn btn-primary mr-2"
+            class="btn btn-primary m-2"
           >
             Edit Event
           </button>
           <button
-            v-if="userStore.user && !userStore.isAdmin"
+            v-if="userStore.isAdmin"
+            @click="viewBudget"
+            class="btn btn-primary m-2"
+          >
+            View Budget
+          </button>
+          <button
+            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email) && ticketAvailable"
             @click="buyTicket"
-            class="btn btn-primary mr-2"
+            class="btn btn-primary m-2"
           >
             Buy a Ticket
           </button>
@@ -69,10 +81,12 @@ const route = useRoute();
 const router = useRouter();
 const eventStore = useEventStore();
 const userStore = useUserStore();
+
 const eventId = computed(() => route.params.id);
 const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
+const ticketAvailable = computed(() => event.value.ticketCount > 0);
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {
@@ -88,4 +102,16 @@ const deleteEvent = () => {
   eventStore.removeEvent(event.value);
   router.push("/events");
 };
+
+const viewBudget = () => {
+  router.push(`/events/${eventId.value}/budget`);
+};
+
+const buyTicket = () => {
+  eventStore.buyTicket(event.value);
+  router.push("/events");
+};
+
+
 </script>
+

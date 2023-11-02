@@ -75,7 +75,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Event Location</label>
-        <MapComponent />
+        <MapComponent :onMapClick="onMapClick" />
       </div>
 
       <button type="submit" class="btn btn-primary">Create Event</button>
@@ -90,7 +90,6 @@ import { ref,computed } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
 const eventStore = useEventStore();
 
 const eventName = ref("");
@@ -100,7 +99,11 @@ const eventTime = ref("");
 const ticketCount = ref("");
 const price = ref("");
 const budget = ref("");
-const location = computed(() => eventStore.coords);
+const location = ref([]); 
+
+const onMapClick = (lonLat) => {
+  location.value = lonLat;
+};
 
 const createEvent = () => {
   const event = {
@@ -112,6 +115,7 @@ const createEvent = () => {
     location: location.value,
     price: price.value,
     budget: budget.value,
+    users:[]
   };
 
   eventStore.addEvent(event);

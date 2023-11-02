@@ -16,6 +16,7 @@ import { fromLonLat, toLonLat } from "ol/proj";
 import { useEventStore } from "../store/eventStore";
 
 const eventStore = useEventStore();
+const emit = defineEmits(["onMapClick"]);
 
 const map = ref(null);
 const vectorSource = ref(null);
@@ -67,8 +68,7 @@ const handleMapClick = (lonLat, vectorSourceInstance) => {
   vectorSourceInstance.clear();
   vectorSourceInstance.addFeature(point);
 
-  const [lon, lat] = lonLat;
-  eventStore.setNewEventLocation(lon, lat);
+  emit("mapClick", lonLat);
 };
 
 onMounted(() => {

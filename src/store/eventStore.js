@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
 import { eventService } from "@/services/eventServices.js";
-import tzlookup from "tz-lookup";
+
 
 export const useEventStore = defineStore({
   id: "eventStore",
   state: () => ({
     events: [],
-    coords: [],
     isEditing: false,
     editedEvent: {
       id: "",
@@ -19,7 +18,16 @@ export const useEventStore = defineStore({
       price: "",
       budget: "",
     },
-    selectedEvent:{},
+    selectedEvent: {},
+    filterOptions: {
+      fromDate: null,
+      toDate: null,
+      minPrice: null,
+      maxPrice: null,
+      availableTickets: true,
+      soldOut: false,
+    },
+    searchQuery: "",
   }),
 
   actions: {
@@ -67,33 +75,60 @@ export const useEventStore = defineStore({
       }
     },
 
-    setNewEventLocation(lon, lat) {
-      this.coords = [lon, lat];
+    async buyTicket(event) {
+      try {
+        await eventService.buyTicket(event);
+        await this.getEventList();
+
+      } catch (error) {
+        console.error("Error buying a ticket:", error);
+      }
+    },
+
+    setFilterOptions(options) {
+      this.filterOptions = { ...options };
+    },
+
+    setSearchQuery(query) {
+      this.searchQuery = query;
     },
   },
 
   getters: {
-    // TODOz
-    // filteredProducts() {
-    //   if (!this.events || this.selectedCategory === "all") {
-    //     return this.events.filter(
-    //       (event) =>
-    //         event.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-    //         event.description
-    //           .toLowerCase()
-    //           .includes(this.searchQuery.toLowerCase())
-    //     );
-    //   }
-    //   return this.events.filter(
-    //     (event) =>
-    //       event.category === this.selectedCategory &&
-    //       (event.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-    //         event.description
-    //           .toLowerCase()
-    //           .includes(this.searchQuery.toLowerCase()))
-    //   );
-    // },
-    // TODO
-      
+    filteredEvents() {
+      const {
+        fromDate,
+        toDate,
+        minPrice,
+        maxPrice,
+        availableTickets,
+        soldOut,
+      } = this.filterOptions;
+      const filteredEvents = this.events.filter((event) => {
+        const eventDate = new Date(event.date);
+        if (fromDate && eventDate < fromDate) return false;
+        if (toDate && eventDate > toDate) return false;
+
+        if (minPrice !== null && event.price < minPrice) return false;
+        if (maxPrice !== null && event.price > maxPrice) return false;
+
+        if (availableTickets && event.ticketCount <= 0) return false;
+        if (soldOut && event.ticketCount > 0) return false;
+
+        if (this.searchQuery) {
+          const lowerCaseQuery = this.searchQuery.toLowerCase();
+          if (
+            !event.name.toLowerCase().includes(lowerCaseQuery) &&
+            !event.description.toLowerCase().includes(lowerCaseQuery)
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      return filteredEvents;
     },
+  },
 });
