@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="height: 700px; width: 800px"></div>
+  <div id="map"></div>
 </template>
 
 <script setup>
@@ -13,6 +13,8 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
 import { fromLonLat, toLonLat } from "ol/proj";
+import 'ol/ol.css';
+
 
 const emit = defineEmits(["mapClick"]);
 

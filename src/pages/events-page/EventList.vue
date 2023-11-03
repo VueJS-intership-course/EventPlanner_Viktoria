@@ -84,7 +84,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          {{ getUserTime(`${event.date}T${event.time}`) }}
+          {{ getUserTime(event.utcTime) }}
         </li>
         <li class="list-group-item">${{ event.price }}</li>
         <li v-if="event.ticketCount > 0" class="list-group-item">

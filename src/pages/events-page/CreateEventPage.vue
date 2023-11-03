@@ -89,7 +89,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Event Location</label>
-        <MapComponent :onMapClick="onMapClick" />
+        <MapComponent :onMapClick="onMapClick" style="height: 500px; width: 700px"/>
       </div>
       <button type="submit" class="btn btn-primary">Create Event</button>
     </Form>
@@ -101,12 +101,8 @@ import MapComponent from "@/components/MapComponent.vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import moment from "moment-timezone"; 
-import {
-  Field,
-  Form,
-  ErrorMessage,
-} from "vee-validate";
+import moment, { utc } from "moment-timezone";
+import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";
 
@@ -118,8 +114,8 @@ const eventDescription = ref("");
 const eventDate = ref("");
 const eventTime = ref("");
 const ticketCount = ref("");
-const ticketPrice = ref('');
-const budget = ref('');
+const ticketPrice = ref("");
+const budget = ref("");
 const location = ref([]);
 
 const onMapClick = (lonLat) => {
@@ -127,13 +123,19 @@ const onMapClick = (lonLat) => {
   location.value = lonLat;
 };
 
-
 const createEvent = (formData) => {
+  const eventTimezone = convertCoordsToTz(location.value);
+  const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
+  const eventUtcTime = moment.tz(eventDatetime, eventTimezone).utc();
+  console.log("eventUtcTime", eventUtcTime);
+  console.log("eventUtcTime to utc format",eventUtcTime.format("YYYY-MM-DDTHH:mm:ssZ"));
+
   const event = {
     name: formData.eventName,
     description: formData.eventDescription,
-    date: formData.eventDate,
-    time: formData.eventTime,
+    date: eventUtcTime.format("YYYY-MM-DD"),
+    time: eventUtcTime.format("HH:mm"),
+    utcTime: eventUtcTime.format("YYYY-MM-DDTHH:mm"),
     ticketCount: formData.ticketCount,
     location: location.value,
     price: formData.ticketPrice,
@@ -141,12 +143,6 @@ const createEvent = (formData) => {
     users: [],
   };
   try {
-    const eventTimezone = convertCoordsToTz(location.value);
-    const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
-    const eventUtcTime = moment.tz(eventDatetime, eventTimezone).utc();
-    event.date = eventUtcTime.format("YYYY-MM-DD"); 
-    event.time = eventUtcTime.format("HH:mm"); 
-
     eventStore.addEvent(event);
     router.push("/events");
   } catch (error) {
@@ -154,5 +150,4 @@ const createEvent = (formData) => {
     // TODO: handle the error with a toastify message
   }
 };
-
 </script>

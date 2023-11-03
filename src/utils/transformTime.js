@@ -10,7 +10,6 @@ export const getUserTime = (utcTime) => {
   return userTime.format("HH:mm / YYYY-MM-DD");
 };
 
-
 export const getEventTime = (utcTime, timezone) => {
   if (!utcTime || !timezone) {
     return "Loading...";

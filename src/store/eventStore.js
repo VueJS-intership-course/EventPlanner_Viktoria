@@ -13,6 +13,7 @@ export const useEventStore = defineStore({
       description: "",
       date: "",
       time: "",
+      utcTime: "",
       location: [],
       ticketCount: "",
       price: "",

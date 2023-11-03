@@ -19,7 +19,7 @@
         </p>
         <p class="mb-2">
           <strong>Your Time:</strong>
-          {{ getUserTime(`${event.date}T${event.time}`) }}
+          {{ getUserTime(event.utcTime) }}
         </p>
 
         <p class="mb-2">

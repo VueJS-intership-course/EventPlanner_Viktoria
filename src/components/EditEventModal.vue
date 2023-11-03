@@ -5,7 +5,7 @@
     @save="saveClicked"
     @cancel="cancelClicked"
   >
-    <Form :validationSchema="vSchema">
+    <Form>
       <div class="form-group">
         <label for="eventName">Event Name</label>
         <Field
@@ -72,7 +72,7 @@
         />
         <ErrorMessage name="ticketPrice" class="text-danger" />
       </div>
-      <!-- <MapComponent/> -->
+      <MapComponent :onMapClick="onMapClick" style="height: 300px; width: 450px; margin: 10px;" />
     </Form>
   </modal>
 </template>
@@ -83,8 +83,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
-import * as Yup from "yup";
-// import MapComponent from "./MapComponent.vue";
+import MapComponent from "./MapComponent.vue";
 
 const router = useRouter();
 
@@ -94,7 +93,12 @@ const editedEvent = computed(() => store.editedEvent);
 const modalTitle = "Edit Event";
 const modalId = "editEventModal";
 
+const onMapClick = (lonLat) => {
+  editedEvent.value.location = lonLat;
+};
+
 const saveClicked = () => {
+  editedEvent.value.utcTime = `${editedEvent.value.date}T${editedEvent.value.time}`;
   store.editEvent(editedEvent.value);
   store.isEditing = false;
   router.push("/events");
@@ -104,16 +108,4 @@ const cancelClicked = () => {
   store.isEditing = false;
 };
 
-const vSchema = Yup.object({
-  eventName: Yup.string().required("Event Name is required"),
-  description: Yup.string().required("Event Description is required"),
-  date: Yup.date().required("Event Date is required"),
-  time: Yup.string().required("Event Time is required"),
-  ticketCount: Yup.number()
-    .typeError("Available Tickets must be a number")
-    .required("Available Tickets is required"),
-  ticketPrice: Yup.number()
-    .typeError("Ticket Price must be a number")
-    .required("Ticket Price is required"),
-});
 </script>
