@@ -1,6 +1,6 @@
 <template>
   <div style="width: 50%" class="container mt-4">
-    <h2>Create Event</h2>
+    <h2>Create a new Event</h2>
     <Form @submit="createEvent" :validationSchema="createEventSchema">
       <div class="mb-3">
         <label for="eventName" class="form-label">Event Name</label>
@@ -101,7 +101,7 @@ import MapComponent from "@/components/MapComponent.vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import moment, { utc } from "moment-timezone";
+import moment from "moment-timezone";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";

@@ -1,6 +1,7 @@
 import fb from "@/firebase/fbConfig.js";
 import generateUniqueKey from "@/utils/randomId.js";
 import { useUserStore } from "@/store/userStore.js";
+import moment from "moment-timezone";
 
 export const eventService = {
   async getAll() {
@@ -13,8 +14,6 @@ export const eventService = {
           id,
           name,
           description,
-          time,
-          date,
           utcTime,
           location,
           ticketCount,
@@ -26,8 +25,6 @@ export const eventService = {
           id,
           name,
           description,
-          date,
-          time,
           utcTime,
           location,
           ticketCount,

@@ -15,26 +15,30 @@
         <h1 class="display-4">{{ event.name }}</h1>
         <p class="lead">{{ event.description }}</p>
         <p class="mb-2">
-          <strong>Event Time in {{ eventTz }}:</strong> {{ getEventTime(`${event.date}T${event.time}`, eventTz) }}
+          <strong>Event Time in {{ eventTz }}:</strong>
+          {{ getEventTime(event.utcTime, eventTz) }}
         </p>
         <p class="mb-2">
           <strong>Your Time:</strong>
           {{ getUserTime(event.utcTime) }}
         </p>
 
-        <p class="mb-2">
+        <p v-if="ticketAvailable" class="mb-2">
           <strong>Tickets Left:</strong> {{ event.ticketCount }}
+        </p>
+        <p v-if="!ticketAvailable" class="mb-2 text-danger">
+          <strong>Tickets sold out</strong>
         </p>
         <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
         <p v-if="userStore.isAdmin" class="mb-2">
           <strong>Budget:</strong> ${{ event.budget }}
         </p>
-        <p class="mb-2"><strong>User:</strong> ${{ event.users }}</p>
-        <p class="mb-2"><strong>Are tickets Available:</strong> {{ ticketAvailable }}</p>
+        <p v-if="userStore.isAdmin" class="mb-2">
+          <strong>Users with tickets:</strong> {{ event.users }}
+        </p>
 
         <div class="mt-4">
           <button
-      
             v-if="userStore.isAdmin"
             @click="deleteEvent"
             class="btn btn-danger m-2"
@@ -56,7 +60,12 @@
             View Budget
           </button>
           <button
-            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email) && ticketAvailable"
+            v-if="
+              userStore.user &&
+              !userStore.isAdmin &&
+              !event.users.includes(userStore.user.email) &&
+              ticketAvailable
+            "
             @click="buyTicket"
             class="btn btn-primary m-2"
           >
@@ -75,9 +84,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
 import EditEventModal from "@/components/EditEventModal.vue";
-import {getUserTime, getEventTime} from "@/utils/transformTime.js";
+import { getUserTime, getEventTime } from "@/utils/transformTime.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";
-
 
 const route = useRoute();
 const router = useRouter();
@@ -114,7 +122,4 @@ const buyTicket = () => {
   eventStore.buyTicket(event.value);
   router.push("/events");
 };
-
-
 </script>
-

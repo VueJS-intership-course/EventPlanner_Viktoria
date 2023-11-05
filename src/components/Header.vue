@@ -37,7 +37,11 @@
               Admin
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Add admins</a></li>
+              <li>
+                <RouterLink class="dropdown-item" to="/register-admin"
+                  >Add admins</RouterLink
+                >
+              </li>
               <li>
                 <RouterLink class="dropdown-item" to="/create-event"
                   >Add new events</RouterLink

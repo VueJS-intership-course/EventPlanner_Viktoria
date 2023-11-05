@@ -44,6 +44,11 @@ export const routes = [
       component: Register,
     },
     {
+      path: "/register-admin",
+      name: "registerAdmin",
+      component: Register,
+    },
+    {
       path: "/events/:id/budget",
       name: "event-budget",
       component: EventBudgetPage,

@@ -7,7 +7,7 @@ export const getUserTime = (utcTime) => {
     return "Loading...";
   }
   const userTime = moment.utc(utcTime).tz(store.user.timezone);
-  return userTime.format("HH:mm / YYYY-MM-DD");
+  return userTime.format("HH:mm DD/MM/YYYY");
 };
 
 export const getEventTime = (utcTime, timezone) => {
@@ -15,6 +15,6 @@ export const getEventTime = (utcTime, timezone) => {
     return "Loading...";
   }
   const eventTime = moment.utc(utcTime).tz(timezone);
-  return eventTime.format("HH:mm / YYYY-MM-DD");
+  return eventTime.format("HH:mm DD/MM/YYYY");
 };
 

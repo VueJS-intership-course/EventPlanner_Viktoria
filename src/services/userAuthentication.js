@@ -16,6 +16,7 @@ export const authService = {
             email: user.email,
             username: user.username,
             timezone: user.timezone,
+            isAdmin: user.isAdmin,
           });
       }
     } catch (error) {

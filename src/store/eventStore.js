@@ -11,8 +11,6 @@ export const useEventStore = defineStore({
       id: "",
       name: "",
       description: "",
-      date: "",
-      time: "",
       utcTime: "",
       location: [],
       ticketCount: "",
