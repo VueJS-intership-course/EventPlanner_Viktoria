@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { eventService } from "@/services/eventServices.js";
 
-
 export const useEventStore = defineStore({
   id: "eventStore",
   state: () => ({
@@ -23,10 +22,9 @@ export const useEventStore = defineStore({
       toDate: null,
       minPrice: null,
       maxPrice: null,
-      availableTickets: true,
-      soldOut: false,
+      searchQuery: "",
+      ticketStatus: "all",
     },
-    searchQuery: "",
   }),
 
   actions: {
@@ -78,18 +76,32 @@ export const useEventStore = defineStore({
       try {
         await eventService.buyTicket(event);
         await this.getEventList();
-
       } catch (error) {
         console.error("Error buying a ticket:", error);
       }
     },
 
-    setFilterOptions(options) {
-      this.filterOptions = { ...options };
+    applyFilters() {
+      this.filterOptions = {
+        fromDate: this.filterOptions.fromDate,
+        toDate: this.filterOptions.toDate,
+        minPrice: this.filterOptions.minPrice,
+        maxPrice: this.filterOptions.maxPrice,
+        searchQuery: this.filterOptions.searchQuery,
+        ticketStatus: this.filterOptions.ticketStatus,
+      };
     },
 
-    setSearchQuery(query) {
-      this.searchQuery = query;
+    resetFilters() {
+      this.filterOptions = {
+        fromDate: null,
+        toDate: null,
+        minPrice: null,
+        maxPrice: null,
+        searchQuery: "",
+        ticketStatus: "all",
+      };
+      this.applyFilters();
     },
   },
 
@@ -100,22 +112,22 @@ export const useEventStore = defineStore({
         toDate,
         minPrice,
         maxPrice,
-        availableTickets,
-        soldOut,
+        searchQuery,
+        ticketStatus,
       } = this.filterOptions;
-      const filteredEvents = this.events.filter((event) => {
-        const eventDate = new Date(event.date);
-        if (fromDate && eventDate < fromDate) return false;
-        if (toDate && eventDate > toDate) return false;
 
+      return this.events.filter((event) => {
+        const eventDate = new Date(event.date);
+
+        if (fromDate && eventDate < new Date(fromDate)) return false;
+        if (toDate && eventDate > new Date(toDate)) return false;
         if (minPrice !== null && event.price < minPrice) return false;
         if (maxPrice !== null && event.price > maxPrice) return false;
-
-        if (availableTickets && event.ticketCount <= 0) return false;
-        if (soldOut && event.ticketCount > 0) return false;
-
-        if (this.searchQuery) {
-          const lowerCaseQuery = this.searchQuery.toLowerCase();
+        if (ticketStatus === "available" && event.ticketCount <= 0)
+          return false;
+        if (ticketStatus === "sold-out" && event.ticketCount > 0) return false;
+        if (searchQuery) {
+          const lowerCaseQuery = searchQuery.toLowerCase();
           if (
             !event.name.toLowerCase().includes(lowerCaseQuery) &&
             !event.description.toLowerCase().includes(lowerCaseQuery)
@@ -126,8 +138,6 @@ export const useEventStore = defineStore({
 
         return true;
       });
-
-      return filteredEvents;
     },
   },
 });

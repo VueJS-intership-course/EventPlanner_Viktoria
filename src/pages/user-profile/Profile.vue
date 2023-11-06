@@ -86,7 +86,6 @@
     <RouterLink to="/register" class="btn btn-secondary">Sign up</RouterLink>
   </section>
   <EditUserModal v-if="isEditing" />
-
 </template>
 
 <script setup>
@@ -134,12 +133,11 @@ const filteredEvents = computed(() => {
 });
 
 const isEventUpcoming = (event) => {
-  return new Date(event.date) > new Date();
+  return new Date(event.utcTime) > new Date();
 };
 
 const editProfile = () => {
   userStore.isEditing = true;
   userStore.editedUser = { ...currentUser.value };
 };
-
 </script>

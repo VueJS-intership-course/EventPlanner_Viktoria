@@ -24,7 +24,7 @@
             <RouterLink class="nav-link" to="/events">Events</RouterLink>
           </li>
           <li v-if="store.user" class="nav-item">
-            <a class="nav-link" href="#">Overview</a>
+            <RouterLink to="/overview" class="nav-link" href="#">Overview</RouterLink>
           </li>
           <li v-if="isAuthenticated" class="nav-item dropdown">
             <a

@@ -6,6 +6,7 @@ import EventList from "@/pages/events-page/EventList.vue";
 import CreateEventPage from "@/pages/events-page/CreateEventPage.vue";
 import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
 import EventBudgetPage from "@/pages/budget-page/BudgetPage.vue";
+import OverviewPage from "@/pages/overview-page/OverviewPage.vue";
 
 export const routes = [
     {
@@ -52,5 +53,10 @@ export const routes = [
       path: "/events/:id/budget",
       name: "event-budget",
       component: EventBudgetPage,
+    },
+    {
+      path: "/overview",
+      name: "overview",
+      component: OverviewPage,
     },
   ];

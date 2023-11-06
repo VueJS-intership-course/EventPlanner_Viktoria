@@ -1,11 +1,7 @@
 <template>
-    <div class="home-page">
-        <h1>Home Page</h1>
-        TODO
-    </div>
+  <div class="home-page">
+    <h1>Home Page</h1>
+  </div>
 </template>
 
-<script setup>
-
-
-</script>
+<script setup></script>
