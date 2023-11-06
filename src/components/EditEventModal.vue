@@ -35,7 +35,7 @@
           class="form-control"
           id="eventDate"
           name="eventDate"
-          v-model="editedEvent.date"
+          v-model="date"
         />
         <ErrorMessage name="eventDate" class="text-danger" />
       </div>
@@ -46,7 +46,7 @@
           class="form-control"
           id="eventTime"
           name="eventTime"
-          v-model="editedEvent.time"
+          v-model="time"
         />
         <ErrorMessage name="eventTime" class="text-danger" />
       </div>
@@ -78,17 +78,21 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "./MapComponent.vue";
+import {getUserTime} from "@/utils/transformTime.js";
 
 const router = useRouter();
 
 const store = useEventStore();
 const editedEvent = computed(() => store.editedEvent);
+
+const time = ref(getUserTime(editedEvent.value.utcTime).split(" ")[0]);
+const date = ref(getUserTime(editedEvent.value.utcTime).split(" ")[1]);
 
 const modalTitle = "Edit Event";
 const modalId = "editEventModal";
@@ -98,7 +102,7 @@ const onMapClick = (lonLat) => {
 };
 
 const saveClicked = () => {
-  editedEvent.value.utcTime = `${editedEvent.value.date}T${editedEvent.value.time}`;
+  editedEvent.value.utcTime = `${date.value}T${time.value}`;
   store.editEvent(editedEvent.value);
   store.isEditing = false;
   router.push("/events");

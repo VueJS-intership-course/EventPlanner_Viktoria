@@ -2,8 +2,8 @@
   <div class="container my-4">
     <h1 class="display-4">Budget for {{ event.name }}</h1>
     <p><strong>Start Budget:</strong> ${{ event.budget }}</p>
-    <p><strong>Revenue from tickets:</strong> Revenue: ${{ revenue }}</p>
-    <p><strong>Total Budget:</strong> ${{ revenue + event.budget }}</p>
+    <p v-if="revenue"><strong>Revenue from tickets:</strong> Revenue: ${{ revenue }}</p>
+    <p v-if="revenue"><strong>Total Budget:</strong> ${{ revenue + event.budget }}</p>
   </div>
 </template>
 

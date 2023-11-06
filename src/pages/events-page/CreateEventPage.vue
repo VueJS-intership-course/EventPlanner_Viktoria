@@ -126,16 +126,11 @@ const onMapClick = (lonLat) => {
 const createEvent = (formData) => {
   const eventTimezone = convertCoordsToTz(location.value);
   const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
-  const eventUtcTime = moment.tz(eventDatetime, eventTimezone).utc();
-  console.log("eventUtcTime", eventUtcTime);
-  console.log("eventUtcTime to utc format",eventUtcTime.format("YYYY-MM-DDTHH:mm:ssZ"));
 
   const event = {
     name: formData.eventName,
     description: formData.eventDescription,
-    date: eventUtcTime.format("YYYY-MM-DD"),
-    time: eventUtcTime.format("HH:mm"),
-    utcTime: eventUtcTime.format("YYYY-MM-DDTHH:mm"),
+    utcTime: moment.tz(eventDatetime, eventTimezone).utc().toISOString(),
     ticketCount: formData.ticketCount,
     location: location.value,
     price: formData.ticketPrice,
@@ -148,6 +143,8 @@ const createEvent = (formData) => {
   } catch (error) {
     console.error("Error while adding the event:", error);
     // TODO: handle the error with a toastify message
+
+
   }
 };
 </script>
