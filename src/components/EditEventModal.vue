@@ -5,7 +5,7 @@
     @save="saveClicked"
     @cancel="cancelClicked"
   >
-    <Form>
+    <Form :validation-schema="editEventSchema">
       <div class="form-group">
         <label for="eventName">Event Name</label>
         <Field
@@ -35,7 +35,7 @@
           class="form-control"
           id="eventDate"
           name="eventDate"
-          v-model="date"
+          v-model="eventDate"
         />
         <ErrorMessage name="eventDate" class="text-danger" />
       </div>
@@ -46,7 +46,7 @@
           class="form-control"
           id="eventTime"
           name="eventTime"
-          v-model="time"
+          v-model="eventTime"
         />
         <ErrorMessage name="eventTime" class="text-danger" />
       </div>
@@ -62,17 +62,20 @@
         <ErrorMessage name="ticketCount" class="text-danger" />
       </div>
       <div class="form-group">
-        <label for="ticketPrice">Ticket Price</label>
+        <label for="price">Ticket Price</label>
         <Field
           type="number"
           class="form-control"
-          id="ticketPrice"
-          name="ticketPrice"
+          id="price"
+          name="price"
           v-model="editedEvent.price"
         />
-        <ErrorMessage name="ticketPrice" class="text-danger" />
+        <ErrorMessage name="price" class="text-danger" />
       </div>
-      <MapComponent :onMapClick="onMapClick" style="height: 300px; width: 450px; margin: 10px;" />
+      <MapComponent
+        :onMapClick="onMapClick"
+        style="height: 300px; width: 450px; margin: 10px"
+      />
     </Form>
   </modal>
 </template>
@@ -84,22 +87,22 @@ import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "./MapComponent.vue";
-import { getEventTime} from "@/utils/transformTime.js";
+import { getEventTime } from "@/utils/transformTime.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";
 import moment from "moment-timezone";
+import { editEventSchema } from "@/utils/validationSchemas.js";
 
 const router = useRouter();
-
 const store = useEventStore();
 const editedEvent = computed(() => store.editedEvent);
 
-console.log(editedEvent.value.location);
 const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
 
-
-const datetime = computed(() => getEventTime(editedEvent.value.utcTime, tz.value));
-const time = ref(datetime.value.split(" ")[0]);
-const date = ref(datetime.value.split(" ")[1]);
+const datetime = computed(() =>
+  getEventTime(editedEvent.value.utcTime, tz.value)
+);
+const eventTime = ref(datetime.value.split(" ")[0]);
+const eventDate = ref(datetime.value.split(" ")[1]);
 
 const modalTitle = "Edit Event";
 const modalId = "editEventModal";
@@ -109,16 +112,29 @@ const onMapClick = (lonLat) => {
 };
 
 const saveClicked = () => {
-  const eventDatetime = `${date.value}T${time.value}`;
+  editEventSchema
+    .validate({
+      eventName: editedEvent.value.name,
+      eventDescription: editedEvent.value.description,
+      eventDate: eventDate.value,
+      eventTime: eventTime.value,
+      ticketCount: editedEvent.value.ticketCount,
+      price: editedEvent.value.price,
+    })
+    .then(() => {
+      const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
-  editedEvent.value.utcTime = moment.tz(eventDatetime, tz.value).utc().toISOString()
-  store.editEvent(editedEvent.value);
-  store.isEditing = false;
-  router.push("/events");
+      editedEvent.value.utcTime = moment
+        .tz(eventDatetime, tz.value)
+        .utc()
+        .toISOString();
+      store.editEvent(editedEvent.value);
+      store.isEditing = false;
+      router.push("/events");
+    });
 };
 
 const cancelClicked = () => {
   store.isEditing = false;
 };
-
 </script>

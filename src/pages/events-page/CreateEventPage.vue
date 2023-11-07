@@ -64,16 +64,16 @@
         <ErrorMessage name="ticketCount" class="text-danger" />
       </div>
       <div class="mb-3">
-        <label for="ticketPrice" class="form-label">Ticket Price</label>
+        <label for="price" class="form-label">Ticket Price</label>
         <Field
           type="number"
           class="form-control"
-          id="ticketPrice"
-          name="ticketPrice"
-          v-model="ticketPrice"
+          id="price"
+          name="price"
+          v-model="price"
           required
         />
-        <ErrorMessage name="ticketPrice" class="text-danger" />
+        <ErrorMessage name="price" class="text-danger" />
       </div>
       <div class="mb-3">
         <label for="budget" class="form-label">Event Budget</label>
@@ -114,7 +114,7 @@ const eventDescription = ref("");
 const eventDate = ref("");
 const eventTime = ref("");
 const ticketCount = ref("");
-const ticketPrice = ref("");
+const price = ref("");
 const budget = ref("");
 const location = ref([]);
 
@@ -133,7 +133,7 @@ const createEvent = (formData) => {
     utcTime: moment.tz(eventDatetime, eventTimezone).utc().toISOString(),
     ticketCount: formData.ticketCount,
     location: location.value,
-    price: formData.ticketPrice,
+    price: formData.price,
     budget: formData.budget,
     users: [],
   };
