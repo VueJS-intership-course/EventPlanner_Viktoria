@@ -117,10 +117,10 @@ export const useEventStore = defineStore({
       } = this.filterOptions;
 
       return this.events.filter((event) => {
-        const eventDate = new Date(event.date);
+        const eventDate = event.utcTime.split("T")[0];
 
-        if (fromDate && eventDate < new Date(fromDate)) return false;
-        if (toDate && eventDate > new Date(toDate)) return false;
+        if (fromDate && eventDate < fromDate) return false;
+        if (toDate && eventDate > toDate) return false;
         if (minPrice !== null && event.price < minPrice) return false;
         if (maxPrice !== null && event.price > maxPrice) return false;
         if (ticketStatus === "available" && event.ticketCount <= 0)

@@ -73,7 +73,7 @@
 
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 const eventStore = useEventStore();
 
 const filtersApplied = ref(false);
@@ -81,6 +81,14 @@ const filtersApplied = ref(false);
 const filterOptions = computed(() => eventStore.filterOptions);
 
 const applyFilters = () => {
+  const fromDate = filterOptions.value.fromDate
+    ? new Date(filterOptions.value.fromDate).toISOString().split("T")[0]
+    : null;
+  const toDate = filterOptions.value.toDate
+    ? new Date(filterOptions.value.toDate).toISOString().split("T")[0]
+    : null;
+  eventStore.filterOptions.fromDate = fromDate;
+  eventStore.filterOptions.toDate = toDate;
   eventStore.applyFilters();
   filtersApplied.value = true;
 };
@@ -89,4 +97,11 @@ const resetFilters = () => {
   eventStore.resetFilters();
   filtersApplied.value = false;
 };
+
+watch(filterOptions.value, (newOptions, oldOptions) => {
+  if (newOptions.maxPrice === "") {
+    eventStore.filterOptions.maxPrice = null;
+  }
+});
+
 </script>

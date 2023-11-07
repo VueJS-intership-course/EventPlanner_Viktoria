@@ -84,15 +84,22 @@ import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "./MapComponent.vue";
-import {getUserTime} from "@/utils/transformTime.js";
+import { getEventTime} from "@/utils/transformTime.js";
+import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import moment from "moment-timezone";
 
 const router = useRouter();
 
 const store = useEventStore();
 const editedEvent = computed(() => store.editedEvent);
 
-const time = ref(getUserTime(editedEvent.value.utcTime).split(" ")[0]);
-const date = ref(getUserTime(editedEvent.value.utcTime).split(" ")[1]);
+console.log(editedEvent.value.location);
+const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
+
+
+const datetime = computed(() => getEventTime(editedEvent.value.utcTime, tz.value));
+const time = ref(datetime.value.split(" ")[0]);
+const date = ref(datetime.value.split(" ")[1]);
 
 const modalTitle = "Edit Event";
 const modalId = "editEventModal";
@@ -102,7 +109,9 @@ const onMapClick = (lonLat) => {
 };
 
 const saveClicked = () => {
-  editedEvent.value.utcTime = `${date.value}T${time.value}`;
+  const eventDatetime = `${date.value}T${time.value}`;
+
+  editedEvent.value.utcTime = moment.tz(eventDatetime, tz.value).utc().toISOString()
   store.editEvent(editedEvent.value);
   store.isEditing = false;
   router.push("/events");
