@@ -69,23 +69,23 @@ const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
 
-const searchQuery = ref("");
-const filterOptions = computed(() => eventStore.filterOptions);
 
 onBeforeMount(() => {
   const { query } = router.currentRoute.value;
+
   if (query) {
-    filterOptions.fromDate = query.fromDate || null;
-    filterOptions.toDate = query.toDate || null;
-    filterOptions.minPrice = query.minPrice || null;
-    filterOptions.maxPrice = query.maxPrice || null;
-    filterOptions.ticketStatus =
-      query.availableTickets === "true"
-        ? "available"
-        : query.soldOut === "true"
-        ? "sold-out"
-        : "all";
-    searchQuery.value = query.searchQuery || "";
+    eventStore.filterOptions.fromDate = query.fromDate || null;
+    eventStore.filterOptions.toDate = query.toDate || null;
+    eventStore.filterOptions.minPrice = query.minPrice || null;
+    eventStore.filterOptions.maxPrice = query.maxPrice || null;
+    eventStore.filterOptions.ticketStatus =
+      query.availableTickets === 'true'
+        ? 'available'
+        : query.soldOut === 'true'
+        ? 'sold-out'
+        : 'all';
+    eventStore.filterOptions.searchQuery = query.searchQuery;
+
   }
 });
 

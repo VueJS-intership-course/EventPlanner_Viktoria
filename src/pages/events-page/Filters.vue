@@ -59,10 +59,10 @@
           v-model="filterOptions.searchQuery"
         />
       </div>
-      <div class="col-md-3 mt-5">
+      <div class="d-flex justify-content-end">
         <button type="submit" class="btn btn-primary">Apply Filters</button>
       </div>
-      <div v-if="filtersApplied" class="col-md-3">
+      <div v-if="filtersApplied" class="d-flex justify-content-end">
         <button @click="resetFilters" class="btn btn-secondary">
           Reset Filters
         </button>
@@ -73,11 +73,13 @@
 
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
+import { useRouter } from "vue-router";
 import { computed, ref, watch } from "vue";
 const eventStore = useEventStore();
+const router = useRouter(); 
+
 
 const filtersApplied = ref(false);
-
 const filterOptions = computed(() => eventStore.filterOptions);
 
 const applyFilters = () => {
@@ -91,11 +93,26 @@ const applyFilters = () => {
   eventStore.filterOptions.toDate = toDate;
   eventStore.applyFilters();
   filtersApplied.value = true;
+
+  router.push({
+    query: {
+      fromDate,
+      toDate,
+      minPrice: filterOptions.value.minPrice,
+      maxPrice: filterOptions.value.maxPrice,
+      searchQuery: filterOptions.value.searchQuery,
+      availableTickets: filterOptions.value.ticketStatus === 'available',
+      soldOut: filterOptions.value.ticketStatus === 'sold-out',
+    },
+  });
+  console.log("Search Query in Filters.vue:", filterOptions.value.searchQuery);
+
 };
 
 const resetFilters = () => {
   eventStore.resetFilters();
   filtersApplied.value = false;
+  router.push({ query: null });
 };
 
 watch(filterOptions.value, (newOptions, oldOptions) => {
