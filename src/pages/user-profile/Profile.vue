@@ -60,7 +60,6 @@
                 >Upcoming Events</a
               >
             </p>
-
             <div>
               <ul
                 class="list-group"
@@ -79,6 +78,7 @@
         </div>
       </div>
     </div>
+    <EventsCalendar :current-user-events="currentUserEvents"/>
   </section>
   <section v-if="!currentUser">
     <h3 class="mt-5">You are currently not logged in</h3>
@@ -93,6 +93,7 @@ import { computed, ref } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useEventStore } from "@/store/eventStore.js";
 import EditUserModal from "./EditUserModal.vue";
+import EventsCalendar from "./EventsCalendar.vue";
 
 const userStore = useUserStore();
 const eventStore = useEventStore();
@@ -140,4 +141,6 @@ const editProfile = () => {
   userStore.isEditing = true;
   userStore.editedUser = { ...currentUser.value };
 };
+
+
 </script>

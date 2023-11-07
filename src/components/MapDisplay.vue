@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -47,6 +47,7 @@ const initMap = () => {
     }),
   });
 
+  console.log("location", location);
   displayLocationPoint(location, vectorSourceInstance);
 
   map.value = mapInstance;
@@ -76,9 +77,9 @@ onMounted(() => {
   initMap();
 });
 
-onBeforeUnmount(() => {
-  if (map.value) {
-    map.value.setTarget(null);
-  }
+onUnmounted(() => {
+  map.value.setTarget(null);
 });
+
+
 </script>
