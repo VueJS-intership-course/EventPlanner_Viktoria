@@ -1,7 +1,10 @@
 <template>
-  <div class="demo-app">
-    <div class="demo-app-main">
-      <FullCalendar class="demo-app-calendar" :options="calendarOptions">
+  <div>
+    <EventByMonthChart/>
+  </div>
+  <div class="cal-app">
+    <div class="cal-app-main">
+      <FullCalendar class="cal-app-calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
           <b>{{ arg.timeText }}</b>
           <i>{{ arg.event.title }}</i>
@@ -12,12 +15,13 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useEventStore } from "@/store/eventStore";
+import EventByMonthChart from "./EventByMonthChart.vue";
 
 const store = useEventStore();
 
@@ -59,7 +63,7 @@ const calendarOptions = ref({
 
 </script>
 
-<style lang="css">
+<style scoped>
 h2 {
   margin: 0;
   font-size: 16px;
@@ -79,25 +83,14 @@ b {
   margin-right: 3px;
 }
 
-.demo-app {
+.cal-app {
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }
 
-.demo-app-sidebar {
-  width: 300px;
-  line-height: 1.5;
-  background: #eaf9ff;
-  border-right: 1px solid #d3e2e8;
-}
-
-.demo-app-sidebar-section {
-  padding: 2em;
-}
-
-.demo-app-main {
+.cal-app-main {
   flex-grow: 1;
   padding: 3em;
 }

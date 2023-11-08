@@ -64,7 +64,7 @@
   });
   </script>
   
-  <style lang="css">
+  <style scoped>
   h2 {
     margin: 0;
     font-size: 16px;
@@ -97,4 +97,3 @@
   }
   
   </style>
-  
