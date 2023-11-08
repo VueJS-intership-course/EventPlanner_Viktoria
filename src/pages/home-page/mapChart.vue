@@ -5,7 +5,7 @@
 <script setup>
 import Highcharts from "highcharts";
 import mapData from "@highcharts/map-collection/custom/world.geo.json";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
 
 const eventCountByCountry = defineProps({
   eventCountByCountry: {
@@ -13,14 +13,14 @@ const eventCountByCountry = defineProps({
     required: true,
   },
 });
-    
+
 const transformedArray = computed(() => {
   return Object.entries(eventCountByCountry.eventCountByCountry).map(
     ([name, value]) => ({ name, value })
   );
-}); 
+});
 
-onMounted(() => {
+const initMap = () => {
   Highcharts.mapChart("world-map", {
     chart: {
       map: mapData,
@@ -45,9 +45,14 @@ onMounted(() => {
       },
     ],
     accessibility: {
-        enabled: false,
+      enabled: false,
     },
-
   });
+};
+
+watch(transformedArray, () => {
+    initMap();
 });
+
+// onMounted(() => {});
 </script>
