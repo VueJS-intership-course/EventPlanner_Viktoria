@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -56,6 +56,7 @@ const calendarOptions = ref({
   weekends: true,
   eventsSet: handleEvents,
 });
+
 </script>
 
 <style lang="css">

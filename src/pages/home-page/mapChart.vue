@@ -1,5 +1,5 @@
 <template>
-  <div v-if="transformedArray" id="world-map"></div>
+  <div id="world-map"></div>
 </template>
 
 <script setup>
@@ -35,7 +35,7 @@ const initMap = () => {
         // dataLabels: {
         //   enabled: true,
         //   format: "{point.name}",
-        // },
+        // },  
         joinBy: "name",
         states: {
           hover: {

@@ -17,7 +17,10 @@ const eventCountByCountry = ref({});
 
 const countEventsByCountry = () => {
   events.value.forEach(async (event) => {
-    const country = await getCountryFromCoords(event.location);
+    let country = await getCountryFromCoords(event.location);
+    if (country === "United States") {
+      country = "United States of America";
+    }
     eventCountByCountry.value[country] =
       (eventCountByCountry.value[country] || 0) + 1;
   });
