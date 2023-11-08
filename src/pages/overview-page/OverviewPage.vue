@@ -33,8 +33,6 @@ const transformedEvents = computed(() =>
   }))
 );
 
-console.log(transformedEvents.value);
-
 const transformedEventsRef = ref([]);
 transformedEventsRef.value = transformedEvents.value;
 
