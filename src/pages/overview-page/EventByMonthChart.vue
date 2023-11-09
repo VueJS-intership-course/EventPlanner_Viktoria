@@ -21,7 +21,6 @@ events.value.forEach((event) => {
   eventCountByMonth[month]++;
 });
 
-
 const chartOptions = {
   chart: {
     type: "column", 

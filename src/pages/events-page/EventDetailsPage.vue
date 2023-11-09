@@ -63,7 +63,8 @@
                   userStore.user &&
                   !userStore.isAdmin &&
                   !event.users.includes(userStore.user.email) &&
-                  ticketAvailable
+                  ticketAvailable &&
+                  isBeforeToday(event.utcTime)
                 "
                 @click="buyTicket"
                 class="btn btn-primary m-2"
@@ -80,13 +81,13 @@
       <div class="container my-4">
         <div class="row">
           <div class="col-md-6">
-          <p class="lead">Event Location</p>
-          <MapDisplay :location="event.location" />
-        </div>
-        <div class="col-md-6">
-          <p class="lead">Event Countdown</p>
-          <p>TODO</p>
-        </div>
+            <p class="lead">Event Location</p>
+            <MapDisplay :location="event.location" />
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Event Countdown</p>
+            <p>TODO</p>
+          </div>
         </div>
       </div>
     </div>
@@ -137,5 +138,10 @@ const viewBudget = () => {
 const buyTicket = () => {
   eventStore.buyTicket(event.value);
   router.push("/events");
+};
+
+const isBeforeToday = (date) => {
+  const today = new Date().toISOString();
+  return date > today;
 };
 </script>

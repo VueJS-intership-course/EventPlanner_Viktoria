@@ -1,9 +1,17 @@
 <template>
-    <div class="container my-4">
-      <Filters />
+  <div class="container my-4">
+    <button @click="toggleFilters" class="btn btn-primary">
+      Toggle Filters
+    </button>
+    <Filters v-if="showFilters" />
   </div>
-  <div class="card-container">
-    <div v-for="event in filteredEvents" :key="generateUniqueKey" class="card">
+  <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
+    <div
+      v-for="event in filteredEvents"
+      :key="generateUniqueKey"
+      class="card"
+      style="width: 280px"
+    >
       <img
         class="card-img-top"
         src="https://picsum.photos/280/200"
@@ -11,12 +19,11 @@
       />
       <div class="card-body">
         <h5 class="card-title">{{ event.name }}</h5>
-        <p class="card-text">{{ event.description }}</p>
+        <p class="card-text">{{ truncateText(event.description, 100) }}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          {{ getUserTime(event.utcTime) }}
-        </li>
+        <li v-if="userStore.user" class="list-group-item">{{ getUserTime(event.utcTime) }}</li>
+        <li v-if="!userStore.user" class="list-group-item">{{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}</li>
         <li class="list-group-item">${{ event.price }}</li>
         <li v-if="event.ticketCount > 0" class="list-group-item">
           Tickets left: {{ event.ticketCount }}
@@ -37,7 +44,8 @@
           v-if="
             !userStore.isAdmin &&
             !event.users.includes(userStore.user.email) &&
-            event.ticketCount > 0
+            event.ticketCount > 0 &&
+            isBeforeToday(event.utcTime)
           "
           @click="buyTicket(event)"
           class="btn btn-primary m-2"
@@ -55,8 +63,9 @@ import { useEventStore } from "@/store/eventStore.js";
 import generateUniqueKey from "../../utils/randomId";
 import { useUserStore } from "../../store/userStore";
 import { useRouter } from "vue-router";
-import { getUserTime } from "@/utils/transformTime.js";
+import { getUserTime, getEventTime } from "@/utils/transformTime.js";
 import Filters from "@/pages/events-page/Filters.vue";
+import convertCoordsToTz from "@/utils/getTzFromCoords.js";
 
 const router = useRouter();
 
@@ -69,6 +78,23 @@ const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
 
+const truncateText = (text, maxLength) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+
+const showFilters = ref(false);
+
+const toggleFilters = () => {
+  showFilters.value = !showFilters.value;
+};
+
+const isBeforeToday = (date) => {
+  const today = new Date().toISOString();
+  return date > today;
+};
+
+
+
 
 onBeforeMount(() => {
   const { query } = router.currentRoute.value;
@@ -79,13 +105,12 @@ onBeforeMount(() => {
     eventStore.filterOptions.minPrice = query.minPrice || null;
     eventStore.filterOptions.maxPrice = query.maxPrice || null;
     eventStore.filterOptions.ticketStatus =
-      query.availableTickets === 'true'
-        ? 'available'
-        : query.soldOut === 'true'
-        ? 'sold-out'
-        : 'all';
+      query.availableTickets === "true"
+        ? "available"
+        : query.soldOut === "true"
+        ? "sold-out"
+        : "all";
     eventStore.filterOptions.searchQuery = query.searchQuery;
-
   }
 });
 
@@ -98,18 +123,3 @@ const buyTicket = (event) => {
   router.push("/events");
 };
 </script>
-
-<style scoped>
-.card-container {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin: 15px;
-}
-
-.card {
-  width: 280px;
-}
-</style>

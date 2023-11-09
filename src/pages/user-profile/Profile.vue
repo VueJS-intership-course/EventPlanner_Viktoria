@@ -24,7 +24,10 @@
               >
                 Edit Profile
               </button>
-              <div class="d-flex justify-content-between text-center mt-5 mb-2">
+              <div
+                v-if="!userStore.isAdmin"
+                class="d-flex justify-content-between text-center mt-5 mb-2"
+              >
                 <div>
                   <p class="mb-2 h5">{{ pastEvents.length }}</p>
                   <p class="text-muted mb-0">Past Events</p>
@@ -37,6 +40,12 @@
                   <p class="mb-2 h5">{{ upcomingEvents.length }}</p>
                   <p class="text-muted mb-0">Upcoming events</p>
                 </div>
+              </div>
+              <div
+                v-if="userStore.isAdmin"
+                class="d-flex justify-content-center text-center mt-5 mb-2"
+              >
+                <p class="mb-2 h5">Admin Rights</p>
               </div>
             </div>
           </div>
@@ -78,7 +87,10 @@
         </div>
       </div>
     </div>
-    <EventsCalendar :current-user-events="currentUserEvents"/>
+    <EventsCalendar
+      v-if="!userStore.isAdmin"
+      :current-user-events="currentUserEvents"
+    />
   </section>
   <section v-if="!currentUser">
     <h3 class="mt-5">You are currently not logged in</h3>
@@ -141,6 +153,4 @@ const editProfile = () => {
   userStore.isEditing = true;
   userStore.editedUser = { ...currentUser.value };
 };
-
-
 </script>

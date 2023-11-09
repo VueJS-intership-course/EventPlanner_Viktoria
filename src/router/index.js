@@ -16,7 +16,8 @@ router.beforeResolve(async (to, from, next) => {
     (to.name === "register" && store.isLogged) ||
     (to.name === "create-event" && !store.isAdmin) ||
     (to.name === "event-budget" && !store.isAdmin)||
-    (to.name === "registerAdmin" && !store.isAdmin)
+    (to.name === "registerAdmin" && !store.isAdmin) ||
+    (to.name === "overview" && !store.isAdmin) 
   ) {
     next({ name: "home" });
   } else next();

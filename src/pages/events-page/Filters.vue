@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
-    <form @submit.prevent="applyFilters" class="row g-2">
-      <div class="col-md-3">
+    <form @submit.prevent="applyFilters" class="row g-3">
+      <div class="col-md-2">
         <label for="fromDate" class="form-label">From Date:</label>
         <input
           type="date"
@@ -10,7 +10,7 @@
           v-model="filterOptions.fromDate"
         />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label for="toDate" class="form-label">To Date:</label>
         <input
           type="date"
@@ -19,7 +19,7 @@
           v-model="filterOptions.toDate"
         />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label for="minPrice" class="form-label">Min Price:</label>
         <input
           type="number"
@@ -28,7 +28,7 @@
           v-model="filterOptions.minPrice"
         />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label for="maxPrice" class="form-label">Max Price:</label>
         <input
           type="number"
@@ -37,7 +37,7 @@
           v-model="filterOptions.maxPrice"
         />
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label for="ticketStatus" class="form-label">Ticket Status:</label>
         <select
           class="form-select"
@@ -49,8 +49,7 @@
           <option value="sold-out">Sold Out</option>
         </select>
       </div>
-
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label for="searchQuery" class="form-label">Search Event:</label>
         <input
           type="text"
@@ -59,17 +58,16 @@
           v-model="filterOptions.searchQuery"
         />
       </div>
-      <div class="d-flex justify-content-end">
+      <div class="col-md-12 d-flex justify-content-end">
         <button type="submit" class="btn btn-primary">Apply Filters</button>
       </div>
-      <div v-if="filtersApplied" class="d-flex justify-content-end">
-        <button @click="resetFilters" class="btn btn-secondary">
-          Reset Filters
-        </button>
+      <div v-if="filtersApplied" class="col-md-12 d-flex justify-content-end">
+        <button @click="resetFilters" class="btn btn-secondary">Reset Filters</button>
       </div>
     </form>
   </div>
 </template>
+
 
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
@@ -105,8 +103,6 @@ const applyFilters = () => {
       soldOut: filterOptions.value.ticketStatus === 'sold-out',
     },
   });
-  console.log("Search Query in Filters.vue:", filterOptions.value.searchQuery);
-
 };
 
 const resetFilters = () => {

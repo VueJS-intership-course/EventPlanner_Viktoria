@@ -23,7 +23,7 @@
           <li class="nav-item">
             <RouterLink class="nav-link" to="/events">Events</RouterLink>
           </li>
-          <li v-if="store.user" class="nav-item">
+          <li v-if="isAuthenticated"  class="nav-item">
             <RouterLink to="/overview" class="nav-link" href="#">Overview</RouterLink>
           </li>
           <li v-if="isAuthenticated" class="nav-item dropdown">
@@ -60,9 +60,12 @@
         <button @click="logoutUser" v-if="store.user" class="btn btn-danger">
           Logout
         </button>
+        <RouterLink to="/register" v-if="!store.user" class="btn btn-primary">
+          Register
+        </RouterLink>
         <RouterLink to="/login" v-if="!store.user" class="btn btn-primary">
           Login
-        </RouterLink>
+        </RouterLink>     
       </div>
     </div>
   </nav>

@@ -91,6 +91,7 @@ import { getEventTime } from "@/utils/transformTime.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";
 import moment from "moment-timezone";
 import { editEventSchema } from "@/utils/validationSchemas.js";
+import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 const store = useEventStore();
@@ -131,6 +132,7 @@ const saveClicked = () => {
       store.editEvent(editedEvent.value);
       store.isEditing = false;
       router.push("/events");
+      showNotification("Event edited successfully!");
     });
 };
 
