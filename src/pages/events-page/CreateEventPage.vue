@@ -1,6 +1,10 @@
 <template>
-  <div style="width: 50%" class="container mt-4">
-    <h2>Create a new Event</h2>
+    <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+    <h2 class="card-title text-center mb-4">Create a new Event</h2>
     <Form @submit="createEvent" :validationSchema="createEventSchema">
       <div class="mb-3">
         <label for="eventName" class="form-label">Event Name</label>
@@ -89,10 +93,14 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Event Location</label>
-        <MapComponent :onMapClick="onMapClick" style="height: 500px; width: 700px"/>
+        <MapComponent :onMapClick="onMapClick" style="height: 500px; width: 600px"/>
       </div>
       <button type="submit" class="btn btn-primary">Create Event</button>
     </Form>
+  </div>
+  </div>
+  </div>
+  </div>
   </div>
 </template>
 
@@ -105,6 +113,7 @@ import moment from "moment-timezone";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -119,7 +128,6 @@ const budget = ref("");
 const location = ref([]);
 
 const onMapClick = (lonLat) => {
-  console.log("map click", lonLat);
   location.value = lonLat;
 };
 
@@ -142,8 +150,7 @@ const createEvent = (formData) => {
     router.push("/events");
   } catch (error) {
     console.error("Error while adding the event:", error);
-    // TODO: handle the error with a toastify message
-
+    showNotification('Error addin the event')
 
   }
 };

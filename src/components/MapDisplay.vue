@@ -47,7 +47,6 @@ const initMap = () => {
     }),
   });
 
-  console.log("location", location);
   displayLocationPoint(location, vectorSourceInstance);
 
   map.value = mapInstance;

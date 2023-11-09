@@ -6,16 +6,7 @@ export const useEventStore = defineStore({
   state: () => ({
     events: [],
     isEditing: false,
-    editedEvent: {
-      id: "",
-      name: "",
-      description: "",
-      utcTime: "",
-      location: [],
-      ticketCount: "",
-      price: "",
-      budget: "",
-    },
+    editedEvent: {},
     selectedEvent: {},
     filterOptions: {
       fromDate: null,

@@ -1,7 +1,7 @@
 <template>
   <modal
-    :title="modalTitle"
-    :modalId="modalId"
+    title="Edit Event"
+    modalId="editEventModal"
     @save="saveClicked"
     @cancel="cancelClicked"
   >
@@ -94,9 +94,9 @@ import { editEventSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
-const store = useEventStore();
+const store = useEventStore()
+;
 const editedEvent = computed(() => store.editedEvent);
-
 const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
 
 const datetime = computed(() =>
@@ -104,9 +104,6 @@ const datetime = computed(() =>
 );
 const eventTime = ref(datetime.value.split(" ")[0]);
 const eventDate = ref(datetime.value.split(" ")[1]);
-
-const modalTitle = "Edit Event";
-const modalId = "editEventModal";
 
 const onMapClick = (lonLat) => {
   editedEvent.value.location = lonLat;

@@ -96,13 +96,12 @@ const handleSelectedTimezone = (selectedTimezone) => {
 
 
 const registerUser = async () => {
-  console.log
   try {
     const user = {
       email: email.value,
       username: username.value,
       timezone: timezone.value,
-      isAdmin: store.isAdmin,
+      isAdmin: store.isAdmin ? true : false,
     };
 
     await authService.register(user, password.value);
