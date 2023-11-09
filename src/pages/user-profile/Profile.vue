@@ -24,7 +24,10 @@
               >
                 Edit Profile
               </button>
-              <div class="d-flex justify-content-between text-center mt-5 mb-2">
+              <div
+                v-if="!userStore.isAdmin"
+                class="d-flex justify-content-between text-center mt-5 mb-2"
+              >
                 <div>
                   <p class="mb-2 h5">{{ pastEvents.length }}</p>
                   <p class="text-muted mb-0">Past Events</p>
@@ -37,6 +40,12 @@
                   <p class="mb-2 h5">{{ upcomingEvents.length }}</p>
                   <p class="text-muted mb-0">Upcoming events</p>
                 </div>
+              </div>
+              <div
+                v-if="userStore.isAdmin"
+                class="d-flex justify-content-center text-center mt-5 mb-2"
+              >
+                <p class="mb-2 h5">Admin Rights</p>
               </div>
             </div>
           </div>
@@ -60,7 +69,6 @@
                 >Upcoming Events</a
               >
             </p>
-
             <div>
               <ul
                 class="list-group"
@@ -68,7 +76,7 @@
               >
                 <li v-for="event in filteredEvents" class="list-group-item">
                   <p class="text-">{{ event.name }}</p>
-                  <RouterLink :to="'/event/' + event.id" class="btn btn-primary"
+                  <RouterLink :to="'/events/' + event.id" class="btn btn-primary"
                     >Details</RouterLink
                   >
                 </li>
@@ -79,6 +87,10 @@
         </div>
       </div>
     </div>
+    <EventsCalendar
+      v-if="!userStore.isAdmin"
+      :current-user-events="currentUserEvents"
+    />
   </section>
   <section v-if="!currentUser">
     <h3 class="mt-5">You are currently not logged in</h3>
@@ -86,7 +98,6 @@
     <RouterLink to="/register" class="btn btn-secondary">Sign up</RouterLink>
   </section>
   <EditUserModal v-if="isEditing" />
-
 </template>
 
 <script setup>
@@ -94,6 +105,7 @@ import { computed, ref } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useEventStore } from "@/store/eventStore.js";
 import EditUserModal from "./EditUserModal.vue";
+import EventsCalendar from "./EventsCalendar.vue";
 
 const userStore = useUserStore();
 const eventStore = useEventStore();
@@ -134,12 +146,11 @@ const filteredEvents = computed(() => {
 });
 
 const isEventUpcoming = (event) => {
-  return new Date(event.date) > new Date();
+  return new Date(event.utcTime) > new Date();
 };
 
 const editProfile = () => {
   userStore.isEditing = true;
   userStore.editedUser = { ...currentUser.value };
 };
-
 </script>

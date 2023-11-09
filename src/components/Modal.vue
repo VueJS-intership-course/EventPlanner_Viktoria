@@ -25,27 +25,26 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
 
-const { title, modalId, saveFunction, cancelFunction } = defineProps([
-  "title",
-  "modalId",
-  "saveFunction",
-  "cancelFunction",
-]);
+const { title, modalId } = defineProps({
+    title: {
+      type: String,
+      required: true,
+    },
+    modalId: {
+      type: String,
+      required: true,
+    },
+  });
+
+
 const emit = defineEmits(["save", "cancel" ]);
 
 const handleSave = () => {
   emit("save");
-  if (saveFunction) {
-    saveFunction();
-  }
 };
 
 const handleCancel = () => {
   emit("cancel");
-  if (cancelFunction) {
-    cancelFunction();
-  }
 };
 </script>

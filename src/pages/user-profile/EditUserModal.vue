@@ -1,18 +1,29 @@
 <template>
-  <modal :title="modalTitle" :modalId="modalId" @save="saveClicked" @cancel="cancelClicked">
-    <div class="form-group">
-      <label for="username">New Username</label>
-      <input
-        type="text"
-        class="form-control"
-        id="username"
-        v-model="editedUser.username"
-      />
-    </div>
-    <div class="form-group">
-      <label for="timezone">New Timezone</label>
-      <time-zone-dropdown @selected="handleSelectedTimezone"></time-zone-dropdown>
-    </div>
+  <modal
+    :title="modalTitle"
+    :modalId="modalId"
+    @save="saveClicked"
+    @cancel="cancelClicked"
+  >
+    <Form :validation-schema="editUserSchema">
+      <div class="form-group">
+        <label for="username">New Username</label>
+        <Field
+          type="text"
+          class="form-control"
+          id="username"
+          name="username"
+          v-model="editedUser.username"
+        />
+        <ErrorMessage name="username" class="text-danger" />
+      </div>
+      <div class="form-group">
+        <label for="timezone">New Timezone</label>
+        <time-zone-dropdown
+          @selected="handleSelectedTimezone"
+        ></time-zone-dropdown>
+      </div>
+    </Form>
   </modal>
 </template>
 
@@ -21,7 +32,9 @@ import { computed } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
-import Modal from "@/components/Modal.vue"; 
+import Modal from "@/components/Modal.vue";
+import { Field, Form, ErrorMessage } from "vee-validate";
+import { editUserSchema } from "@/utils/validationSchemas.js";
 
 const router = useRouter();
 
@@ -36,9 +49,18 @@ const handleSelectedTimezone = (selectedTimezone) => {
 };
 
 const saveClicked = () => {
-  store.editUser(editedUser.value);
-  store.isEditing = false;
-  router.push("/profile");
+  editUserSchema
+    .validate({
+      username: editedUser.value.username,
+    })
+    .then(() => {
+      store.editUser(editedUser.value);
+      store.isEditing = false;
+      router.push("/profile");
+    })
+    .catch((err) => {
+      //toastify
+    });
 };
 
 const cancelClicked = () => {

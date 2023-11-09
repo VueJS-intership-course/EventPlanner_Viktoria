@@ -13,25 +13,25 @@ export const eventService = {
           id,
           name,
           description,
-          time,
-          date,
+          utcTime,
           location,
           ticketCount,
           price,
           budget,
           users,
+          expenses,
         } = doc.data();
         const event = {
           id,
           name,
           description,
-          date,
-          time,
+          utcTime,
           location,
           ticketCount,
           price,
           budget,
           users,
+          expenses,
         };
         data.push(event);
       });
@@ -68,13 +68,13 @@ export const eventService = {
         id: event.id,
         name: event.name,
         description: event.description,
-        date: event.date,
-        time: event.time,
+        utcTime: event.utcTime,
         location: event.location,
         ticketCount: event.ticketCount,
         price: event.price,
         budget: event.budget,
         users: event.users,
+        expenses: event.expenses,
       });
     } catch (error) {
       console.error("Error adding an event:", error);
@@ -109,8 +109,7 @@ export const eventService = {
         id: event.id,
         name: event.name,
         description: event.description,
-        date: event.date,
-        time: event.time,
+        utcTime: event.utcTime,
         location: event.location,
         ticketCount: event.ticketCount,
         price: event.price,
@@ -143,4 +142,22 @@ export const eventService = {
       console.error("Error buying ticket: ", error);
     }
   },
+
+  async addExpense(event, expense) {
+    const querySnapshot = await fb.fireStore
+      .collection("events")
+      .where("id", "==", event.id)
+      .get();
+
+    const doc = querySnapshot.docs[0];
+    try {
+      const updatedExpenses = [...event.expenses, expense];
+
+      await doc.ref.update({
+        expenses: updatedExpenses,
+      });
+    } catch (error) {
+      console.error("Error adding expense: ", error);
+    }
+  }
 };

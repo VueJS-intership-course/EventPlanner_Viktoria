@@ -23,8 +23,8 @@
           <li class="nav-item">
             <RouterLink class="nav-link" to="/events">Events</RouterLink>
           </li>
-          <li v-if="store.user" class="nav-item">
-            <a class="nav-link" href="#">Overview</a>
+          <li v-if="isAuthenticated"  class="nav-item">
+            <RouterLink to="/overview" class="nav-link" href="#">Overview</RouterLink>
           </li>
           <li v-if="isAuthenticated" class="nav-item dropdown">
             <a
@@ -37,7 +37,11 @@
               Admin
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Add admins</a></li>
+              <li>
+                <RouterLink class="dropdown-item" to="/register-admin"
+                  >Add admins</RouterLink
+                >
+              </li>
               <li>
                 <RouterLink class="dropdown-item" to="/create-event"
                   >Add new events</RouterLink
@@ -56,9 +60,12 @@
         <button @click="logoutUser" v-if="store.user" class="btn btn-danger">
           Logout
         </button>
+        <RouterLink to="/register" v-if="!store.user" class="btn btn-primary">
+          Register
+        </RouterLink>
         <RouterLink to="/login" v-if="!store.user" class="btn btn-primary">
           Login
-        </RouterLink>
+        </RouterLink>     
       </div>
     </div>
   </nav>
@@ -94,8 +101,4 @@ span {
   margin: 1rem;
 }
 
-img {
-  margin-right: 0.5rem;
-  border-radius: 7px;
-}
 </style>

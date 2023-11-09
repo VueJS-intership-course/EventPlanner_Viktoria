@@ -1,25 +1,20 @@
 import moment from "moment-timezone";
-import tzlookup from "tz-lookup";
 import { useUserStore } from "@/store/userStore.js";
 
-const getUserTime = (date, time, eventcoords) => {
-  if (!date || !time || !eventcoords) return "Loading...";
-
-  const [lon, lat] = eventcoords;
-  const timezone = tzlookup(lat, lon);
-
-  const eventTime = moment.tz(`${date} ${time}`, timezone);
-
+export const getUserTime = (utcTime) => {
   const store = useUserStore();
-
-  if (store.user && store.user.timezone) {
-    const targetTime = eventTime
-      .tz(store.user.timezone)
-      .format("HH:mm DD/MM/YYYY");
-    return targetTime;
+  if (!utcTime || !store.user || !store.user.timezone) {
+    return "Loading...";
   }
-
-  return `${time}${date}`;
+  const userTime = moment.utc(utcTime).tz(store.user.timezone);
+  return userTime.format("HH:mm YYYY-MM-DD");
 };
 
-export default getUserTime;
+export const getEventTime = (utcTime, timezone) => {
+  if (!utcTime || !timezone) {
+    return "Loading...";
+  }
+  const eventTime = moment.utc(utcTime).tz(timezone);
+  return eventTime.format("HH:mm YYYY-MM-DD");
+};
+

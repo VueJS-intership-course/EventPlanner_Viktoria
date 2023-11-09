@@ -7,14 +7,19 @@ import { useUserStore } from "@/store/userStore.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
-import HighchartsVue from "highcharts-vue";
 import Highcharts from "highcharts";
-import { authService } from "@/services/userAuthentication.js";
+import HighchartsVue from "highcharts-vue";
+import HighchartsMap from 'highcharts/modules/map';
+import HighchartsMore from 'highcharts/highcharts-more';
+
+
+HighchartsMap(Highcharts);
+HighchartsMore(Highcharts);
 
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
-app.use(HighchartsVue);
+app.use(HighchartsVue, { Highcharts });
 
 const store = useUserStore();
 

@@ -1,9 +1,11 @@
 <template>
-  <div id="map"></div>
+  <div>
+    <div id="eventDetailsMap" style="width: 600px; height: 400px"></div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -12,11 +14,15 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
-import { fromLonLat, toLonLat } from "ol/proj";
-import 'ol/ol.css';
+import { fromLonLat } from "ol/proj";
+import "ol/ol.css";
 
-
-const emit = defineEmits(["mapClick"]);
+const { location } = defineProps({
+  location: {
+    type: Array,
+    required: true,
+  },
+});
 
 const map = ref(null);
 const vectorSource = ref(null);
@@ -28,7 +34,7 @@ const initMap = () => {
   });
 
   const mapInstance = new Map({
-    target: "map",
+    target: "eventDetailsMap",
     layers: [
       new TileLayer({
         source: new OSM(),
@@ -36,21 +42,18 @@ const initMap = () => {
       vectorLayer,
     ],
     view: new View({
-      center: fromLonLat([0, 0]),
-      zoom: 2,
+      center: fromLonLat(location),
+      zoom: 4,
     }),
   });
 
-  mapInstance.on("click", (event) => {
-    const lonLat = toLonLat(event.coordinate);
-    handleMapClick(lonLat, vectorSourceInstance);
-  });
+  displayLocationPoint(location, vectorSourceInstance);
 
   map.value = mapInstance;
   vectorSource.value = vectorSourceInstance;
 };
 
-const handleMapClick = (lonLat, vectorSourceInstance) => {
+const displayLocationPoint = (lonLat, vectorSourceInstance) => {
   const point = new Feature({
     geometry: new Point(fromLonLat(lonLat)),
   });
@@ -59,7 +62,7 @@ const handleMapClick = (lonLat, vectorSourceInstance) => {
     image: new Circle({
       radius: 7,
       fill: new Fill({
-        color: "black",
+        color: "blue",
       }),
     }),
   });
@@ -67,11 +70,15 @@ const handleMapClick = (lonLat, vectorSourceInstance) => {
   point.setStyle(pointStyle);
   vectorSourceInstance.clear();
   vectorSourceInstance.addFeature(point);
-
-  emit("mapClick", lonLat);
 };
 
 onMounted(() => {
   initMap();
 });
+
+onUnmounted(() => {
+  map.value.setTarget(null);
+});
+
+
 </script>

@@ -1,16 +1,11 @@
 <template>
-  <div>
-    <EventByMonthChart/>
-  </div>
-  <div class="cal-app">
-    <div class="cal-app-main">
-      <FullCalendar class="cal-app-calendar" :options="calendarOptions">
-        <template v-slot:eventContent="arg">
-          <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
-        </template>
-      </FullCalendar>
-    </div>
+  <div class="demo-app">
+    <FullCalendar class="demo-app-calendar" :options="calendarOptions">
+      <template v-slot:eventContent="arg">
+        <b>{{ arg.timeText }}</b>
+        <i>{{ arg.event.title }}</i>
+      </template>
+    </FullCalendar>
   </div>
 </template>
 
@@ -21,11 +16,16 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useEventStore } from "@/store/eventStore";
-import EventByMonthChart from "./EventByMonthChart.vue";
 
 const store = useEventStore();
-
 store.getEventList();
+
+defineProps({
+  currentUserEvents: {
+    type: Array,
+    required: true,
+  },
+});
 
 const allEvents = computed(() => store.events);
 
@@ -49,7 +49,7 @@ const calendarOptions = ref({
   headerToolbar: {
     left: "prev,next today",
     center: "title",
-    right: "dayGridMonth,timeGridWeek,timeGridDay",
+    right: "dayGridMonth,timeGridWeek",
   },
   initialView: "dayGridMonth",
   initialEvents: transformedEventsRef.value,
@@ -60,43 +60,44 @@ const calendarOptions = ref({
   weekends: true,
   eventsSet: handleEvents,
 });
-
 </script>
 
 <style scoped>
-h2 {
-  margin: 0;
-  font-size: 16px;
-}
-
-ul {
-  margin: 0;
-  padding: 0 0 0 1.5em;
-}
-
-li {
-  margin: 1.5em 0;
-  padding: 0;
-}
-
-b {
-  margin-right: 3px;
-}
-
-.cal-app {
+.demo-app {
   display: flex;
-  min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  min-height: 100vh;
+  font-family: 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
   font-size: 14px;
+  justify-content: center;
+  align-items: center;
 }
 
-.cal-app-main {
-  flex-grow: 1;
-  padding: 3em;
+.demo-app-calendar {
+  width: 80%;
+  margin: auto;
 }
 
-.fc {
-  width: 800px;
-  margin: 0 auto;
+/* Adjust the following styles based on your preferences */
+.fc-dayGridMonth-view,
+.fc-timeGridWeek-view {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.fc-day,
+.fc-time-grid-event {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 3px;
+}
+
+.fc-event-title {
+  color: #333;
+  font-size: 12px;
+}
+
+.fc-today {
+  background-color: #e8f5e9;
+  border-radius: 3px;
 }
 </style>

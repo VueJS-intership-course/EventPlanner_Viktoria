@@ -1,72 +1,98 @@
 <template>
-  <div v-if="isLoading">
-    <p>Loading event details...</p>
-  </div>
-  <div v-if="event" class="container my-4">
-    <div class="row">
-      <div class="col-md-6">
-        <img
-          src="https://picsum.photos/600/400"
-          alt="Event Image"
-          class="img-fluid rounded"
-        />
+  <div>
+    <div class="card">
+      <div class="container my-4">
+        <div class="row">
+          <div class="col-md-6">
+            <img
+              src="https://picsum.photos/600/400"
+              alt="Event Image"
+              class="img-fluid rounded"
+            />
+          </div>
+          <div class="col-md-6">
+            <h1 class="display-4">{{ event.name }}</h1>
+            <p class="lead">{{ event.description }}</p>
+            <p class="mb-2">
+              <strong>Event Time in {{ eventTz }}:</strong>
+              {{ getEventTime(event.utcTime, eventTz) }}
+            </p>
+            <p v-if="userStore.user" class="mb-2">
+              <strong>Your Time:</strong>
+              {{ getUserTime(event.utcTime) }}
+            </p>
+                  
+
+            <p v-if="ticketAvailable" class="mb-2">
+              <strong>Tickets Left:</strong> {{ event.ticketCount }}
+            </p>
+            <p v-if="!ticketAvailable" class="mb-2 text-danger">
+              <strong>Tickets sold out</strong>
+            </p>
+            <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
+            <p v-if="userStore.isAdmin" class="mb-2">
+              <strong>Budget:</strong> ${{ event.budget }}
+            </p>
+            <p v-if="userStore.isAdmin" class="mb-2">
+              <strong>Users with tickets:</strong> {{ event.users }}
+            </p>
+
+            <div class="mt-4">
+              <button
+                v-if="userStore.isAdmin"
+                @click="deleteEvent"
+                class="btn btn-danger m-2"
+              >
+                Delete Event
+              </button>
+              <button
+                v-if="userStore.isAdmin"
+                @click="editEvent"
+                class="btn btn-primary m-2"
+              >
+                Edit Event
+              </button>
+              <button
+                v-if="userStore.isAdmin"
+                @click="viewBudget"
+                class="btn btn-primary m-2"
+              >
+                View Budget
+              </button>
+              <button
+                v-if="
+                  userStore.user &&
+                  !userStore.isAdmin &&
+                  !event.users.includes(userStore.user.email) &&
+                  ticketAvailable &&
+                  isBeforeToday(event.utcTime)
+                "
+                @click="buyTicket"
+                class="btn btn-primary m-2"
+              >
+                Buy a Ticket
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6">
-        <h1 class="display-4">{{ event.name }}</h1>
-        <p class="lead">{{ event.description }}</p>
-        <p class="mb-2">
-          <strong>Event Time:</strong> {{ event.time }} / {{ event.date }}
-        </p>
-        <p class="mb-2">
-          <strong>Your Time:</strong>
-          {{ getUserTime(event.date, event.time, event.location) }}
-        </p>
-
-        <p class="mb-2">
-          <strong>Tickets Left:</strong> {{ event.ticketCount }}
-        </p>
-        <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
-        <p v-if="userStore.isAdmin" class="mb-2">
-          <strong>Budget:</strong> ${{ event.budget }}
-        </p>
-        <p class="mb-2"><strong>User:</strong> ${{ event.users }}</p>
-        <p class="mb-2"><strong>Are tickets Available:</strong> {{ ticketAvailable }}</p>
-
-        <div class="mt-4">
-          <button
-      
-            v-if="userStore.isAdmin"
-            @click="deleteEvent"
-            class="btn btn-danger m-2"
-          >
-            Delete Event
-          </button>
-          <button
-            v-if="userStore.isAdmin"
-            @click="editEvent"
-            class="btn btn-primary m-2"
-          >
-            Edit Event
-          </button>
-          <button
-            v-if="userStore.isAdmin"
-            @click="viewBudget"
-            class="btn btn-primary m-2"
-          >
-            View Budget
-          </button>
-          <button
-            v-if="userStore.user && !userStore.isAdmin && !event.users.includes(userStore.user.email) && ticketAvailable"
-            @click="buyTicket"
-            class="btn btn-primary m-2"
-          >
-            Buy a Ticket
-          </button>
+      <EditEventModal v-if="isEditing" />
+    </div>
+    <div class="card">
+      <div class="container my-4">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="lead">Event Location</p>
+            <MapDisplay :location="event.location" />
+          </div>
+          <div class="col-md-6">
+            <p class="lead">Event Countdown</p>
+            <p>TODO</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <EditEventModal v-if="isEditing" />
 </template>
 
 <script setup>
@@ -75,7 +101,9 @@ import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
 import EditEventModal from "@/components/EditEventModal.vue";
-import getUserTime from "@/utils/transformTime.js";
+import { getUserTime, getEventTime } from "@/utils/transformTime.js";
+import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import MapDisplay from "@/components/MapDisplay.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -87,6 +115,7 @@ const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
 const ticketAvailable = computed(() => event.value.ticketCount > 0);
+const eventTz = computed(() => convertCoordsToTz(event.value.location));
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {
@@ -112,6 +141,8 @@ const buyTicket = () => {
   router.push("/events");
 };
 
-
+const isBeforeToday = (date) => {
+  const today = new Date().toISOString();
+  return date > today;
+};
 </script>
-
