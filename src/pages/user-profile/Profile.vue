@@ -76,7 +76,7 @@
               >
                 <li v-for="event in filteredEvents" class="list-group-item">
                   <p class="text-">{{ event.name }}</p>
-                  <RouterLink :to="'/event/' + event.id" class="btn btn-primary"
+                  <RouterLink :to="'/events/' + event.id" class="btn btn-primary"
                     >Details</RouterLink
                   >
                 </li>
