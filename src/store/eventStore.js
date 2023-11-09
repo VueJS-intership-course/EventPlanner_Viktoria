@@ -72,6 +72,15 @@ export const useEventStore = defineStore({
       }
     },
 
+    async addExpense(event, expense){
+      try {
+        await eventService.addExpense(event, expense);
+        await this.getEventList();
+      } catch (error) {
+        console.error("Error adding an expense:", error);
+      }
+    },
+
     applyFilters() {
       this.filterOptions = {
         fromDate: this.filterOptions.fromDate,

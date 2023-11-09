@@ -1,7 +1,7 @@
 import HomePage from "@/pages/home-page/HomePage.vue";
 import Profile from "@/pages/user-profile/Profile.vue";
-import Login from "@/components/LoginForm.vue";
-import Register from "@/components/RegisterForm.vue";
+import Login from "@/pages/login-register/LoginPage.vue";
+import Register from "@/pages/login-register/RegisterPage.vue";
 import EventList from "@/pages/events-page/EventList.vue";
 import CreateEventPage from "@/pages/events-page/CreateEventPage.vue";
 import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
@@ -21,7 +21,7 @@ export const routes = [
       component: EventList,
     },
     {
-      path: "/event/:id",
+      path: "/events/:id",
       name: "event-details",
       component: EventDetailsPage,
     },

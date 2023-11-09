@@ -73,10 +73,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
-import TimeZoneDropdown from "./TimeZoneDropdown.vue";
+import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { registerSchema } from "@/utils/validationSchemas.js";
 import { useUserStore } from "@/store/userStore.js";

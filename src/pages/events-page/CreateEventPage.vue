@@ -144,6 +144,7 @@ const createEvent = (formData) => {
     price: formData.price,
     budget: formData.budget,
     users: [],
+    expenses: [],
   };
   try {
     eventStore.addEvent(event);
