@@ -17,10 +17,11 @@
               <strong>Event Time in {{ eventTz }}:</strong>
               {{ getEventTime(event.utcTime, eventTz) }}
             </p>
-            <p class="mb-2">
+            <p v-if="userStore.user" class="mb-2">
               <strong>Your Time:</strong>
               {{ getUserTime(event.utcTime) }}
             </p>
+                  
 
             <p v-if="ticketAvailable" class="mb-2">
               <strong>Tickets Left:</strong> {{ event.ticketCount }}

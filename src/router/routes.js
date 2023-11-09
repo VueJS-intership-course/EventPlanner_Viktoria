@@ -7,6 +7,7 @@ import CreateEventPage from "@/pages/events-page/CreateEventPage.vue";
 import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
 import EventBudgetPage from "@/pages/budget-page/BudgetPage.vue";
 import OverviewPage from "@/pages/overview-page/OverviewPage.vue";
+import NotFound from "@/pages/404notFound.vue";
 
 export const routes = [
     {
@@ -58,5 +59,9 @@ export const routes = [
       path: "/overview",
       name: "overview",
       component: OverviewPage,
+    },
+    {
+      path: "/:catchAll(.*)",
+      component: NotFound,
     },
   ];
