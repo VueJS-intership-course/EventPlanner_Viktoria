@@ -17,8 +17,19 @@
             class="list-group-item d-flex justify-content-between align-items-center"
           >
             {{ category }} - ${{ getCategoryExpense(category) }}
+            <div class="d-flex flex-wrap">
+              <span
+                v-for="expense in groupedExpenses[category]"
+                :key="generateUniqueKey()"
+                class="badge bg-secondary rounded-pill mx-1"
+                @click="deleteExpense(category, expense.id)"
+                style="cursor: pointer"
+              >
+                {{ expense.cost }}
+                <i class="bi bi-x-circle-fill"></i>
+              </span>
+            </div>
           </li>
-
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
@@ -27,7 +38,6 @@
               >${{ totalExpenses }}</span
             >
           </li>
-
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
@@ -44,6 +54,7 @@
           </li>
         </ul>
       </div>
+
       <div class="col-md-6">
         <form @submit.prevent="addExpense" class="mt-4">
           <div class="mb-3">
@@ -77,9 +88,13 @@
         </form>
       </div>
     </div>
+
     <div v-if="totalExpenses" class="col-md-6">
-        <ExpensePieChart :groupedExpenses="groupedExpenses" :totalExpenses="totalExpenses" />
-      </div>
+      <ExpensePieChart
+        :groupedExpenses="groupedExpenses"
+        :totalExpenses="totalExpenses"
+      />
+    </div>
   </div>
 </template>
 
@@ -87,6 +102,7 @@
 import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore";
 import ExpensePieChart from "@/pages/budget-page/PieChart.vue";
+import generateUniqueKey from "@/utils/randomId.js";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);
@@ -142,13 +158,19 @@ const expense = ref({
 const addExpense = async () => {
   try {
     await eventStore.addExpense(event.value, expense.value);
-    expense.value = { category: "utilities", cost: 0 };
+    expense.value = { category: "utilities", cost: 0, id: generateUniqueKey() };
     eventStore.selectedEvent = eventStore.getEventById(event.value.id);
   } catch (error) {
     console.error("Error adding expense: ", error);
   }
 };
 
-
-
+const deleteExpense = async (category, expenseId) => {
+  try {
+    await eventStore.deleteExpense(event.value, category, expenseId);
+    eventStore.selectedEvent = eventStore.getEventById(event.value.id);
+  } catch (error) {
+    console.error("Error deleting expense: ", error);
+  }
+};
 </script>

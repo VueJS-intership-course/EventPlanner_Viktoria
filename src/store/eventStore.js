@@ -72,12 +72,21 @@ export const useEventStore = defineStore({
       }
     },
 
-    async addExpense(event, expense){
+    async addExpense(event, expense) {
       try {
         await eventService.addExpense(event, expense);
         await this.getEventList();
       } catch (error) {
         console.error("Error adding an expense:", error);
+      }
+    },
+
+    async deleteExpense(event, category, expenseId) {
+      try {
+        await eventService.deleteExpense(event, category, expenseId);
+        await this.getEventList();
+      } catch (error) {
+        console.error("Error deleting an expense:", error);
       }
     },
 

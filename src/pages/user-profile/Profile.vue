@@ -104,7 +104,7 @@
 import { computed, ref } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useEventStore } from "@/store/eventStore.js";
-import EditUserModal from "./EditUserModal.vue";
+import EditUserModal from "@/pages/user-profile/EditUserModal.vue";
 import EventsCalendar from "./EventsCalendar.vue";
 
 const userStore = useUserStore();

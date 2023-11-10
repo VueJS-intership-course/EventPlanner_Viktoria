@@ -159,5 +159,28 @@ export const eventService = {
     } catch (error) {
       console.error("Error adding expense: ", error);
     }
+  },
+
+  async deleteExpense(event, category, expenseId) {
+    const querySnapshot = await fb.fireStore
+      .collection("events")
+      .where("id", "==", event.id)
+      .get();
+  
+    const doc = querySnapshot.docs[0];
+    try {
+      const updatedExpenses = event.expenses.filter(
+        (expense) => !(expense.category === category && expense.id === expenseId)
+      );
+  
+      await doc.ref.update({
+        expenses: updatedExpenses,
+      });
+    } catch (error) {
+      console.error("Error deleting expense: ", error);
+    }
   }
+  
+  
+  
 };

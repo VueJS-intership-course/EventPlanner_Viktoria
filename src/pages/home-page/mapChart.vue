@@ -32,16 +32,12 @@ const initMap = () => {
       {
         data: transformedArray.value,
         name: "Events",
-        // dataLabels: {
-        //   enabled: true,
-        //   format: "{point.name}",
-        // },  
         joinBy: "name",
         states: {
           hover: {
             color: "#808080",
           },
-        },
+        }, 
       },
     ],
     accessibility: {
@@ -53,6 +49,4 @@ const initMap = () => {
 watch(transformedArray, () => {
     initMap();
 });
-
-// onMounted(() => {});
 </script>
