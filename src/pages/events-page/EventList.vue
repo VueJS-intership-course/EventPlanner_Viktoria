@@ -1,7 +1,13 @@
 <template>
   <div class="container my-4">
-    <button @click="toggleFilters" class="btn btn-primary">
+    <button @click="toggleFilters" class="btn btn-primary position-relative">
       Toggle Filters
+      <span
+        v-if="hasActiveFilters"
+        class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+      >
+        {{ Object.keys(router.currentRoute.value.query).length }}
+      </span>
     </button>
     <Filters v-if="showFilters" />
   </div>
@@ -22,8 +28,12 @@
         <p class="card-text">{{ truncateText(event.description, 100) }}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li v-if="userStore.user" class="list-group-item">{{ getUserTime(event.utcTime) }}</li>
-        <li v-if="!userStore.user" class="list-group-item">{{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}</li>
+        <li v-if="userStore.user" class="list-group-item">
+          {{ getUserTime(event.utcTime) }}
+        </li>
+        <li v-if="!userStore.user" class="list-group-item">
+          {{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}
+        </li>
         <li class="list-group-item">${{ event.price }}</li>
         <li v-if="event.ticketCount > 0" class="list-group-item">
           Tickets left: {{ event.ticketCount }}
@@ -93,8 +103,19 @@ const isBeforeToday = (date) => {
   return date > today;
 };
 
+const hasActiveFilters = computed(() => {
+  const { query } = router.currentRoute.value;
 
-
+  return (
+    (query.fromDate && query.fromDate !== "undefined") ||
+    (query.toDate && query.toDate !== "undefined") ||
+    (query.minPrice && query.minPrice !== "undefined") ||
+    (query.maxPrice && query.maxPrice !== "undefined") ||
+    (query.availableTickets === "true" || query.availableTickets === "false") ||
+    (query.soldOut === "true" || query.soldOut === "false") ||
+    query.searchQuery
+  );
+});
 
 onBeforeMount(() => {
   const { query } = router.currentRoute.value;
