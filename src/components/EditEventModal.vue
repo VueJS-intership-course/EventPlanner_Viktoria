@@ -88,7 +88,7 @@ import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "./MapComponent.vue";
 import { getEventTime } from "@/utils/transformTime.js";
-import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 import moment from "moment-timezone";
 import { editEventSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";

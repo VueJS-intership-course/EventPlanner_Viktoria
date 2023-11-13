@@ -102,7 +102,7 @@ import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
 import EditEventModal from "@/components/EditEventModal.vue";
 import { getUserTime, getEventTime } from "@/utils/transformTime.js";
-import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 import MapDisplay from "@/components/MapDisplay.vue";
 
 const route = useRoute();

@@ -25,7 +25,7 @@
                 @click="deleteExpense(category, expense.id)"
                 style="cursor: pointer"
               >
-                {{ expense.cost }}
+                ${{ expense.cost }}
                 <i class="bi bi-x-circle-fill"></i>
               </span>
             </div>
@@ -102,7 +102,7 @@
 import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore";
 import ExpensePieChart from "@/pages/budget-page/PieChart.vue";
-import generateUniqueKey from "@/utils/randomId.js";
+import generateUniqueKey from "@/utils/randomUUID.js";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);

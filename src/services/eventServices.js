@@ -1,5 +1,5 @@
 import fb from "@/firebase/fbConfig.js";
-import generateUniqueKey from "@/utils/randomId.js";
+import generateUniqueKey from "@/utils/randomUUID.js";
 import { useUserStore } from "@/store/userStore.js";
 
 export const eventService = {

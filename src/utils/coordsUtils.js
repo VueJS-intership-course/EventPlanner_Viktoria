@@ -1,13 +1,16 @@
 import tzlookup from "tz-lookup";
 
-const convertCoordsToTz = (coordinates) => {
-  const [lon, lat] = coordinates;
-  const timezone = tzlookup(lat, lon);
-
-  return timezone;
+export const convertCoordsToTz = (coordinates) => {
+  try {
+    const [lon, lat] = coordinates;
+    const timezone = tzlookup(lat, lon);
+  
+    return timezone;
+  }
+  catch (error) {
+    console.log("Invalid coordinates:", error);
+  }
 };
-
-export default convertCoordsToTz;
 
 export const getCountryFromCoords = async (coords) => {
   try {

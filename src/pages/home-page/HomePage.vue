@@ -5,7 +5,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
-import { getCountryFromCoords } from "@/utils/getTzFromCoords.js";
+import { getCountryFromCoords } from "@/utils/coordsUtils.js";
 import HighchartsMap from "@/pages/home-page/mapChart.vue";
 
 const store = useEventStore();

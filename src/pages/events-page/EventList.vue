@@ -70,12 +70,12 @@
 <script setup>
 import { computed, ref, onBeforeMount } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
-import generateUniqueKey from "../../utils/randomId";
-import { useUserStore } from "../../store/userStore";
+import generateUniqueKey from "@/utils/randomUUID.js";
+import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { getUserTime, getEventTime } from "@/utils/transformTime.js";
 import Filters from "@/pages/events-page/Filters.vue";
-import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 
 const router = useRouter();
 
