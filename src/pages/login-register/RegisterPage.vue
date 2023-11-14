@@ -4,8 +4,12 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h2 v-if="!store.isAdmin" class="card-title text-center mb-4">Register</h2>
-            <h2 v-if="store.isAdmin" class="card-title text-center mb-4">Add a New Admin</h2>
+            <h2 v-if="!store.isAdmin" class="card-title text-center mb-4">
+              Register
+            </h2>
+            <h2 v-if="store.isAdmin" class="card-title text-center mb-4">
+              Add a New Admin
+            </h2>
 
             <Form @submit="registerUser" :validation-schema="registerSchema">
               <div class="mb-3">
@@ -94,7 +98,6 @@ const handleSelectedTimezone = (selectedTimezone) => {
   timezone.value = selectedTimezone;
 };
 
-
 const registerUser = async () => {
   try {
     const user = {
@@ -108,7 +111,6 @@ const registerUser = async () => {
     router.push("/");
   } catch (error) {
     console.error(error.message);
-    //TODO: Show toastify errors
   }
 };
 </script>

@@ -18,11 +18,7 @@
       class="card"
       style="width: 280px"
     >
-      <img
-        class="card-img-top"
-        :src="event.imageURL"
-        alt="Event image top"
-      />
+      <img class="card-img-top" :src="event.imageURL" alt="Event image top" />
       <div class="card-body">
         <h5 class="card-title">{{ event.name }}</h5>
         <p class="card-text">{{ truncateText(event.description, 100) }}</p>
@@ -75,7 +71,7 @@ import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import Filters from "@/pages/events-page/Filters.vue";
-import {convertCoordsToTz} from "@/utils/coordsUtils.js";
+import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 
 const router = useRouter();
 
@@ -111,8 +107,10 @@ const hasActiveFilters = computed(() => {
     (query.toDate && query.toDate !== "undefined") ||
     (query.minPrice && query.minPrice !== "undefined") ||
     (query.maxPrice && query.maxPrice !== "undefined") ||
-    (query.availableTickets === "true" || query.availableTickets === "false") ||
-    (query.soldOut === "true" || query.soldOut === "false") ||
+    query.availableTickets === "true" ||
+    query.availableTickets === "false" ||
+    query.soldOut === "true" ||
+    query.soldOut === "false" ||
     query.searchQuery
   );
 });
@@ -142,7 +140,7 @@ onBeforeMount(() => {
       query.soldOut ||
       query.searchQuery;
 
-    eventStore.filtersApplied = hasQueryParams? true : false;
+    eventStore.filtersApplied = hasQueryParams ? true : false;
   }
 });
 
@@ -157,9 +155,9 @@ const buyTicket = (event) => {
 </script>
 
 <style>
-  .card-img-top {
-    width: 100%; 
-    height: 200px; 
-    object-fit: cover; 
-  }
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
 </style>

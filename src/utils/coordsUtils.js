@@ -1,10 +1,10 @@
 import tzlookup from "tz-lookup";
 
 export const convertCoordsToTz = (coordinates) => {
-    const [lon, lat] = coordinates;
-    const timezone = tzlookup(lat, lon);
-  
-    return timezone;
+  const [lon, lat] = coordinates;
+  const timezone = tzlookup(lat, lon);
+
+  return timezone;
 };
 
 export const getCountryFromCoords = async (coords) => {

@@ -4,7 +4,7 @@ export const authService = {
   async register(user, password) {
     try {
       const userCredential = await fb.auth.createUserWithEmailAndPassword(
-        user.email,
+        user.email, 
         password
       );
 

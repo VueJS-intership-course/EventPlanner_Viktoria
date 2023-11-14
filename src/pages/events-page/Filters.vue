@@ -77,7 +77,6 @@ const eventStore = useEventStore();
 const router = useRouter(); 
 
 
-// const filtersApplied = ref(false);
 const filterOptions = computed(() => eventStore.filterOptions);
 
 const applyFilters = () => {

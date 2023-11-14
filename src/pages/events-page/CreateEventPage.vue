@@ -187,7 +187,6 @@ const createEvent = (formData) => {
     imageURL: imageURL.value,
   };
   try {
-    
     eventStore.addEvent(event);
     router.push("/events");
   } catch (error) {

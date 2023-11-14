@@ -5,7 +5,7 @@
 <script setup>
 import Highcharts from "highcharts";
 import mapData from "@highcharts/map-collection/custom/world.geo.json";
-import { computed, onMounted, watch } from "vue";
+import { computed, watch } from "vue";
 
 const eventCountByCountry = defineProps({
   eventCountByCountry: {

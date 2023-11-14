@@ -88,14 +88,13 @@ import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";
-import {convertCoordsToTz} from "@/utils/coordsUtils.js";
+import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import moment from "moment-timezone";
 import { editEventSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
-const store = useEventStore()
-;
+const store = useEventStore();
 const editedEvent = computed(() => store.editedEvent);
 const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
 

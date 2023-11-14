@@ -16,7 +16,7 @@ export const createEventSchema = Yup.object({
   ticketCount: Yup.number()
     .typeError("Available Tickets must be a number")
     .required("Available Tickets is required")
-    .min(1, "Available Tickets must be greater than 0"),
+    .min(0, "Available Tickets must be greater than 0"),
   price: Yup.number()
     .typeError("Ticket Price must be a number")
     .required("Ticket Price is required")

@@ -25,20 +25,18 @@
 </template>
 
 <script setup>
-
 const { title, modalId } = defineProps({
-    title: {
-      type: String,
-      required: true,
-    },
-    modalId: {
-      type: String,
-      required: true,
-    },
-  });
+  title: {
+    type: String,
+    required: true,
+  },
+  modalId: {
+    type: String,
+    required: true,
+  },
+});
 
-
-const emit = defineEmits(["save", "cancel" ]);
+const emit = defineEmits(["save", "cancel"]);
 
 const handleSave = () => {
   emit("save");
