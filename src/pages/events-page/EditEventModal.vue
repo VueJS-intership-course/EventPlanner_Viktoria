@@ -86,7 +86,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
-import MapComponent from "./MapComponent.vue";
+import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";
 import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 import moment from "moment-timezone";

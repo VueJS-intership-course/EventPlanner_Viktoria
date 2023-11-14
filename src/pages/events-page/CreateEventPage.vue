@@ -123,7 +123,7 @@
 </template>
 
 <script setup>
-import MapComponent from "@/components/MapComponent.vue";
+import MapComponent from "@/components/maps/MapComponent.vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";

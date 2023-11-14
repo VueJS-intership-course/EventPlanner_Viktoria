@@ -10,7 +10,7 @@
 <script setup>
 import { computed } from "vue";
 import { useEventStore } from "@/store/eventStore";
-import EventByMonthChart from "./EventByMonthChart.vue";
+import EventByMonthChart from "@/components/highcharts/EventByMonthChart.vue";
 import EventsCalendar from "@/components/EventsCalendar.vue";
 
 const store = useEventStore();

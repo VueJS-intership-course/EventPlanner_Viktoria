@@ -101,7 +101,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore";
-import ExpensePieChart from "@/pages/budget-page/PieChart.vue";
+import ExpensePieChart from "@/components/highcharts/PieChart.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
 
 const eventStore = useEventStore();

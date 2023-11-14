@@ -106,12 +106,10 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
-import EditEventModal from "@/components/EditEventModal.vue";
+import EditEventModal from "@/pages/events-page/EditEventModal.vue";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
-import MapDisplay from "@/components/MapDisplay.vue";
-// import firebase from 'firebase/compat/app';
-// import 'firebase/compat/storage';
+import MapDisplay from "@/components/maps/MapDisplay.vue";
 import fb from '@/firebase/fbConfig.js';
 
 const route = useRoute();

@@ -6,7 +6,7 @@
 import { ref, onMounted } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { getCountryFromCoords } from "@/utils/coordsUtils.js";
-import HighchartsMap from "@/pages/home-page/MapChart.vue";
+import HighchartsMap from "@/components/highcharts/MapChart.vue";
 
 const store = useEventStore();
 
