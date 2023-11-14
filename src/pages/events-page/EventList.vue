@@ -132,6 +132,17 @@ onBeforeMount(() => {
         ? "sold-out"
         : "all";
     eventStore.filterOptions.searchQuery = query.searchQuery;
+
+    const hasQueryParams =
+      query.fromDate ||
+      query.toDate ||
+      query.minPrice ||
+      query.maxPrice ||
+      query.availableTickets ||
+      query.soldOut ||
+      query.searchQuery;
+
+    eventStore.filtersApplied = hasQueryParams? true : false;
   }
 });
 
@@ -144,3 +155,11 @@ const buyTicket = (event) => {
   router.push("/events");
 };
 </script>
+
+<style>
+  .card-img-top {
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+  }
+</style>

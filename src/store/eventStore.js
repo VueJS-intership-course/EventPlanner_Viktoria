@@ -16,6 +16,7 @@ export const useEventStore = defineStore({
       searchQuery: "",
       ticketStatus: "all",
     },
+    filtersApplied: false,
   }),
 
   actions: {
