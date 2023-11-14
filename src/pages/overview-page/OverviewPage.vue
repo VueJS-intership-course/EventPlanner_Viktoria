@@ -1,8 +1,7 @@
 <template>
   <div>
     <EventByMonthChart
-    v-if="eventCountByMonth.value"
-      :eventCount="eventCountByMonth.value"
+      :eventCount="eventCountByMonth"
     />
   </div>
 
@@ -32,13 +31,7 @@ store.getEventList();
 
 const allEvents = computed(() => store.events);
 const eventCountByMonth = computed(() => store.eventCountByMonth);
-const eventCountByMonthRef = ref(eventCountByMonth.value);
-console.log("eventCountByMonthRef", eventCountByMonthRef.value);
-
-watch(eventCountByMonth, (newVal) => {
-  eventCountByMonth.value = newVal;
-  console.log("eventCountByMonthRef2", eventCountByMonth.value);
-});
+console.log("eventCountByMonthRef", eventCountByMonth.value);
 
 const transformedEvents = computed(() =>
   allEvents.value.map((event) => ({

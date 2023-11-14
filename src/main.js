@@ -45,6 +45,7 @@ export function authStateChangedPromise() {
 }
 
 authStateChangedPromise();
+
 app.use(router);
 
 app.mount("#app");

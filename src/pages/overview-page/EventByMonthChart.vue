@@ -1,14 +1,11 @@
 <template>
-  <div style="width: 900px;">
+  <div style="width: 900px">
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
 
 <script setup>
-// import { onMounted } from "vue";
-// import { useEventStore } from "../../store/eventStore";
-// import { computed, watch } from "vue";
-
+import {  reactive, watch } from "vue";
 
 const props = defineProps({
   eventCount: {
@@ -17,10 +14,9 @@ const props = defineProps({
   },
 });
 
-
-const chartOptions = {
+const chartOptions = reactive({
   chart: {
-    type: "column", 
+    type: "column",
     backgroundColor: "#eee",
   },
   title: {
@@ -75,6 +71,12 @@ const chartOptions = {
       color: "#3f51b5",
     },
   ],
-};
+});
 
+watch(
+  () => props.eventCount,
+  (newVal) => {
+    chartOptions.series[0].data = newVal;
+  }
+);
 </script>

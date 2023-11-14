@@ -94,6 +94,17 @@
                 <ErrorMessage name="budget" class="text-danger" />
               </div>
               <div class="mb-3">
+                <label for="eventImage" class="form-label">Event Image</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="eventImage"
+                  name="eventImage"
+                  @change="handleImageUpload"
+                />
+              </div>
+
+              <div class="mb-3">
                 <label class="form-label">Event Location</label>
                 <MapComponent
                   :onMapClick="onMapClick"
@@ -121,6 +132,10 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import showNotification from "@/utils/toastifyNotification.js";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
+import 'firebase/compat/firestore';
+
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -137,6 +152,23 @@ const location = ref([]);
 const onMapClick = (lonLat) => {
   location.value = lonLat;
 };
+
+const handleImageUpload = async (event) => {
+  const imageFile = event.target.files[0];
+  const fbStorage = firebase.storage();
+  const storageRef =  fbStorage.ref();
+  const imageRef = storageRef.child(`event_images/${eventName.value}`);
+
+  try {
+    await imageRef.put(imageFile);
+    const imageURL = await imageRef.getDownloadURL();
+    // Save imageURL along with other event details in the createEvent method
+    // ...
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
+};
+
 
 const createEvent = (formData) => {
   const eventTimezone = convertCoordsToTz(location.value);
