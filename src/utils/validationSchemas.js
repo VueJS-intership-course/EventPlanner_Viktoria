@@ -25,6 +25,7 @@ export const createEventSchema = Yup.object({
     .typeError("Event Budget must be a number")
     .required("Event Budget is required")
     .min(1, "Event Budget must be greater than 0"),
+    eventImage: Yup.mixed().required("Event Image is required"),
 });
 
 export const editEventSchema = Yup.object({

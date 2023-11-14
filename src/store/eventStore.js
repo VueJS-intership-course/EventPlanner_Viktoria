@@ -39,7 +39,6 @@ export const useEventStore = defineStore({
       try {
         await eventService.addEvent(event);
         await this.getEventList();
-        this.coords = [];
       } catch (error) {
         console.error("Error adding an event:", error);
       }

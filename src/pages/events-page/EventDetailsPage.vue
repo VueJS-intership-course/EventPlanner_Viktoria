@@ -3,16 +3,9 @@
     <div class="card">
       <div class="container my-4">
         <div class="row">
-          <!-- <div class="col-md-6">
-            <img
-              src="https://picsum.photos/600/400"
-              alt="Event Image"
-              class="img-fluid rounded"
-            />
-          </div> -->
           <div class="col-md-6">
             <img
-              :src="eventImage"
+              :src="event.imageURL"
               alt="Event Image"
               class="img-fluid rounded"
             />
@@ -110,7 +103,6 @@ import EditEventModal from "@/pages/events-page/EditEventModal.vue";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import MapDisplay from "@/components/maps/MapDisplay.vue";
-import fb from '@/firebase/fbConfig.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -123,10 +115,6 @@ const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
 const ticketAvailable = computed(() => event.value.ticketCount > 0);
 const eventTz = computed(() => convertCoordsToTz(event.value.location));
-const eventImage = computed(() => {
-  return `https://storage.googleapis.com/${fb.storageBucket}/event_images/${event.value.name}`;
-});
-
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {

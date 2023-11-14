@@ -20,6 +20,7 @@ export const eventService = {
           budget,
           users,
           expenses,
+          imageURL,
         } = doc.data();
         const event = {
           id,
@@ -32,6 +33,7 @@ export const eventService = {
           budget,
           users,
           expenses,
+          imageURL,
         };
         data.push(event);
       });
@@ -75,6 +77,7 @@ export const eventService = {
         budget: event.budget,
         users: event.users,
         expenses: event.expenses,
+        imageURL: event.imageURL,
       });
     } catch (error) {
       console.error("Error adding an event:", error);

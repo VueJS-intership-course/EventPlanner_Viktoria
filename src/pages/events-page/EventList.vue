@@ -20,7 +20,7 @@
     >
       <img
         class="card-img-top"
-        src="https://picsum.photos/280/200"
+        :src="event.imageURL"
         alt="Event image top"
       />
       <div class="card-body">

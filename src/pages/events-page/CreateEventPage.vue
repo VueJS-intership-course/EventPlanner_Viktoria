@@ -95,13 +95,14 @@
               </div>
               <div class="mb-3">
                 <label for="eventImage" class="form-label">Event Image</label>
-                <input
+                <Field
                   type="file"
                   class="form-control"
                   id="eventImage"
                   name="eventImage"
                   @change="handleImageUpload"
                 />
+                <ErrorMessage name="eventImage" class="text-danger" />
               </div>
 
               <div class="mb-3">
@@ -132,10 +133,9 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import showNotification from "@/utils/toastifyNotification.js";
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/storage';
-import 'firebase/compat/firestore';
-
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
+import "firebase/compat/firestore";
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -148,6 +148,7 @@ const ticketCount = ref("");
 const price = ref("");
 const budget = ref("");
 const location = ref([]);
+const imageURL = ref("");
 
 const onMapClick = (lonLat) => {
   location.value = lonLat;
@@ -156,24 +157,25 @@ const onMapClick = (lonLat) => {
 const handleImageUpload = async (event) => {
   const imageFile = event.target.files[0];
   const fbStorage = firebase.storage();
-  const storageRef =  fbStorage.ref();
+  const storageRef = fbStorage.ref();
   const imageRef = storageRef.child(`event_images/${eventName.value}`);
 
   try {
     await imageRef.put(imageFile);
-    const imageURL = await imageRef.getDownloadURL();
-    // Save imageURL along with other event details in the createEvent method
-    // ...
+    imageURL.value = await imageRef.getDownloadURL();
+    console.log("Image uploaded successfully:", imageURL.value);
   } catch (error) {
     console.error("Error uploading image:", error);
   }
 };
 
+console.log("imageURL:", imageURL.value);
 
 const createEvent = (formData) => {
   const eventTimezone = convertCoordsToTz(location.value);
   const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
 
+  console.log("cre event :", imageURL.value);
   const event = {
     name: formData.eventName,
     description: formData.eventDescription,
@@ -184,8 +186,10 @@ const createEvent = (formData) => {
     budget: formData.budget,
     users: [],
     expenses: [],
+    imageURL: imageURL.value,
   };
   try {
+    
     eventStore.addEvent(event);
     router.push("/events");
   } catch (error) {
