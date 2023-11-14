@@ -1,4 +1,4 @@
-import { createApp, markRaw } from "vue";
+import { createApp } from "vue";
 import App from "@/App.vue";
 import router from "@/router/index.js";
 import { createPinia } from "pinia";
@@ -10,10 +10,8 @@ import "bootstrap";
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import HighchartsMap from "highcharts/modules/map";
-import HighchartsMore from "highcharts/highcharts-more";
 
 HighchartsMap(Highcharts);
-HighchartsMore(Highcharts);
 
 const app = createApp(App);
 const pinia = createPinia();

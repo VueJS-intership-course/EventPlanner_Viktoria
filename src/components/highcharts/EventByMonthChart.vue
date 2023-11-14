@@ -20,7 +20,7 @@ const chartOptions = reactive({
     backgroundColor: "#eee",
   },
   title: {
-    text: "Event Count by Month in 2023",
+    text: "Event Count by Month",
   },
   xAxis: {
     categories: [

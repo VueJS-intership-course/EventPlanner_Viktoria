@@ -52,6 +52,9 @@ const props = defineProps({
           data,
         },
       ],
+      accessibility: {
+        enabled: false,
+      },
     };
   });
   </script>

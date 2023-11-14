@@ -48,7 +48,6 @@ const calendarOptions = reactive({
 watch(
   () => props.currentUserEvents,
   (newVal) => {
-    console.log("newVal", newVal);
     calendarOptions.initialEvents = newVal;
     calendarKey.value += 1;
   }

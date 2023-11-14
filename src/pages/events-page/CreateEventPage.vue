@@ -169,8 +169,6 @@ const handleImageUpload = async (event) => {
   }
 };
 
-console.log("imageURL:", imageURL.value);
-
 const createEvent = (formData) => {
   const eventTimezone = convertCoordsToTz(location.value);
   const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;

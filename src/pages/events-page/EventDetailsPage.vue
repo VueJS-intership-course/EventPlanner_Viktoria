@@ -32,9 +32,9 @@
             <p v-if="userStore.isAdmin" class="mb-2">
               <strong>Budget:</strong> ${{ event.budget }}
             </p>
-            <p v-if="userStore.isAdmin" class="mb-2">
+            <!-- <p v-if="userStore.isAdmin" class="mb-2">
               <strong>Users with tickets:</strong> {{ event.users }}
-            </p>
+            </p> -->
 
             <div class="mt-4">
               <button
@@ -83,10 +83,6 @@
           <div class="col-md-6">
             <p class="lead">Event Location</p>
             <MapDisplay :location="event.location" />
-          </div>
-          <div class="col-md-6">
-            <p class="lead">Event Countdown</p>
-            <p>TODO</p>
           </div>
         </div>
       </div>
