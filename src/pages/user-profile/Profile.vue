@@ -89,7 +89,7 @@
     </div>
     <EventsCalendar
       v-if="!userStore.isAdmin"
-      :current-user-events="currentUserEvents"
+      :current-user-events="transformedCuurentUserEvents"
     />
   </section>
   <section v-if="!currentUser">
@@ -120,6 +120,14 @@ const currentUserEvents = computed(() => {
     event.users.includes(currentUser.value.email)
   );
 });
+
+const transformedCuurentUserEvents = computed(() =>
+  currentUserEvents.value.map((event) => ({
+    id: event.id,
+    title: event.name,
+    start: event.utcTime,
+  }))
+);
 
 const selectedEventType = ref("upcoming");
 
