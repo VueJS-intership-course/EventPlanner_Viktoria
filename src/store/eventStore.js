@@ -115,6 +115,17 @@ export const useEventStore = defineStore({
   },
 
   getters: {
+    eventCountByMonth() {
+      const eventCountByMonth = new Array(12).fill(0);
+
+      this.events.forEach((event) => {
+        const date = new Date(event.utcTime);
+        const month = date.getUTCMonth();
+        eventCountByMonth[month]++;
+      });
+      return eventCountByMonth;
+    },
+
     filteredEvents() {
       const {
         fromDate,

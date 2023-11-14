@@ -101,7 +101,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
 import EditEventModal from "@/components/EditEventModal.vue";
-import { getUserTime, getEventTime } from "@/utils/transformTime.js";
+import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 import MapDisplay from "@/components/MapDisplay.vue";
 

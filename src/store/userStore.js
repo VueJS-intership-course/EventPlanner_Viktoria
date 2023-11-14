@@ -34,7 +34,6 @@ export const useUserStore = defineStore("users", {
     },
 
   },
-
   getters: {
     isAdmin() {
       if (this.user && this.user.isAdmin) return true;

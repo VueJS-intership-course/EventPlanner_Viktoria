@@ -1,7 +1,11 @@
 <template>
   <div>
-    <EventByMonthChart/>
+    <EventByMonthChart
+    v-if="eventCountByMonth.value"
+      :eventCount="eventCountByMonth.value"
+    />
   </div>
+
   <div class="cal-app">
     <div class="cal-app-main">
       <FullCalendar class="cal-app-calendar" :options="calendarOptions">
@@ -15,7 +19,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -24,10 +28,17 @@ import { useEventStore } from "@/store/eventStore";
 import EventByMonthChart from "./EventByMonthChart.vue";
 
 const store = useEventStore();
-
 store.getEventList();
 
 const allEvents = computed(() => store.events);
+const eventCountByMonth = computed(() => store.eventCountByMonth);
+const eventCountByMonthRef = ref(eventCountByMonth.value);
+console.log("eventCountByMonthRef", eventCountByMonthRef.value);
+
+watch(eventCountByMonth, (newVal) => {
+  eventCountByMonth.value = newVal;
+  console.log("eventCountByMonthRef2", eventCountByMonth.value);
+});
 
 const transformedEvents = computed(() =>
   allEvents.value.map((event) => ({
@@ -60,7 +71,6 @@ const calendarOptions = ref({
   weekends: true,
   eventsSet: handleEvents,
 });
-
 </script>
 
 <style scoped>

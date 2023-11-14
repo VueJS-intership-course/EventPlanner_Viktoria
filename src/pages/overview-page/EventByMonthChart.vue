@@ -5,21 +5,18 @@
 </template>
 
 <script setup>
-import { useEventStore } from "@/store/eventStore.js";
-import { computed, onMounted, ref } from "vue";
+// import { onMounted } from "vue";
+// import { useEventStore } from "../../store/eventStore";
+// import { computed, watch } from "vue";
 
 
-const store = useEventStore();
-store.getEventList();
-const events = computed(() => store.events);
-
-const eventCountByMonth = new Array(12).fill(0);
-
-events.value.forEach((event) => {
-  const date = new Date(event.utcTime);
-  const month = date.getUTCMonth();
-  eventCountByMonth[month]++;
+const props = defineProps({
+  eventCount: {
+    type: Array,
+    required: true,
+  },
 });
+
 
 const chartOptions = {
   chart: {
@@ -74,14 +71,10 @@ const chartOptions = {
   series: [
     {
       name: "Events",
-      data: eventCountByMonth,
+      data: props.eventCount,
       color: "#3f51b5",
     },
   ],
 };
 
-
-onMounted(() => {
-   
-});
 </script>

@@ -73,7 +73,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
-import { getUserTime, getEventTime } from "@/utils/transformTime.js";
+import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import Filters from "@/pages/events-page/Filters.vue";
 import {convertCoordsToTz} from "@/utils/coordsUtils.js";
 

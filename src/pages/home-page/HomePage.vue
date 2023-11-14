@@ -3,10 +3,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { getCountryFromCoords } from "@/utils/coordsUtils.js";
-import HighchartsMap from "@/pages/home-page/mapChart.vue";
+import HighchartsMap from "@/pages/home-page/MapChart.vue";
 
 const store = useEventStore();
 
