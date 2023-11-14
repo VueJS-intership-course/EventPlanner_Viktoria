@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/store/userStore.js";
-import { authStateChangedPromise } from "@/main.js";
 import { routes } from "@/router/routes.js";
 
 const router = createRouter({
@@ -10,7 +9,6 @@ const router = createRouter({
 
 router.beforeResolve(async (to, from, next) => {
   const store = useUserStore();
-  await authStateChangedPromise();
   if (
     (to.name === "login" && store.isLogged) ||
     (to.name === "register" && store.isLogged) ||
