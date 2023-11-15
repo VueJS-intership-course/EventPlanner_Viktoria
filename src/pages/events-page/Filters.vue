@@ -72,7 +72,9 @@
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
+
+
 const eventStore = useEventStore();
 const router = useRouter(); 
 
