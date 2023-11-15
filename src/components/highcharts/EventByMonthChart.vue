@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 900px">
-    <highcharts :options="chartOptions"></highcharts>
+  <div>
+    <highcharts :options="chartOptions" class="chart-container"></highcharts>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ const props = defineProps({
 const chartOptions = reactive({
   chart: {
     type: "column",
-    backgroundColor: "#eee",
+    // backgroundColor: "#eee",
   },
   title: {
     text: "Event Count by Month",
@@ -80,3 +80,9 @@ watch(
   }
 );
 </script>
+
+<style scoped>
+.chart-container {
+  max-width: 100%;
+}
+</style>

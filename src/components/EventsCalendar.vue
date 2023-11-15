@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-4">
     <FullCalendar
       class="container-calendar"
       :options="calendarOptions"
@@ -57,7 +57,6 @@ watch(
 <style scoped>
 .container {
   display: flex;
-  min-height: 100vh;
   font-family: "Arial", "Helvetica Neue", "Helvetica", sans-serif;
   font-size: 14px;
   justify-content: center;
@@ -90,5 +89,14 @@ watch(
 .fc-today {
   background-color: #e8f5e9;
   border-radius: 3px;
+}
+.container {
+  font-family: "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+  font-size: 14px;
+}
+
+.container-calendar {
+  width: 100%;
+  margin: auto;
 }
 </style>

@@ -65,12 +65,12 @@
 
 <script setup>
 import { computed, ref, onBeforeMount } from "vue";
-import { useEventStore } from "@/store/eventStore.js";
+import Filters from "@/pages/events-page/Filters.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
+import { useEventStore } from "@/store/eventStore.js";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
-import Filters from "@/pages/events-page/Filters.vue";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 
 const router = useRouter();

@@ -1,9 +1,21 @@
 <template>
-  <div>
-    <EventByMonthChart :eventCount="eventCountByMonth" />
-  </div>
-  <div>
-    <EventsCalendar :current-user-events="transformedEvents" />
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-6 mt-5">
+        <div class="card">
+          <div class="card-body">
+            <EventByMonthChart :eventCount="eventCountByMonth" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <EventsCalendar :current-user-events="transformedEvents" />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -3,7 +3,7 @@
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-md-12 col-xl-4">
-          <div class="card" style="border-radius: 15px">
+          <div class="card" style="border-radius: 15px; height: 450px">
             <div class="card-body text-center">
               <div class="mt-3 mb-4">
                 <img
@@ -51,38 +51,42 @@
           </div>
         </div>
         <div v-if="!userStore.isAdmin" class="col-md-12 col-xl-4">
-          <div class="card text-center" style="border-radius: 15px">
-            <div class="mt-3 mb-4"></div>
-            <h4 class="mb-2">My Events</h4>
-            <p class="text-muted mb-4">
-              <a
-                href="#"
-                class="link-opacity-50-hover"
-                @click="selectEventType('past')"
-                >Past Events</a
-              >
-              <span class="mx-2">|</span>
-              <a
-                href="#"
-                class="link-opacity-50-hover"
-                @click="selectEventType('upcoming')"
-                >Upcoming Events</a
-              >
-            </p>
-            <div>
-              <ul
-                class="list-group"
-                style="max-height: 300px; overflow-y: auto"
-              >
-                <li v-for="event in filteredEvents" class="list-group-item">
-                  <p class="text-">{{ event.name }}</p>
-                  <RouterLink :to="'/events/' + event.id" class="btn btn-primary"
-                    >Details</RouterLink
-                  >
-                </li>
-              </ul>
+          <div class="card" style="border-radius: 15px; height: 450px">
+            <div class="card-body text-center">
+              <div class="mt-3 mb-4"></div>
+              <h4 class="mb-2">My Events</h4>
+              <p class="text-muted mb-4">
+                <a
+                  href="#"
+                  class="link-opacity-50-hover"
+                  @click="selectEventType('past')"
+                  >Past Events</a
+                >
+                <span class="mx-2">|</span>
+                <a
+                  href="#"
+                  class="link-opacity-50-hover"
+                  @click="selectEventType('upcoming')"
+                  >Upcoming Events</a
+                >
+              </p>
+              <div>
+                <ul
+                  class="list-group"
+                  style="max-height: 300px; overflow-y: auto"
+                >
+                  <li v-for="event in filteredEvents" class="list-group-item">
+                    <p class="text-">{{ event.name }}</p>
+                    <RouterLink
+                      :to="'/events/' + event.id"
+                      class="btn btn-primary"
+                      >Details</RouterLink
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div v-if="!currentUserEvents" class="mt-3">Loading....</div>
             </div>
-            <div v-if="!currentUserEvents" class="mt-3">Loading....</div>
           </div>
         </div>
       </div>
