@@ -46,6 +46,7 @@
         <button @click="goToEventDetails(event.id)" class="btn btn-primary">
           Details
         </button>
+        <!-- <p v-if="!isBeforeToday(event.utcTime)" class="text-default">This event has already passed</p> -->
         <button
           v-if="
             !userStore.isAdmin &&
@@ -88,16 +89,21 @@ const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 
+const isBeforeToday = (date) => {
+  const today = new Date().toISOString();
+  return date > today;
+};
+
 const showFilters = ref(false);
 
 const toggleFilters = () => {
   showFilters.value = !showFilters.value;
 };
 
-const isBeforeToday = (date) => {
-  const today = new Date().toISOString();
-  return date > today;
-};
+const filteredEvents = computed(() => {
+  return eventStore.filteredEvents;
+});
+
 
 const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;
@@ -144,20 +150,17 @@ onBeforeMount(() => {
   }
 });
 
-const filteredEvents = computed(() => {
-  return eventStore.filteredEvents;
-});
-
 const buyTicket = (event) => {
   eventStore.buyTicket(event);
   router.push("/events");
 };
+
 </script>
 
-<style>
+<style lang="scss" scoped>
 .card-img-top {
   width: 100%;
-  height: 200px;
+  height: 12.5rem;
   object-fit: cover;
 }
 </style>

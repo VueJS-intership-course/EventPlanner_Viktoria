@@ -35,6 +35,7 @@ import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
 import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { editUserSchema } from "@/utils/validationSchemas.js";
+import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 
@@ -56,10 +57,11 @@ const saveClicked = () => {
     .then(() => {
       store.editUser(editedUser.value);
       store.isEditing = false;
+      showNotification("Profile updated successfully!");
       router.push("/profile");
     })
     .catch((err) => {
-      //toastify
+      showNotification(err);
     });
 };
 

@@ -41,19 +41,19 @@ const selectTimezone = (tz) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tz-list {
   list-style: none;
   padding: 0;
   margin: 0;
   border: 1px solid #ccc;
   border-top: none;
-  max-height: 150px;
+  max-height: 9.25rem;
   overflow-y: auto;
 }
 
 .tz-list li {
-  padding: 10px;
+  padding: 0.5rem;
   cursor: pointer;
 }
 

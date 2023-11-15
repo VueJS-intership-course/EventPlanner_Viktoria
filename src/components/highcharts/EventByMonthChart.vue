@@ -80,9 +80,3 @@ watch(
   }
 );
 </script>
-
-<style scoped>
-.chart-container {
-  max-width: 100%;
-}
-</style>

@@ -90,7 +90,7 @@ const logoutUser = () => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   margin: 1.5rem;
 }

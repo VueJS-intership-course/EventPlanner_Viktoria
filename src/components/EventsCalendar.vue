@@ -54,11 +54,10 @@ watch(
 );
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   display: flex;
-  font-family: "Arial", "Helvetica Neue", "Helvetica", sans-serif;
-  font-size: 14px;
+  font-size: 0.75rem;
   justify-content: center;
   align-items: center;
 }
@@ -92,7 +91,7 @@ watch(
 }
 .container {
   font-family: "Arial", "Helvetica Neue", "Helvetica", sans-serif;
-  font-size: 14px;
+  font-size: 0.75rem;
 }
 
 .container-calendar {

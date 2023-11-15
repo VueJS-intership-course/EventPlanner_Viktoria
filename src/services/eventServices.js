@@ -105,7 +105,7 @@ export const eventService = {
       .collection("events")
       .where("id", "==", event.id)
       .get();
-
+      
     const doc = querySnapshot.docs[0];
     try {
       await doc.ref.update({
@@ -183,7 +183,5 @@ export const eventService = {
       console.error("Error deleting expense: ", error);
     }
   }
-  
-  
-  
+
 };

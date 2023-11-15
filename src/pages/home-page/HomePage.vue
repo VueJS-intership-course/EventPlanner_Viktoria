@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row justify-content-center"> 
+    <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="map-container">
           <HighchartsMap :eventCountByCountry="eventCountByCountry" />
@@ -9,7 +9,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -38,4 +37,3 @@ onMounted(async () => {
   countEventsByCountry();
 });
 </script>
-

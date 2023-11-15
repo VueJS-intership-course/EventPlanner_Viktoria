@@ -64,6 +64,7 @@ export const registerSchema = Yup.object({
   repeatPassword: Yup.string()
     .required("Repeat Password is required")
     .oneOf([Yup.ref("password")], "Passwords do not match"),
+
 });
 
 export const editUserSchema = Yup.object({
