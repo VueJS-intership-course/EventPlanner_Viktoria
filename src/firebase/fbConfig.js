@@ -18,6 +18,7 @@ firebase.initializeApp(firebaseConfig);
 const fireStore = firebase.firestore();
 const auth = firebase.auth();
 
+
 const fb = {
   fireStore,
   auth,

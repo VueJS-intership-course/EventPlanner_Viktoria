@@ -1,33 +1,26 @@
 <template>
-  <div style="width: 900px;">
-    <highcharts :options="chartOptions"></highcharts>
+  <div>
+    <highcharts :options="chartOptions" class="chart-container"></highcharts>
   </div>
 </template>
 
 <script setup>
-import { useEventStore } from "@/store/eventStore.js";
-import { computed, onMounted, ref } from "vue";
+import {  reactive, watch } from "vue";
 
-
-const store = useEventStore();
-store.getEventList();
-const events = computed(() => store.events);
-
-const eventCountByMonth = new Array(12).fill(0);
-
-events.value.forEach((event) => {
-  const date = new Date(event.utcTime);
-  const month = date.getUTCMonth();
-  eventCountByMonth[month]++;
+const props = defineProps({
+  eventCount: {
+    type: Array,
+    required: true,
+  },
 });
 
-const chartOptions = {
+const chartOptions = reactive({
   chart: {
-    type: "column", 
-    backgroundColor: "#eee",
+    type: "column",
+    // backgroundColor: "#eee",
   },
   title: {
-    text: "Event Count by Month in 2023",
+    text: "Event Count by Month",
   },
   xAxis: {
     categories: [
@@ -74,14 +67,16 @@ const chartOptions = {
   series: [
     {
       name: "Events",
-      data: eventCountByMonth,
+      data: props.eventCount,
       color: "#3f51b5",
     },
   ],
-};
-
-
-onMounted(() => {
-   
 });
+
+watch(
+  () => props.eventCount,
+  (newVal) => {
+    chartOptions.series[0].data = newVal;
+  }
+);
 </script>

@@ -3,7 +3,7 @@
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-md-12 col-xl-4">
-          <div class="card" style="border-radius: 15px">
+          <div class="card" style="border-radius: 15px; height: 450px">
             <div class="card-body text-center">
               <div class="mt-3 mb-4">
                 <img
@@ -51,45 +51,49 @@
           </div>
         </div>
         <div v-if="!userStore.isAdmin" class="col-md-12 col-xl-4">
-          <div class="card text-center" style="border-radius: 15px">
-            <div class="mt-3 mb-4"></div>
-            <h4 class="mb-2">My Events</h4>
-            <p class="text-muted mb-4">
-              <a
-                href="#"
-                class="link-opacity-50-hover"
-                @click="selectEventType('past')"
-                >Past Events</a
-              >
-              <span class="mx-2">|</span>
-              <a
-                href="#"
-                class="link-opacity-50-hover"
-                @click="selectEventType('upcoming')"
-                >Upcoming Events</a
-              >
-            </p>
-            <div>
-              <ul
-                class="list-group"
-                style="max-height: 300px; overflow-y: auto"
-              >
-                <li v-for="event in filteredEvents" class="list-group-item">
-                  <p class="text-">{{ event.name }}</p>
-                  <RouterLink :to="'/events/' + event.id" class="btn btn-primary"
-                    >Details</RouterLink
-                  >
-                </li>
-              </ul>
+          <div class="card" style="border-radius: 15px; height: 450px">
+            <div class="card-body text-center">
+              <div class="mt-3 mb-4"></div>
+              <h4 class="mb-2">My Events</h4>
+              <p class="text-muted mb-4">
+                <a
+                  href="#"
+                  class="link-opacity-50-hover"
+                  @click="selectEventType('past')"
+                  >Past Events</a
+                >
+                <span class="mx-2">|</span>
+                <a
+                  href="#"
+                  class="link-opacity-50-hover"
+                  @click="selectEventType('upcoming')"
+                  >Upcoming Events</a
+                >
+              </p>
+              <div>
+                <ul
+                  class="list-group"
+                  style="max-height: 300px; overflow-y: auto"
+                >
+                  <li v-for="event in filteredEvents" class="list-group-item">
+                    <p class="text-">{{ event.name }}</p>
+                    <RouterLink
+                      :to="'/events/' + event.id"
+                      class="btn btn-primary"
+                      >Details</RouterLink
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div v-if="!currentUserEvents" class="mt-3">Loading....</div>
             </div>
-            <div v-if="!currentUserEvents" class="mt-3">Loading....</div>
           </div>
         </div>
       </div>
     </div>
     <EventsCalendar
       v-if="!userStore.isAdmin"
-      :current-user-events="currentUserEvents"
+      :current-user-events="transformedCuurentUserEvents"
     />
   </section>
   <section v-if="!currentUser">
@@ -104,8 +108,8 @@
 import { computed, ref } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useEventStore } from "@/store/eventStore.js";
-import EditUserModal from "./EditUserModal.vue";
-import EventsCalendar from "./EventsCalendar.vue";
+import EditUserModal from "@/pages/user-profile/EditUserModal.vue";
+import EventsCalendar from "@/components/EventsCalendar.vue";
 
 const userStore = useUserStore();
 const eventStore = useEventStore();
@@ -120,6 +124,14 @@ const currentUserEvents = computed(() => {
     event.users.includes(currentUser.value.email)
   );
 });
+
+const transformedCuurentUserEvents = computed(() =>
+  currentUserEvents.value.map((event) => ({
+    id: event.id,
+    title: event.name,
+    start: event.utcTime,
+  }))
+);
 
 const selectedEventType = ref("upcoming");
 

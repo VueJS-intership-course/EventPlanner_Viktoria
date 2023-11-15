@@ -6,7 +6,6 @@
       <strong>Revenue from tickets:</strong> Revenue: ${{ revenue }}
     </p>
     <p v-if="revenue"><strong>Total Budget:</strong> ${{ totalBudget }}</p>
-
     <div class="row">
       <div class="col-md-6">
         <h2 class="mt-4">Expenses</h2>
@@ -17,8 +16,19 @@
             class="list-group-item d-flex justify-content-between align-items-center"
           >
             {{ category }} - ${{ getCategoryExpense(category) }}
+            <div class="d-flex flex-wrap">
+              <span
+                v-for="expense in groupedExpenses[category]"
+                :key="generateUniqueKey()"
+                class="badge bg-secondary rounded-pill mx-1"
+                @click="deleteExpense(category, expense.id)"
+                style="cursor: pointer"
+              >
+                ${{ expense.cost }}
+                <i class="bi bi-x-circle-fill"></i>
+              </span>
+            </div>
           </li>
-
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
@@ -27,7 +37,6 @@
               >${{ totalExpenses }}</span
             >
           </li>
-
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
           >
@@ -37,13 +46,13 @@
             <strong v-if="totalExpenses < totalBudget" class="text-primary"
               >Remaining Budget:</strong
             >
-
             <span class="badge bg-danger rounded-pill"
               >${{ remainingBudget }}</span
             >
           </li>
         </ul>
       </div>
+
       <div class="col-md-6">
         <form @submit.prevent="addExpense" class="mt-4">
           <div class="mb-3">
@@ -78,28 +87,23 @@
       </div>
     </div>
     <div v-if="totalExpenses" class="col-md-6">
-        <ExpensePieChart :groupedExpenses="groupedExpenses" :totalExpenses="totalExpenses" />
-      </div>
+      <ExpensePieChart
+        :groupedExpenses="groupedExpenses"
+        :totalExpenses="totalExpenses"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore";
-import ExpensePieChart from "@/pages/budget-page/PieChart.vue";
+import ExpensePieChart from "@/components/highcharts/PieChart.vue";
+import generateUniqueKey from "@/utils/randomUUID.js";
+import { expenseCategories } from "@/utils/constants.js";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);
-
-const expenseCategories = [
-  "Utilities",
-  "Rent",
-  "Promotion",
-  "Equipment",
-  "Catering",
-  "Staff",
-  "Other",
-];
 
 const getCategoryExpense = (category) => {
   const categoryExpenses = groupedExpenses.value[category];
@@ -113,7 +117,6 @@ const revenue = computed(() => {
 });
 
 const totalBudget = computed(() => revenue.value + event.value.budget);
-
 const expenses = computed(() => event.value.expenses);
 
 const groupedExpenses = computed(() => {
@@ -142,13 +145,19 @@ const expense = ref({
 const addExpense = async () => {
   try {
     await eventStore.addExpense(event.value, expense.value);
-    expense.value = { category: "utilities", cost: 0 };
+    expense.value = { category: "utilities", cost: 0, id: generateUniqueKey() };
     eventStore.selectedEvent = eventStore.getEventById(event.value.id);
   } catch (error) {
     console.error("Error adding expense: ", error);
   }
 };
 
-
-
+const deleteExpense = async (category, expenseId) => {
+  try {
+    await eventStore.deleteExpense(event.value, category, expenseId);
+    eventStore.selectedEvent = eventStore.getEventById(event.value.id);
+  } catch (error) {
+    console.error("Error deleting expense: ", error);
+  }
+};
 </script>

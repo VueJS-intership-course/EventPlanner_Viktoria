@@ -9,42 +9,39 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
-import HighchartsMap from 'highcharts/modules/map';
-import HighchartsMore from 'highcharts/highcharts-more';
-
+import HighchartsMap from "highcharts/modules/map";
 
 HighchartsMap(Highcharts);
-HighchartsMore(Highcharts);
 
 const app = createApp(App);
 const pinia = createPinia();
+
 app.use(pinia);
 app.use(HighchartsVue, { Highcharts });
 
 const store = useUserStore();
 
-export function authStateChangedPromise() {
+function authStateChangedPromise() {
   return new Promise((resolve, reject) => {
-    const unsubscribe = fb.auth.onAuthStateChanged(async (user) => {
+    fb.auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
-          const userData = await store.setUser(user);
+          const userData = await store.getUser(user.email);
           store.setUser(userData);
-          unsubscribe();
           resolve(userData);
         } catch (error) {
           reject(error);
         }
       } else {
         store.setUser(null);
-        unsubscribe();
         resolve(null);
       }
     });
   });
 }
 
-authStateChangedPromise();
+await authStateChangedPromise();
+
 app.use(router);
 
 app.mount("#app");

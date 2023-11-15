@@ -4,8 +4,12 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h2 v-if="!store.isAdmin" class="card-title text-center mb-4">Register</h2>
-            <h2 v-if="store.isAdmin" class="card-title text-center mb-4">Add a New Admin</h2>
+            <h2 v-if="!store.isAdmin" class="card-title text-center mb-4">
+              Register
+            </h2>
+            <h2 v-if="store.isAdmin" class="card-title text-center mb-4">
+              Add a New Admin
+            </h2>
 
             <Form @submit="registerUser" :validation-schema="registerSchema">
               <div class="mb-3">
@@ -62,6 +66,9 @@
                 <time-zone-dropdown
                   @selected="handleSelectedTimezone"
                 ></time-zone-dropdown>
+                <p v-if="!timezoneChosen" class="text-danger">
+                  Timezone is required!
+                </p>
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </Form>
@@ -74,9 +81,10 @@
 
 <script setup>
 import { ref } from "vue";
+import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import showNotification from "@/utils/toastifyNotification.js";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
-import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { registerSchema } from "@/utils/validationSchemas.js";
 import { useUserStore } from "@/store/userStore.js";
@@ -89,26 +97,32 @@ const password = ref("");
 const username = ref("");
 const repeatPassword = ref("");
 const timezone = ref("");
+const timezoneChosen = ref("");
 
 const handleSelectedTimezone = (selectedTimezone) => {
   timezone.value = selectedTimezone;
+  timezoneChosen.value = true;
 };
-
 
 const registerUser = async () => {
   try {
+    if (!timezone.value) {
+      timezoneChosen.value = false;
+      return;
+    }
     const user = {
       email: email.value,
       username: username.value,
       timezone: timezone.value,
+      // check if the the current user logged is an admin, therefore is registering an admin
       isAdmin: store.isAdmin ? true : false,
     };
 
     await authService.register(user, password.value);
     router.push("/");
+    showNotification("Registered successfully!");
   } catch (error) {
     console.error(error.message);
-    //TODO: Show toastify errors
   }
 };
 </script>

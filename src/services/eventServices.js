@@ -1,5 +1,5 @@
 import fb from "@/firebase/fbConfig.js";
-import generateUniqueKey from "@/utils/randomId.js";
+import generateUniqueKey from "@/utils/randomUUID.js";
 import { useUserStore } from "@/store/userStore.js";
 
 export const eventService = {
@@ -20,6 +20,7 @@ export const eventService = {
           budget,
           users,
           expenses,
+          imageURL,
         } = doc.data();
         const event = {
           id,
@@ -32,6 +33,7 @@ export const eventService = {
           budget,
           users,
           expenses,
+          imageURL,
         };
         data.push(event);
       });
@@ -75,6 +77,7 @@ export const eventService = {
         budget: event.budget,
         users: event.users,
         expenses: event.expenses,
+        imageURL: event.imageURL,
       });
     } catch (error) {
       console.error("Error adding an event:", error);
@@ -102,7 +105,7 @@ export const eventService = {
       .collection("events")
       .where("id", "==", event.id)
       .get();
-
+      
     const doc = querySnapshot.docs[0];
     try {
       await doc.ref.update({
@@ -159,5 +162,26 @@ export const eventService = {
     } catch (error) {
       console.error("Error adding expense: ", error);
     }
+  },
+
+  async deleteExpense(event, category, expenseId) {
+    const querySnapshot = await fb.fireStore
+      .collection("events")
+      .where("id", "==", event.id)
+      .get();
+  
+    const doc = querySnapshot.docs[0];
+    try {
+      const updatedExpenses = event.expenses.filter(
+        (expense) => !(expense.category === category && expense.id === expenseId)
+      );
+  
+      await doc.ref.update({
+        expenses: updatedExpenses,
+      });
+    } catch (error) {
+      console.error("Error deleting expense: ", error);
+    }
   }
+
 };

@@ -4,7 +4,7 @@ export const authService = {
   async register(user, password) {
     try {
       const userCredential = await fb.auth.createUserWithEmailAndPassword(
-        user.email,
+        user.email, 
         password
       );
 
@@ -25,12 +25,15 @@ export const authService = {
     }
   },
 
-  async getUser(id) {
+  async getUser(email) {
     try {
-      const userDoc = await fb.fireStore.collection("users").doc(id).get();
+      const userDoc = await fb.fireStore
+        .collection("users")
+        .where("email", "==", email)
+        .get();
       if (userDoc) {
-        const userData = userDoc.data();
-        return userData;
+        const [doc] = userDoc.docs;
+        return doc.data();
       } else {
         console.log("User document does not exist.");
         return null;

@@ -16,7 +16,7 @@ export const createEventSchema = Yup.object({
   ticketCount: Yup.number()
     .typeError("Available Tickets must be a number")
     .required("Available Tickets is required")
-    .min(1, "Available Tickets must be greater than 0"),
+    .min(0, "Available Tickets must be greater than 0"),
   price: Yup.number()
     .typeError("Ticket Price must be a number")
     .required("Ticket Price is required")
@@ -25,6 +25,7 @@ export const createEventSchema = Yup.object({
     .typeError("Event Budget must be a number")
     .required("Event Budget is required")
     .min(1, "Event Budget must be greater than 0"),
+    eventImage: Yup.mixed().required("Event Image is required"),
 });
 
 export const editEventSchema = Yup.object({
@@ -63,6 +64,7 @@ export const registerSchema = Yup.object({
   repeatPassword: Yup.string()
     .required("Repeat Password is required")
     .oneOf([Yup.ref("password")], "Passwords do not match"),
+
 });
 
 export const editUserSchema = Yup.object({

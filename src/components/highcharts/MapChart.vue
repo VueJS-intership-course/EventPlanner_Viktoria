@@ -5,7 +5,7 @@
 <script setup>
 import Highcharts from "highcharts";
 import mapData from "@highcharts/map-collection/custom/world.geo.json";
-import { computed, onMounted, watch } from "vue";
+import { computed, watch } from "vue";
 
 const eventCountByCountry = defineProps({
   eventCountByCountry: {
@@ -32,16 +32,12 @@ const initMap = () => {
       {
         data: transformedArray.value,
         name: "Events",
-        // dataLabels: {
-        //   enabled: true,
-        //   format: "{point.name}",
-        // },  
         joinBy: "name",
         states: {
           hover: {
             color: "#808080",
           },
-        },
+        }, 
       },
     ],
     accessibility: {
@@ -53,6 +49,4 @@ const initMap = () => {
 watch(transformedArray, () => {
     initMap();
 });
-
-// onMounted(() => {});
 </script>

@@ -1,29 +1,34 @@
 <template>
-  <HighchartsMap :eventCountByCountry="eventCountByCountry" />
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="map-container">
+          <HighchartsMap :eventCountByCountry="eventCountByCountry" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
-import { getCountryFromCoords } from "@/utils/getTzFromCoords.js";
-import HighchartsMap from "@/pages/home-page/mapChart.vue";
+import { getCountryFromCoords } from "@/utils/coordsUtils.js";
+import HighchartsMap from "@/components/highcharts/MapChart.vue";
 
 const store = useEventStore();
-
-store.getEventList();
-
 const events = ref([]);
 const eventCountByCountry = ref({});
 
-const countEventsByCountry = () => {
-  events.value.forEach(async (event) => {
+const countEventsByCountry = async () => {
+  for (const event of events.value) {
     let country = await getCountryFromCoords(event.location);
     if (country === "United States") {
       country = "United States of America";
     }
     eventCountByCountry.value[country] =
       (eventCountByCountry.value[country] || 0) + 1;
-  });
+  }
 };
 
 onMounted(async () => {

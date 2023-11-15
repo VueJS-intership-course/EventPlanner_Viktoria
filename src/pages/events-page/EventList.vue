@@ -1,7 +1,13 @@
 <template>
   <div class="container my-4">
-    <button @click="toggleFilters" class="btn btn-primary">
+    <button @click="toggleFilters" class="btn btn-primary position-relative">
       Toggle Filters
+      <span
+        v-if="hasActiveFilters"
+        class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+      >
+        {{ Object.keys(router.currentRoute.value.query).length }}
+      </span>
     </button>
     <Filters v-if="showFilters" />
   </div>
@@ -12,18 +18,18 @@
       class="card"
       style="width: 280px"
     >
-      <img
-        class="card-img-top"
-        src="https://picsum.photos/280/200"
-        alt="Event image top"
-      />
+      <img class="card-img-top" :src="event.imageURL" alt="Event image top" />
       <div class="card-body">
         <h5 class="card-title">{{ event.name }}</h5>
         <p class="card-text">{{ truncateText(event.description, 100) }}</p>
       </div>
       <ul class="list-group list-group-flush">
-        <li v-if="userStore.user" class="list-group-item">{{ getUserTime(event.utcTime) }}</li>
-        <li v-if="!userStore.user" class="list-group-item">{{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}</li>
+        <li v-if="userStore.user" class="list-group-item">
+          {{ getUserTime(event.utcTime) }}
+        </li>
+        <li v-if="!userStore.user" class="list-group-item">
+          {{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}
+        </li>
         <li class="list-group-item">${{ event.price }}</li>
         <li v-if="event.ticketCount > 0" class="list-group-item">
           Tickets left: {{ event.ticketCount }}
@@ -40,6 +46,7 @@
         <button @click="goToEventDetails(event.id)" class="btn btn-primary">
           Details
         </button>
+        <!-- <p v-if="!isBeforeToday(event.utcTime)" class="text-default">This event has already passed</p> -->
         <button
           v-if="
             !userStore.isAdmin &&
@@ -59,13 +66,13 @@
 
 <script setup>
 import { computed, ref, onBeforeMount } from "vue";
-import { useEventStore } from "@/store/eventStore.js";
-import generateUniqueKey from "../../utils/randomId";
-import { useUserStore } from "../../store/userStore";
-import { useRouter } from "vue-router";
-import { getUserTime, getEventTime } from "@/utils/transformTime.js";
 import Filters from "@/pages/events-page/Filters.vue";
-import convertCoordsToTz from "@/utils/getTzFromCoords.js";
+import generateUniqueKey from "@/utils/randomUUID.js";
+import { useEventStore } from "@/store/eventStore.js";
+import { useUserStore } from "@/store/userStore.js";
+import { useRouter } from "vue-router";
+import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
+import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 
 const router = useRouter();
 
@@ -82,19 +89,37 @@ const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 
+const isBeforeToday = (date) => {
+  const today = new Date().toISOString();
+  return date > today;
+};
+
 const showFilters = ref(false);
 
 const toggleFilters = () => {
   showFilters.value = !showFilters.value;
 };
 
-const isBeforeToday = (date) => {
-  const today = new Date().toISOString();
-  return date > today;
-};
+const filteredEvents = computed(() => {
+  return eventStore.filteredEvents;
+});
 
 
+const hasActiveFilters = computed(() => {
+  const { query } = router.currentRoute.value;
 
+  return (
+    (query.fromDate && query.fromDate !== "undefined") ||
+    (query.toDate && query.toDate !== "undefined") ||
+    (query.minPrice && query.minPrice !== "undefined") ||
+    (query.maxPrice && query.maxPrice !== "undefined") ||
+    query.availableTickets === "true" ||
+    query.availableTickets === "false" ||
+    query.soldOut === "true" ||
+    query.soldOut === "false" ||
+    query.searchQuery
+  );
+});
 
 onBeforeMount(() => {
   const { query } = router.currentRoute.value;
@@ -111,15 +136,31 @@ onBeforeMount(() => {
         ? "sold-out"
         : "all";
     eventStore.filterOptions.searchQuery = query.searchQuery;
-  }
-});
 
-const filteredEvents = computed(() => {
-  return eventStore.filteredEvents;
+    const hasQueryParams =
+      query.fromDate ||
+      query.toDate ||
+      query.minPrice ||
+      query.maxPrice ||
+      query.availableTickets ||
+      query.soldOut ||
+      query.searchQuery;
+
+    eventStore.filtersApplied = hasQueryParams ? true : false;
+  }
 });
 
 const buyTicket = (event) => {
   eventStore.buyTicket(event);
   router.push("/events");
 };
+
 </script>
+
+<style lang="scss" scoped>
+.card-img-top {
+  width: 100%;
+  height: 12.5rem;
+  object-fit: cover;
+}
+</style>

@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-md-6">
             <img
-              src="https://picsum.photos/600/400"
+              :src="event.imageURL"
               alt="Event Image"
               class="img-fluid rounded"
             />
@@ -21,7 +21,6 @@
               <strong>Your Time:</strong>
               {{ getUserTime(event.utcTime) }}
             </p>
-                  
 
             <p v-if="ticketAvailable" class="mb-2">
               <strong>Tickets Left:</strong> {{ event.ticketCount }}
@@ -33,9 +32,9 @@
             <p v-if="userStore.isAdmin" class="mb-2">
               <strong>Budget:</strong> ${{ event.budget }}
             </p>
-            <p v-if="userStore.isAdmin" class="mb-2">
+            <!-- <p v-if="userStore.isAdmin" class="mb-2">
               <strong>Users with tickets:</strong> {{ event.users }}
-            </p>
+            </p> -->
 
             <div class="mt-4">
               <button
@@ -85,10 +84,6 @@
             <p class="lead">Event Location</p>
             <MapDisplay :location="event.location" />
           </div>
-          <div class="col-md-6">
-            <p class="lead">Event Countdown</p>
-            <p>TODO</p>
-          </div>
         </div>
       </div>
     </div>
@@ -100,10 +95,10 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
-import EditEventModal from "@/components/EditEventModal.vue";
-import { getUserTime, getEventTime } from "@/utils/transformTime.js";
-import convertCoordsToTz from "@/utils/getTzFromCoords.js";
-import MapDisplay from "@/components/MapDisplay.vue";
+import EditEventModal from "@/pages/events-page/EditEventModal.vue";
+import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
+import { convertCoordsToTz } from "@/utils/coordsUtils.js";
+import MapDisplay from "@/components/maps/MapDisplay.vue";
 
 const route = useRoute();
 const router = useRouter();

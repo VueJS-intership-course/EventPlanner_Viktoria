@@ -19,6 +19,11 @@ export const useUserStore = defineStore("users", {
       }
     },
 
+    async getUser(email) {
+      const user = await authService.getUser(email);
+      this.user = user;
+    },
+
     async logout() {
       this.user = null;
       await authService.logout();
@@ -34,7 +39,6 @@ export const useUserStore = defineStore("users", {
     },
 
   },
-
   getters: {
     isAdmin() {
       if (this.user && this.user.isAdmin) return true;

@@ -61,7 +61,7 @@
       <div class="col-md-12 d-flex justify-content-end">
         <button type="submit" class="btn btn-primary">Apply Filters</button>
       </div>
-      <div v-if="filtersApplied" class="col-md-12 d-flex justify-content-end">
+      <div v-if="eventStore.filtersApplied" class="col-md-12 d-flex justify-content-end">
         <button @click="resetFilters" class="btn btn-secondary">Reset Filters</button>
       </div>
     </form>
@@ -72,42 +72,41 @@
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
+
+
 const eventStore = useEventStore();
 const router = useRouter(); 
 
 
-const filtersApplied = ref(false);
 const filterOptions = computed(() => eventStore.filterOptions);
 
 const applyFilters = () => {
-  const fromDate = filterOptions.value.fromDate
-    ? new Date(filterOptions.value.fromDate).toISOString().split("T")[0]
-    : null;
-  const toDate = filterOptions.value.toDate
-    ? new Date(filterOptions.value.toDate).toISOString().split("T")[0]
-    : null;
-  eventStore.filterOptions.fromDate = fromDate;
-  eventStore.filterOptions.toDate = toDate;
-  eventStore.applyFilters();
-  filtersApplied.value = true;
+  const { fromDate, toDate, minPrice, maxPrice, ticketStatus, searchQuery } = filterOptions.value;
+  const query = {};
 
-  router.push({
-    query: {
-      fromDate,
-      toDate,
-      minPrice: filterOptions.value.minPrice,
-      maxPrice: filterOptions.value.maxPrice,
-      searchQuery: filterOptions.value.searchQuery,
-      availableTickets: filterOptions.value.ticketStatus === 'available',
-      soldOut: filterOptions.value.ticketStatus === 'sold-out',
-    },
-  });
+  const addQueryParam = (key, value) => {
+    if (value) {
+      query[key] = value;
+    }
+  };
+
+  addQueryParam('fromDate', fromDate ? new Date(fromDate).toISOString().split("T")[0] : null);
+  addQueryParam('toDate', toDate ? new Date(toDate).toISOString().split("T")[0] : null);
+  addQueryParam('minPrice', minPrice);
+  addQueryParam('maxPrice', maxPrice);
+  addQueryParam('ticketStatus', ['available', 'sold-out'].includes(ticketStatus) ? ticketStatus : null);
+  addQueryParam('searchQuery', searchQuery);
+
+  eventStore.applyFilters();
+  eventStore.filtersApplied = true;
+
+  router.push({ query });
 };
 
 const resetFilters = () => {
   eventStore.resetFilters();
-  filtersApplied.value = false;
+  eventStore.filtersApplied = false;
   router.push({ query: null });
 };
 

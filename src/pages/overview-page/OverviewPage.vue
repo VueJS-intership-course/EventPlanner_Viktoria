@@ -1,33 +1,35 @@
 <template>
-  <div>
-    <EventByMonthChart/>
-  </div>
-  <div class="cal-app">
-    <div class="cal-app-main">
-      <FullCalendar class="cal-app-calendar" :options="calendarOptions">
-        <template v-slot:eventContent="arg">
-          <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
-        </template>
-      </FullCalendar>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-6 mt-5">
+        <div class="card">
+          <div class="card-body">
+            <EventByMonthChart :eventCount="eventCountByMonth" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <EventsCalendar :current-user-events="transformedEvents" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import { computed } from "vue";
 import { useEventStore } from "@/store/eventStore";
-import EventByMonthChart from "./EventByMonthChart.vue";
+import EventByMonthChart from "@/components/highcharts/EventByMonthChart.vue";
+import EventsCalendar from "@/components/EventsCalendar.vue";
 
 const store = useEventStore();
-
 store.getEventList();
 
 const allEvents = computed(() => store.events);
+const eventCountByMonth = computed(() => store.eventCountByMonth);
 
 const transformedEvents = computed(() =>
   allEvents.value.map((event) => ({
@@ -36,67 +38,4 @@ const transformedEvents = computed(() =>
     start: event.utcTime,
   }))
 );
-
-const transformedEventsRef = ref([]);
-transformedEventsRef.value = transformedEvents.value;
-
-const handleEvents = (events) => {
-  transformedEventsRef.value = events;
-};
-
-const calendarOptions = ref({
-  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-  headerToolbar: {
-    left: "prev,next today",
-    center: "title",
-    right: "dayGridMonth,timeGridWeek,timeGridDay",
-  },
-  initialView: "dayGridMonth",
-  initialEvents: transformedEventsRef.value,
-  editable: true,
-  selectable: true,
-  selectMirror: true,
-  dayMaxEvents: true,
-  weekends: true,
-  eventsSet: handleEvents,
-});
-
 </script>
-
-<style scoped>
-h2 {
-  margin: 0;
-  font-size: 16px;
-}
-
-ul {
-  margin: 0;
-  padding: 0 0 0 1.5em;
-}
-
-li {
-  margin: 1.5em 0;
-  padding: 0;
-}
-
-b {
-  margin-right: 3px;
-}
-
-.cal-app {
-  display: flex;
-  min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-.cal-app-main {
-  flex-grow: 1;
-  padding: 3em;
-}
-
-.fc {
-  width: 800px;
-  margin: 0 auto;
-}
-</style>
