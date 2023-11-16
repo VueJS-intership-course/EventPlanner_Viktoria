@@ -4,29 +4,23 @@
       <div class="col-md-6">
         <Card>
           <h2 class="card-title text-center mb-4">Login</h2>
-          <form @submit.prevent="loginUser">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                v-model="email"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                v-model="password"
-                required
-              />
-            </div>
+          <Form @submit="loginUser" :validation-schema="loginSchema">
+            <InputField
+              label="Email"
+              inputId="email"
+              :value="email"
+              @update:modelValue="(value) => (email = value)"
+              type="email"
+            />
+            <InputField
+              label="Password"
+              inputId="password"
+              :value="password"
+              @update:modelValue="(value) => (password = value)"
+              type="password"
+            />
             <button type="submit" class="btn btn-primary">Login</button>
-          </form>
+          </Form>
         </Card>
       </div>
     </div>
@@ -38,6 +32,9 @@ import { ref } from "vue";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
 import Card from "@/components/Card.vue";
+import { loginSchema } from "@/utils/validationSchemas.js";
+import InputField from "../../components/InputField.vue";
+import { Form } from "vee-validate";
 
 const router = useRouter();
 
@@ -46,6 +43,7 @@ const password = ref("");
 
 const loginUser = async () => {
   try {
+    console.log(email.value, password.value);
     await authService.login(email.value, password.value);
     router.push("/");
   } catch (error) {

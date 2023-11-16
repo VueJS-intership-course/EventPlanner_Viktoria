@@ -11,56 +11,34 @@
           </h2>
 
           <Form @submit="registerUser" :validation-schema="registerSchema">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <Field
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                v-model="email"
-                required
-              />
-              <ErrorMessage name="email" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <Field
-                type="text"
-                class="form-control"
-                id="username"
-                name="username"
-                v-model="username"
-                required
-              />
-              <ErrorMessage name="username" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <Field
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                v-model="password"
-                required
-              />
-              <ErrorMessage name="password" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label for="repeatPassword" class="form-label"
-                >Repeat Password</label
-              >
-              <Field
-                type="password"
-                class="form-control"
-                id="repeatPassword"
-                name="repeatPassword"
-                v-model="repeatPassword"
-                required
-              />
-              <ErrorMessage name="repeatPassword" class="text-danger" />
-            </div>
+            <InputField
+              label="Email"
+              inputId="email"
+              :value="email"
+              @update:modelValue="(value) => (email = value)"
+              type="email"
+            />
+            <InputField
+              label="Username"
+              inputId="username"
+              :value="username"
+              @update:modelValue="(value) => (username = value)"
+              type="text"
+            />
+            <InputField
+              label="Password"
+              inputId="password"
+              :value="password"
+              @update:modelValue="(value) => (password = value)"
+              type="password"
+            />
+            <InputField
+              label="Repeat Password"
+              inputId="repeatPassword"
+              :value="repeatPassword"
+              @update:modelValue="(value) => (repeatPassword = value)"
+              type="password"
+            />
             <div class="mb-3">
               <time-zone-dropdown
                 @selected="handleSelectedTimezone"
@@ -80,11 +58,13 @@
 <script setup>
 import { ref } from "vue";
 import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import InputField from "@/components/InputField.vue";
+
 import Card from "@/components/Card.vue";
 import showNotification from "@/utils/toastifyNotification.js";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
-import { Field, Form, ErrorMessage } from "vee-validate";
+import { Form } from "vee-validate";
 import { registerSchema } from "@/utils/validationSchemas.js";
 import { useUserStore } from "@/store/userStore.js";
 
@@ -109,6 +89,7 @@ const registerUser = async () => {
       timezoneChosen.value = false;
       return;
     }
+    console.log(email.value, username.value, timezone.value, password.value);
     const user = {
       email: email.value,
       username: username.value,

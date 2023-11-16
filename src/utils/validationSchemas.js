@@ -67,6 +67,15 @@ export const registerSchema = Yup.object({
 
 });
 
+export const loginSchema = Yup.object({
+  email: Yup.string()
+    .required("Email is required")
+    .email("Email must be a valid email address"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
+
 export const editUserSchema = Yup.object({
   username: Yup.string()
     .required("Username is required")

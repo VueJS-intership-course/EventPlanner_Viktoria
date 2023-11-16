@@ -6,72 +6,48 @@
     @cancel="cancelClicked"
   >
     <Form :validation-schema="editEventSchema">
-      <div class="form-group">
-        <label for="eventName">Event Name</label>
-        <Field
-          type="text"
-          class="form-control"
-          id="eventName"
-          name="eventName"
-          v-model="editedEvent.name"
-        />
-        <ErrorMessage name="eventName" class="text-danger" />
-      </div>
-      <div class="form-group">
-        <label for="eventDescription">Event Description</label>
-        <Field
-          as="textarea"
-          class="form-control"
-          id="eventDescription"
-          name="eventDescription"
-          v-model="editedEvent.description"
-        />
-        <ErrorMessage name="eventDescription" class="text-danger" />
-      </div>
-      <div class="form-group">
-        <label for="eventDate">Event Date</label>
-        <Field
-          type="date"
-          class="form-control"
-          id="eventDate"
-          name="eventDate"
-          v-model="eventDate"
-        />
-        <ErrorMessage name="eventDate" class="text-danger" />
-      </div>
-      <div class="form-group">
-        <label for="eventTime">Event Time</label>
-        <Field
-          type="time"
-          class="form-control"
-          id="eventTime"
-          name="eventTime"
-          v-model="eventTime"
-        />
-        <ErrorMessage name="eventTime" class="text-danger" />
-      </div>
-      <div class="form-group">
-        <label for="ticketCount">Available Tickets</label>
-        <Field
-          type="number"
-          class="form-control"
-          id="ticketCount"
-          name="ticketCount"
-          v-model="editedEvent.ticketCount"
-        />
-        <ErrorMessage name="ticketCount" class="text-danger" />
-      </div>
-      <div class="form-group">
-        <label for="price">Ticket Price</label>
-        <Field
-          type="number"
-          class="form-control"
-          id="price"
-          name="price"
-          v-model="editedEvent.price"
-        />
-        <ErrorMessage name="price" class="text-danger" />
-      </div>
+      <InputField
+        label="Event Name"
+        inputId="eventName"
+        :value="editedEvent.name"
+        @update:modelValue="(value) => (editedEvent.name = value)"
+        type="text"
+      />
+      <InputField
+        label="Event Description"
+        inputId="eventDescription"
+        :value="editedEvent.description"
+        @update:modelValue="(value) => (editedEvent.description = value)"
+        type="textarea"
+      />
+      <InputField
+        label="Event Date"
+        inputId="eventDate"
+        :value="eventDate"
+        @update:modelValue="(value) => (eventDate = value)"
+        type="date"
+      />
+      <InputField
+        label="Event Time"
+        inputId="eventTime"
+        :value="eventTime"
+        @update:modelValue="(value) => (eventTime = value)"
+        type="time"
+      />
+      <InputField
+        label="Ticket Count"
+        inputId="ticketCount"
+        :value="editedEvent.ticketCount"
+        @update:modelValue="(value) => (editedEvent.ticketCount = value)"
+        type="number"
+      />
+      <InputField
+        label="Ticket Price"
+        inputId="price"
+        :value="editedEvent.price"
+        @update:modelValue="(value) => (editedEvent.price = value)"
+        type="number"
+      />
       <MapComponent
         :onMapClick="onMapClick"
         style="height: 300px; width: 450px; margin: 10px"
@@ -85,6 +61,7 @@ import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
+import InputField from "@/components/InputField.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";

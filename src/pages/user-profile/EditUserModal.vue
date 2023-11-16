@@ -6,17 +6,13 @@
     @cancel="cancelClicked"
   >
     <Form :validation-schema="editUserSchema">
-      <div class="form-group">
-        <label for="username">New Username</label>
-        <Field
-          type="text"
-          class="form-control"
-          id="username"
-          name="username"
-          v-model="editedUser.username"
-        />
-        <ErrorMessage name="username" class="text-danger" />
-      </div>
+     <InputField
+        label="Username"
+        inputId="username"
+        :value="editedUser.username"
+        @update:modelValue="(value) => (editedUser.username = value)"
+        type="text"
+      />
       <div class="form-group">
         <label for="timezone">New Timezone</label>
         <time-zone-dropdown
@@ -36,6 +32,7 @@ import Modal from "@/components/Modal.vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { editUserSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
+import InputField from "@/components/InputField.vue";
 
 const router = useRouter();
 
