@@ -98,9 +98,9 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useEventStore } from "@/store/eventStore";
+import { expenseCategories } from "@/utils/constants.js";
 import ExpensePieChart from "@/components/highcharts/PieChart.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
-import { expenseCategories } from "@/utils/constants.js";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);

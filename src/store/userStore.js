@@ -24,9 +24,18 @@ export const useUserStore = defineStore("users", {
       this.user = user;
     },
 
+    async login(email, password) {
+      const user = await authService.login(email, password);
+      this.user = user;
+    },
     async logout() {
       this.user = null;
       await authService.logout();
+    },
+
+    async register(email, password) {
+      const user = await authService.register(email, password);
+      this.user = user;
     },
 
     async editUser(user) {

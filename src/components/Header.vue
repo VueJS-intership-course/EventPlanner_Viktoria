@@ -74,9 +74,10 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/store/userStore.js";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/userStore.js";
+
 
 const router = useRouter();
 const store = useUserStore();

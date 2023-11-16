@@ -29,22 +29,22 @@
 
 <script setup>
 import { ref } from "vue";
-import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";
-import Card from "@/components/Card.vue";
-import { loginSchema } from "@/utils/validationSchemas.js";
-import InputField from "../../components/InputField.vue";
 import { Form } from "vee-validate";
+import { useUserStore } from "@/store/userStore.js";  
+import { loginSchema } from "@/utils/validationSchemas.js";
+import Card from "@/components/Card.vue";
+import InputField from "@/components/InputField.vue";
 
 const router = useRouter();
+const userStore = useUserStore();
 
 const email = ref("");
 const password = ref("");
 
 const loginUser = async () => {
   try {
-    console.log(email.value, password.value);
-    await authService.login(email.value, password.value);
+    await userStore.login(email.value, password.value);
     router.push("/");
   } catch (error) {
     console.error("Error signing in:", error);

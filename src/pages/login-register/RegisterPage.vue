@@ -57,16 +57,14 @@
 
 <script setup>
 import { ref } from "vue";
-import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
-import InputField from "@/components/InputField.vue";
-
-import Card from "@/components/Card.vue";
-import showNotification from "@/utils/toastifyNotification.js";
-import { authService } from "@/services/userAuthentication.js";
+import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { Form } from "vee-validate";
 import { registerSchema } from "@/utils/validationSchemas.js";
-import { useUserStore } from "@/store/userStore.js";
+import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import InputField from "@/components/InputField.vue";
+import Card from "@/components/Card.vue";
+import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -89,7 +87,6 @@ const registerUser = async () => {
       timezoneChosen.value = false;
       return;
     }
-    console.log(email.value, username.value, timezone.value, password.value);
     const user = {
       email: email.value,
       username: username.value,
@@ -98,7 +95,7 @@ const registerUser = async () => {
       isAdmin: userStore.isAdmin ? true : false,
     };
 
-    await authService.register(user, password.value);
+    await userStore.register(user, password.value);
     router.push("/");
     showNotification("Registered successfully!");
   } catch (error) {

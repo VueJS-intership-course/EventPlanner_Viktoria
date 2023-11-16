@@ -74,20 +74,19 @@
 </template>
 
 <script setup>
-import MapComponent from "@/components/maps/MapComponent.vue";
-import Card from "@/components/Card.vue";
-import { useEventStore } from "@/store/eventStore.js";
 import { ref } from "vue";
+import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import moment from "moment-timezone";
 import { Field, Form, ErrorMessage } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import showNotification from "@/utils/toastifyNotification.js";
-import firebase from "firebase/compat/app";
-import "firebase/compat/storage";
-import "firebase/compat/firestore";
+import MapComponent from "@/components/maps/MapComponent.vue";
+import Card from "@/components/Card.vue";
 import InputField from "@/components/InputField.vue";
+import fb from "@/firebase/fbConfig.js";
+
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -108,8 +107,7 @@ const onMapClick = (lonLat) => {
 
 const handleImageUpload = async (event) => {
   const imageFile = event.target.files[0];
-  const fbStorage = firebase.storage();
-  const storageRef = fbStorage.ref();
+  const storageRef = fb.storage.ref();
   const imageRef = storageRef.child(`event_images/${eventName.value}`);
 
   try {

@@ -1,12 +1,12 @@
 <template>
   <modal
-    :title="modalTitle"
-    :modalId="modalId"
+    title="Edit Profile"
+    modalId="editProfileModal"
     @save="saveClicked"
     @cancel="cancelClicked"
   >
     <Form :validation-schema="editUserSchema">
-     <InputField
+      <InputField
         label="Username"
         inputId="username"
         :value="editedUser.username"
@@ -27,20 +27,17 @@
 import { computed } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
-import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
-import Modal from "@/components/Modal.vue";
-import { Field, Form, ErrorMessage } from "vee-validate";
+import { Form } from "vee-validate";
 import { editUserSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
+import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import Modal from "@/components/Modal.vue";
 import InputField from "@/components/InputField.vue";
 
 const router = useRouter();
 
 const userStore = useUserStore();
 const editedUser = computed(() => userStore.editedUser);
-
-const modalTitle = "Edit Profile";
-const modalId = "editProfileModal";
 
 const handleSelectedTimezone = (selectedTimezone) => {
   editedUser.value.timezone = selectedTimezone;

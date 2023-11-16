@@ -62,7 +62,7 @@ import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import InputField from "@/components/InputField.vue";
-import { Field, Form, ErrorMessage } from "vee-validate";
+import { Form } from "vee-validate";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
