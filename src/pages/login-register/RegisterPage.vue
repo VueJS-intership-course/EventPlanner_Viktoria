@@ -2,78 +2,76 @@
   <div class="container mt-4">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h2 v-if="!userStore.isAdmin" class="card-title text-center mb-4">
-              Register
-            </h2>
-            <h2 v-if="userStore.isAdmin" class="card-title text-center mb-4">
-              Add a New Admin
-            </h2>
+        <Card>
+          <h2 v-if="!userStore.isAdmin" class="card-title text-center mb-4">
+            Register
+          </h2>
+          <h2 v-if="userStore.isAdmin" class="card-title text-center mb-4">
+            Add a New Admin
+          </h2>
 
-            <Form @submit="registerUser" :validation-schema="registerSchema">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <Field
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  v-model="email"
-                  required
-                />
-                <ErrorMessage name="email" class="text-danger" />
-              </div>
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <Field
-                  type="text"
-                  class="form-control"
-                  id="username"
-                  name="username"
-                  v-model="username"
-                  required
-                />
-                <ErrorMessage name="username" class="text-danger" />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <Field
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  name="password"
-                  v-model="password"
-                  required
-                />
-                <ErrorMessage name="password" class="text-danger" />
-              </div>
-              <div class="mb-3">
-                <label for="repeatPassword" class="form-label"
-                  >Repeat Password</label
-                >
-                <Field
-                  type="password"
-                  class="form-control"
-                  id="repeatPassword"
-                  name="repeatPassword"
-                  v-model="repeatPassword"
-                  required
-                />
-                <ErrorMessage name="repeatPassword" class="text-danger" />
-              </div>
-              <div class="mb-3">
-                <time-zone-dropdown
-                  @selected="handleSelectedTimezone"
-                ></time-zone-dropdown>
-                <p v-if="!timezoneChosen" class="text-danger">
-                  Timezone is required!
-                </p>
-              </div>
-              <button type="submit" class="btn btn-primary">Register</button>
-            </Form>
-          </div>
-        </div>
+          <Form @submit="registerUser" :validation-schema="registerSchema">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <Field
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                v-model="email"
+                required
+              />
+              <ErrorMessage name="email" class="text-danger" />
+            </div>
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <Field
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                v-model="username"
+                required
+              />
+              <ErrorMessage name="username" class="text-danger" />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <Field
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                v-model="password"
+                required
+              />
+              <ErrorMessage name="password" class="text-danger" />
+            </div>
+            <div class="mb-3">
+              <label for="repeatPassword" class="form-label"
+                >Repeat Password</label
+              >
+              <Field
+                type="password"
+                class="form-control"
+                id="repeatPassword"
+                name="repeatPassword"
+                v-model="repeatPassword"
+                required
+              />
+              <ErrorMessage name="repeatPassword" class="text-danger" />
+            </div>
+            <div class="mb-3">
+              <time-zone-dropdown
+                @selected="handleSelectedTimezone"
+              ></time-zone-dropdown>
+              <p v-if="!timezoneChosen" class="text-danger">
+                Timezone is required!
+              </p>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </Form>
+        </Card>
       </div>
     </div>
   </div>
@@ -82,6 +80,7 @@
 <script setup>
 import { ref } from "vue";
 import TimeZoneDropdown from "@/components/TimeZoneDropdown.vue";
+import Card from "@/components/Card.vue";
 import showNotification from "@/utils/toastifyNotification.js";
 import { authService } from "@/services/userAuthentication.js";
 import { useRouter } from "vue-router";

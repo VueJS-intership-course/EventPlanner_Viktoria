@@ -2,18 +2,14 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-md-6 mt-5">
-        <div class="card">
-          <div class="card-body">
-            <EventByMonthChart :eventCount="eventCountByMonth" />
-          </div>
-        </div>
+        <Card>
+          <EventByMonthChart :eventCount="eventCountByMonth" />
+        </Card>
       </div>
       <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <EventsCalendar :current-user-events="transformedEvents" />
-          </div>
-        </div>
+        <Card>
+          <EventsCalendar :current-user-events="transformedEvents" />
+        </Card>
       </div>
     </div>
   </div>
@@ -24,6 +20,7 @@ import { computed } from "vue";
 import { useEventStore } from "@/store/eventStore";
 import EventByMonthChart from "@/components/highcharts/EventByMonthChart.vue";
 import EventsCalendar from "@/components/EventsCalendar.vue";
+import Card from "@/components/Card.vue";
 
 const store = useEventStore();
 store.getEventList();
