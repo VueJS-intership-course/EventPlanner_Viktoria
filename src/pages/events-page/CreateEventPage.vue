@@ -173,7 +173,6 @@ const createEvent = (formData) => {
   const eventTimezone = convertCoordsToTz(location.value);
   const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
 
-  console.log("cre event :", imageURL.value);
   const event = {
     name: formData.eventName,
     description: formData.eventDescription,
@@ -191,7 +190,7 @@ const createEvent = (formData) => {
     router.push("/events");
   } catch (error) {
     console.error("Error while adding the event:", error);
-    showNotification("Error addin the event");
+    showNotification("Error adding the event");
   }
 };
 </script>

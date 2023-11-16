@@ -91,10 +91,11 @@
         </div>
       </div>
     </div>
-    <EventsCalendar
-      v-if="!userStore.isAdmin"
-      :current-user-events="transformedCuurentUserEvents"
-    />
+          <EventsCalendar
+            v-if="!userStore.isAdmin"
+            :current-user-events="transformedCuurentUserEvents"
+            style="width: 700px; height: 500px;"
+          />
   </section>
   <section v-if="!currentUser">
     <h3 class="mt-5">You are currently not logged in</h3>
@@ -113,6 +114,7 @@ import EventsCalendar from "@/components/EventsCalendar.vue";
 
 const userStore = useUserStore();
 const eventStore = useEventStore();
+
 eventStore.getEventList();
 
 const currentUser = computed(() => userStore.user);

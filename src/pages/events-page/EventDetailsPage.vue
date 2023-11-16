@@ -35,7 +35,6 @@
             <!-- <p v-if="userStore.isAdmin" class="mb-2">
               <strong>Users with tickets:</strong> {{ event.users }}
             </p> -->
-
             <div class="mt-4">
               <button
                 v-if="userStore.isAdmin"
@@ -95,10 +94,10 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEventStore } from "@/store/eventStore";
 import { useUserStore } from "@/store/userStore";
-import EditEventModal from "@/pages/events-page/EditEventModal.vue";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import MapDisplay from "@/components/maps/MapDisplay.vue";
+import EditEventModal from "@/pages/events-page/EditEventModal.vue";
 
 const route = useRoute();
 const router = useRouter();

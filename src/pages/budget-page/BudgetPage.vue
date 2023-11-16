@@ -112,6 +112,7 @@ const getCategoryExpense = (category) => {
     : 0;
 };
 
+// revenue from ticket sales
 const revenue = computed(() => {
   if (event.value) return event.value.users.length * event.value.price;
 });
@@ -140,6 +141,7 @@ const remainingBudget = computed(() => totalBudget.value - totalExpenses.value);
 const expense = ref({
   category: "utilities",
   cost: 0,
+  id: '',
 });
 
 const addExpense = async () => {

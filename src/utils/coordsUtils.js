@@ -1,6 +1,7 @@
 import tzlookup from "tz-lookup";
 
 export const convertCoordsToTz = (coordinates) => {
+  if (!coordinates) return "Loading...";
   const [lon, lat] = coordinates;
   const timezone = tzlookup(lat, lon);
 

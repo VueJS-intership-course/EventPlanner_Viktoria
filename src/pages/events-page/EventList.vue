@@ -85,6 +85,7 @@ const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
 
+// trim the text to have the same lenght text in each card
 const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
@@ -103,7 +104,6 @@ const toggleFilters = () => {
 const filteredEvents = computed(() => {
   return eventStore.filteredEvents;
 });
-
 
 const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;

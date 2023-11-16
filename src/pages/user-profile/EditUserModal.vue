@@ -39,8 +39,8 @@ import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 
-const store = useUserStore();
-const editedUser = computed(() => store.editedUser);
+const userStore = useUserStore();
+const editedUser = computed(() => userStore.editedUser);
 
 const modalTitle = "Edit Profile";
 const modalId = "editProfileModal";
@@ -55,8 +55,8 @@ const saveClicked = () => {
       username: editedUser.value.username,
     })
     .then(() => {
-      store.editUser(editedUser.value);
-      store.isEditing = false;
+      userStore.editUser(editedUser.value);
+      userStore.isEditing = false;
       showNotification("Profile updated successfully!");
       router.push("/profile");
     })
@@ -66,6 +66,6 @@ const saveClicked = () => {
 };
 
 const cancelClicked = () => {
-  store.isEditing = false;
+  userStore.isEditing = false;
 };
 </script>

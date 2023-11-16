@@ -4,10 +4,10 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h2 v-if="!store.isAdmin" class="card-title text-center mb-4">
+            <h2 v-if="!userStore.isAdmin" class="card-title text-center mb-4">
               Register
             </h2>
-            <h2 v-if="store.isAdmin" class="card-title text-center mb-4">
+            <h2 v-if="userStore.isAdmin" class="card-title text-center mb-4">
               Add a New Admin
             </h2>
 
@@ -90,7 +90,7 @@ import { registerSchema } from "@/utils/validationSchemas.js";
 import { useUserStore } from "@/store/userStore.js";
 
 const router = useRouter();
-const store = useUserStore();
+const userStore = useUserStore();
 
 const email = ref("");
 const password = ref("");
@@ -115,7 +115,7 @@ const registerUser = async () => {
       username: username.value,
       timezone: timezone.value,
       // check if the the current user logged is an admin, therefore is registering an admin
-      isAdmin: store.isAdmin ? true : false,
+      isAdmin: userStore.isAdmin ? true : false,
     };
 
     await authService.register(user, password.value);

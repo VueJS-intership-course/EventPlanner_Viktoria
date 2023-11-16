@@ -61,28 +61,31 @@
       <div class="col-md-12 d-flex justify-content-end">
         <button type="submit" class="btn btn-primary">Apply Filters</button>
       </div>
-      <div v-if="eventStore.filtersApplied" class="col-md-12 d-flex justify-content-end">
-        <button @click="resetFilters" class="btn btn-secondary">Reset Filters</button>
+      <div
+        v-if="eventStore.filtersApplied"
+        class="col-md-12 d-flex justify-content-end"
+      >
+        <button @click="resetFilters" class="btn btn-secondary">
+          Reset Filters
+        </button>
       </div>
     </form>
   </div>
 </template>
-
 
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import { computed, watch } from "vue";
 
-
 const eventStore = useEventStore();
-const router = useRouter(); 
-
+const router = useRouter();
 
 const filterOptions = computed(() => eventStore.filterOptions);
 
 const applyFilters = () => {
-  const { fromDate, toDate, minPrice, maxPrice, ticketStatus, searchQuery } = filterOptions.value;
+  const { fromDate, toDate, minPrice, maxPrice, ticketStatus, searchQuery } =
+    filterOptions.value;
   const query = {};
 
   const addQueryParam = (key, value) => {
@@ -91,12 +94,21 @@ const applyFilters = () => {
     }
   };
 
-  addQueryParam('fromDate', fromDate ? new Date(fromDate).toISOString().split("T")[0] : null);
-  addQueryParam('toDate', toDate ? new Date(toDate).toISOString().split("T")[0] : null);
-  addQueryParam('minPrice', minPrice);
-  addQueryParam('maxPrice', maxPrice);
-  addQueryParam('ticketStatus', ['available', 'sold-out'].includes(ticketStatus) ? ticketStatus : null);
-  addQueryParam('searchQuery', searchQuery);
+  addQueryParam(
+    "fromDate",
+    fromDate ? new Date(fromDate).toISOString().split("T")[0] : null
+  );
+  addQueryParam(
+    "toDate",
+    toDate ? new Date(toDate).toISOString().split("T")[0] : null
+  );
+  addQueryParam("minPrice", minPrice);
+  addQueryParam("maxPrice", maxPrice);
+  addQueryParam(
+    "ticketStatus",
+    ["available", "sold-out"].includes(ticketStatus) ? ticketStatus : null
+  );
+  addQueryParam("searchQuery", searchQuery);
 
   eventStore.applyFilters();
   eventStore.filtersApplied = true;
@@ -115,5 +127,4 @@ watch(filterOptions.value, (newOptions, oldOptions) => {
     eventStore.filterOptions.maxPrice = null;
   }
 });
-
 </script>

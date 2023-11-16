@@ -56,16 +56,16 @@
           Hello, {{ loggedUser.username }}
           <i v-if="isAuthenticated" class="bi bi-database-fill-check"></i>
         </span>
-        <RouterLink class="nav-link" to="/profile" v-if="store.user">
+        <RouterLink class="nav-link" to="/profile" v-if="loggedUser">
           Profile
         </RouterLink>
-        <button @click="logoutUser" v-if="store.user" class="btn btn-danger">
+        <button @click="logoutUser" v-if="loggedUser" class="btn btn-danger">
           Logout
         </button>
-        <RouterLink to="/register" v-if="!store.user" class="btn btn-primary">
+        <RouterLink to="/register" v-if="!loggedUser" class="btn btn-primary">
           Register
         </RouterLink>
-        <RouterLink to="/login" v-if="!store.user" class="btn btn-primary">
+        <RouterLink to="/login" v-if="!loggedUser" class="btn btn-primary">
           Login
         </RouterLink>
       </div>

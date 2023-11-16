@@ -17,6 +17,7 @@ import { getCountryFromCoords } from "@/utils/coordsUtils.js";
 import HighchartsMap from "@/components/highcharts/MapChart.vue";
 
 const store = useEventStore();
+
 const events = ref([]);
 const eventCountByCountry = ref({});
 
