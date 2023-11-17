@@ -5,7 +5,8 @@
 </template>
 
 <script setup>
-import {  reactive, watch } from "vue";
+import { reactive, watch } from "vue";
+import { months } from "@/utils/constants.js";
 
 const props = defineProps({
   eventCount: {
@@ -17,26 +18,12 @@ const props = defineProps({
 const chartOptions = reactive({
   chart: {
     type: "column",
-    // backgroundColor: "#eee",
   },
   title: {
     text: "Event Count by Month",
   },
   xAxis: {
-    categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
+    categories: months,
     labels: {
       style: {
         color: "black",
