@@ -2,7 +2,17 @@
   <div class="mb-3">
     <label :for="inputId" class="form-label">{{ label }}</label>
     <Field
+      v-if="type !== 'textarea'"
       :type="type"
+      :id="inputId"
+      :name="inputId"
+      :value="value"
+      @input="updateInputValue"
+      class="form-control"
+    />
+    <Field
+      v-if="type === 'textarea'"
+      as="textarea"
       :id="inputId"
       :name="inputId"
       :value="value"
@@ -20,7 +30,7 @@ const props = defineProps({
   label: String,
   type: String,
   inputId: String,
-  value: [String, Number, Date]
+  value: [String, Number, Date],
 });
 
 const emit = defineEmits(["update:modelValue"]);
