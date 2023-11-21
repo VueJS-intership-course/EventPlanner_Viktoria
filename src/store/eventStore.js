@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 import { eventService } from "@/services/eventServices.js";
 
-export const useEventStore = defineStore({
-  id: "eventStore",
+export const useEventStore = defineStore("eventStore", {
   state: () => ({
     events: [],
     isEditing: false,

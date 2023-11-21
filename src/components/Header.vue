@@ -52,7 +52,7 @@
             </ul>
           </li>
         </ul>
-        <span v-if="loggedUser">
+        <span id="helloUser" v-if="loggedUser">
           Hello, {{ loggedUser.username }}
           <i v-if="isAuthenticated" class="bi bi-database-fill-check"></i>
         </span>

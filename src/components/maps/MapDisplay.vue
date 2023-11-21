@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";

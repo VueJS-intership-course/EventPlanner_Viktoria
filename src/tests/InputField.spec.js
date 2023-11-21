@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import InputField from "../components/InputField.vue";
+import InputField from "@/components/InputField.vue";
 
 let wrapper;
 
@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 describe("InputField.vue", () => {
-  it("renders a label", () => {
+  it("should render a label", () => {
     expect(wrapper.find("label").text()).toBe("Test Label");
   });
 

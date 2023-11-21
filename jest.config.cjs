@@ -8,5 +8,8 @@ module.exports = {
   testEnvironmentOptions: {
     customExportConditions: ["node", "node-addons"],
   },
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'
+    },
   snapshotSerializers: ["jest-serializer-vue"],
 };
