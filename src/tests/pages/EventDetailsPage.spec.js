@@ -1,4 +1,4 @@
-import { shallowMount, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import EventDetailsPage from "@/pages/events-page/EventDetailsPage.vue";
 import userStoreMock from "@/tests/__mocks__/userState.js";
 import eventStoreMock from "@/tests/__mocks__/eventState.js";

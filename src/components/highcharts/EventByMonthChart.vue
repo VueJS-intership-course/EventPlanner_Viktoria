@@ -7,6 +7,11 @@
 <script setup>
 import { reactive, watch } from "vue";
 import { months } from "@/utils/constants.js";
+import { routerKey } from "vue-router";
+import { useRouter } from "vue-router";
+import moment from "moment";
+
+const router = useRouter();
 
 const props = defineProps({
   eventCount: {
@@ -14,6 +19,19 @@ const props = defineProps({
     required: true,
   },
 });
+
+const getMonth = (month) => {
+  const formattedStartDate = moment(new Date(2023, month, 1)).format(
+    "YYYY-MM-DD"
+  );
+  const formattedEndDate = moment(new Date(2023, month + 1, 0)).format(
+    "YYYY-MM-DD"
+  );
+
+  router.push(
+    `/events?fromDate=${formattedStartDate}&toDate=${formattedEndDate}`
+  );
+};
 
 const chartOptions = reactive({
   chart: {
@@ -56,6 +74,23 @@ const chartOptions = reactive({
       name: "Events",
       data: props.eventCount,
       color: "#3f51b5",
+      cursor: "pointer",
+      point: {
+        events: {
+          click: function () {
+            const monthIndex = months.indexOf(this.category);
+            const formattedStartDate = moment(
+              new Date(2023, monthIndex, 1)
+            ).format("YYYY-MM-DD");
+            const formattedEndDate = moment(
+              new Date(2023, monthIndex + 1, 0)
+            ).format("YYYY-MM-DD");
+            router.push(
+              `/events?fromDate=${formattedStartDate}&toDate=${formattedEndDate}`
+            );
+          },
+        },
+      },
     },
   ],
 });

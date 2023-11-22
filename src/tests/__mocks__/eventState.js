@@ -7,7 +7,7 @@ const eventStateMockWithTickets = {
   ticketCount: 98,
   price: 20,
   budget: 1500,
-  users: ["testt@gmail.com", "test@abv.bg"],
+  users: [],
   expenses: [],
   imageURL: "https://fastly.picsum.photos/id/858/200/300",
 };
@@ -37,7 +37,7 @@ const eventStoreMockWithoutTickets = {
       ticketCount: 0,
       price: 20,
       budget: 1500,
-      users: ["test@test.test"],
+      users: ["test@tt.test"],
     },
   ],
   isEditing: false,
