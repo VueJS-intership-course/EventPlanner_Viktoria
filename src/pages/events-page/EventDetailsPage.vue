@@ -1,4 +1,4 @@
-<template>
+<template v-if="event">
   <div>
     <div class="card">
       <div class="container my-4">
@@ -78,7 +78,7 @@
     </div>
     <div class="card">
       <div class="container my-4">
-        <div class="row">
+        <div class="row" v-if="event.location">
           <div class="col-md-6">
             <p class="lead">Event Location</p>
             <MapDisplay :location="event.location" />
@@ -109,7 +109,9 @@ const event = computed(() => eventStore.selectedEvent);
 const isLoading = ref(true);
 const isEditing = computed(() => eventStore.isEditing);
 const ticketAvailable = computed(() => event.value.ticketCount > 0);
-const eventTz = computed(() => convertCoordsToTz(event.value.location));
+const eventTz = computed(() =>
+  event.value.location ? convertCoordsToTz(event.value.location) : null
+);
 
 eventStore.getEventById(eventId.value);
 if (eventId.value) {

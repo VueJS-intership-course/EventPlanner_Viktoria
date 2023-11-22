@@ -31,25 +31,25 @@ describe("Header.vue", () => {
     expect(wrapper.find(".navbar-brand").text()).toBe("eVENTS");
   });
 
-  //   it("displays 'Register' and 'Login' buttons when not logged in", () => {
-  //     const wrapper = mount(Header, {
-  //       global: {
-  //         plugins: [
-  //           createTestingPinia({
-  //             initialState: {
-  //               userStore: userStoreMock.userStateMockWithoutUser,
-  //             },
-  //           }),
-  //         ],
-  //         stubs: ["RouterLink"],
-  //       },
-  //     });
+  it("displays 'Register' and 'Login' buttons when not logged in", () => {
+    const wrapper = mount(Header, {
+      global: {
+        plugins: [
+          createTestingPinia({
+            initialState: {
+              userStore: userStoreMock.userStateMockWithoutUser,
+            },
+          }),
+        ],
+        stubs: ["router-link"],
+      },
+    });
 
-  //     const buttons = wrapper.findAll(".btn-primary");
+    const buttons = wrapper.findAll(".btn-primary");
 
-  //     expect(buttons[0].text()).toContain("Register");
-  //     expect(buttons[1].text()).toContain("Login");
-  //   });
+    expect(buttons[0].text()).toContain("Register");
+    expect(buttons[1].text()).toContain("Login");
+  });
 
   it("displays 'Logout' button and 'Hello, {user}' when logged in", () => {
     const wrapper = mount(Header, {
@@ -57,7 +57,9 @@ describe("Header.vue", () => {
         plugins: [
           createTestingPinia({
             initialState: {
-              users: userStoreMock.userStateMockWithUser,
+              users: {
+                user: userStoreMock.userStateMockWithUser,
+              },
             },
           }),
         ],
@@ -69,7 +71,7 @@ describe("Header.vue", () => {
     expect(logoutButton.text()).toContain("Logout");
 
     expect(wrapper.find("#helloUser").text()).toContain(
-      `Hello, ${userStoreMock.userStateMockWithUser.user.username}`
+      `Hello, ${userStoreMock.userStateMockWithUser.username}`
     );
   });
 
@@ -81,14 +83,11 @@ describe("Header.vue", () => {
           createTestingPinia({
             initialState: {
               users: {
-                user: {
-                  username: "test",
-                  email: "",
-                },
-                actions: {
-                  logout: mockLogout,
-                },
+                user: userStoreMock.userStateMockWithUser,
               },
+            },
+            stubActions: {
+              logout: mockLogout,
             },
           }),
         ],
@@ -104,29 +103,24 @@ describe("Header.vue", () => {
     expect(wrapper.vm.$route.path).toBe("/login");
   });
 
-  //   it('displays "Admin" and "Overview" button when user is admin', () => {
-  //     const wrapper = mount(Header, {
-  //       global: {
-  //         plugins: [
-  //           createTestingPinia({
-  //             initialState: {
-  //               users: {
-  //                 user: {
-  //                   username: "test",
-  //                   email: "",
-  //                   isAdmin: true,
-  //                 },
-  //               },
-  //             },
-  //           }),
-  //         ],
-  //         stubs: ["RouterLink"],
-  //       },
-  //     });
+  it('displays "Admin" and "Overview" button when user is admin', () => {
+    const wrapper = mount(Header, {
+      global: {
+        plugins: [
+          createTestingPinia({
+            initialState: {
+              users: {
+                user: userStoreMock.userStateMockWithUserAndIsAdmin,
+              },
+            },
+          }),
+        ],
+        stubs: ["router-link"],
+      },
+    });
 
-  //     const links = wrapper.findAll(".nav-link");
-  //     expect(links[3].text()).toContain("Admin");
-  //     expect(links[2].text()).toContain("Overview");
-  //   }
-  //   );
+    const links = wrapper.findAll(".nav-link");
+    expect(links[3].text()).toContain("Admin");
+    expect(links[2].text()).toContain("Overview");
+  });
 });

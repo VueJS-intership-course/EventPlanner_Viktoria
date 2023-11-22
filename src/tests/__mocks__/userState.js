@@ -1,36 +1,23 @@
-const userStateMockWithoutUser = {
-  user: {},
-};
+const userStateMockWithoutUser = {};
 
 const userStateMockWithUser = {
-  user: {
-    username: "test",
-    email: "test@test.test",
-    timezone: "Europe/Monaco",
-    isAdmin: true,
-  },
-  
+  username: "test",
+  email: "test@test.test",
+  timezone: "Europe/Monaco",
+  isAdmin: false,
 };
 
-const userStateMockWithUserAndIsEditing = {
-  user: {
-    username: "test",
-    email: "test@test.test",
-    timezone: "Europe/Monaco",
-  },
-  isEditing: true,
-  editedUser: {
-    email: "test@test.test",
-    username: "test",
-    timezone: "Europe/Monaco",
-  },
+const userStateMockWithUserAndIsAdmin = {
+  username: "test",
+  email: "admin@test.com",
+  timezone: "Europe/Monaco",
+  isAdmin: true,
 };
 
 const userStoreMock = {
   userStateMockWithoutUser,
   userStateMockWithUser,
-  userStateMockWithUserAndIsEditing,
+  userStateMockWithUserAndIsAdmin,
 };
 
 export default userStoreMock;
-
