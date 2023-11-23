@@ -73,8 +73,6 @@ describe("OverviewPage.vue", () => {
   });
 
   it('calls "getEventList" when the component is mounted', () => {
-    expect(wrapper.vm.store.getEventList).toHaveBeenCalled();
+    expect(wrapper.vm.store.getEventList).toBeCalled();
   });
-
-  console.log(wrapper.vm.store.events);
 });

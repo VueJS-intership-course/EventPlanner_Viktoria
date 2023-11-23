@@ -20,19 +20,6 @@ const props = defineProps({
   },
 });
 
-const getMonth = (month) => {
-  const formattedStartDate = moment(new Date(2023, month, 1)).format(
-    "YYYY-MM-DD"
-  );
-  const formattedEndDate = moment(new Date(2023, month + 1, 0)).format(
-    "YYYY-MM-DD"
-  );
-
-  router.push(
-    `/events?fromDate=${formattedStartDate}&toDate=${formattedEndDate}`
-  );
-};
-
 const chartOptions = reactive({
   chart: {
     type: "column",
@@ -85,9 +72,15 @@ const chartOptions = reactive({
             const formattedEndDate = moment(
               new Date(2023, monthIndex + 1, 0)
             ).format("YYYY-MM-DD");
-            router.push(
-              `/events?fromDate=${formattedStartDate}&toDate=${formattedEndDate}`
-            );
+            router.push({
+              name: "event-list",
+              query: {
+                fromDate: formattedStartDate,
+                toDate: formattedEndDate,
+              },
+            });
+
+
           },
         },
       },

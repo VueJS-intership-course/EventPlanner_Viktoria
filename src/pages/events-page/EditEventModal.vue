@@ -62,11 +62,11 @@ import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import Modal from "@/components/Modal.vue";
 import InputField from "@/components/InputField.vue";
+import moment from "moment-timezone";
 import { Form } from "vee-validate";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
-import moment from "moment-timezone";
 import { editEventSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
 
@@ -76,7 +76,10 @@ const editedEvent = computed(() => store.editedEvent);
 const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
 
 const datetime = computed(() =>
-  getEventTime(editedEvent.value.utcTime, tz.value)
+  moment(
+    getEventTime(editedEvent.value.utcTime, tz.value),
+    "DD MMM YYYY | HH:mm"
+  ).format("HH:mm YYYY-MM-DD")
 );
 const eventTime = ref(datetime.value.split(" ")[0]);
 const eventDate = ref(datetime.value.split(" ")[1]);

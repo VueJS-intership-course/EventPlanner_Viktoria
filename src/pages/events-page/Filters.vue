@@ -1,40 +1,44 @@
 <template>
   <div class="container my-4">
-    <form @submit.prevent="applyFilters" class="row g-3">
+    <Form
+      @submit="applyFilters"
+      class="row g-3"
+      :validation-schema="filterSchema"
+    >
       <div class="col-md-2">
-        <label for="fromDate" class="form-label">From Date:</label>
-        <input
+        <InputField
+          label="From Date"
           type="date"
-          class="form-control"
-          id="fromDate"
-          v-model="filterOptions.fromDate"
+          inputId="fromDate"
+          :value="filterOptions.fromDate"
+          @update:modelValue="(value) => (filterOptions.fromDate = value)"
         />
       </div>
       <div class="col-md-2">
-        <label for="toDate" class="form-label">To Date:</label>
-        <input
+        <InputField
+          label="To Date"
           type="date"
-          class="form-control"
-          id="toDate"
-          v-model="filterOptions.toDate"
+          inputId="toDate"
+          :value="filterOptions.toDate"
+          @update:modelValue="(value) => (filterOptions.toDate = value)"
         />
       </div>
       <div class="col-md-2">
-        <label for="minPrice" class="form-label">Min Price:</label>
-        <input
+        <InputField
+          label="Min Price"
           type="number"
-          class="form-control"
-          id="minPrice"
-          v-model="filterOptions.minPrice"
+          inputId="minPrice"
+          :value="filterOptions.minPrice"
+          @update:modelValue="(value) => (filterOptions.minPrice = value)"
         />
       </div>
       <div class="col-md-2">
-        <label for="maxPrice" class="form-label">Max Price:</label>
-        <input
+        <InputField
+          label="Max Price"
           type="number"
-          class="form-control"
-          id="maxPrice"
-          v-model="filterOptions.maxPrice"
+          inputId="maxPrice"
+          :value="filterOptions.maxPrice"
+          @update:modelValue="(value) => (filterOptions.maxPrice = value)"
         />
       </div>
       <div class="col-md-2">
@@ -50,11 +54,10 @@
         </select>
       </div>
       <div class="col-md-2">
-        <label for="searchQuery" class="form-label">Search Event:</label>
-        <input
+        <InputField
+          label="Search Event"
           type="text"
-          class="form-control"
-          id="searchQuery"
+          inputId="searchQuery"
           v-model="filterOptions.searchQuery"
         />
       </div>
@@ -69,7 +72,7 @@
           Reset Filters
         </button>
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
@@ -77,6 +80,9 @@
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import { computed, watch } from "vue";
+import InputField from "@/components/InputField.vue";
+import { filterSchema } from "@/utils/validationSchemas.js";
+import { Form} from "vee-validate";
 
 const eventStore = useEventStore();
 const router = useRouter();
@@ -121,6 +127,8 @@ const resetFilters = () => {
   eventStore.filtersApplied = false;
   router.push({ query: null });
 };
+
+
 
 watch(filterOptions.value, (newOptions, oldOptions) => {
   if (newOptions.maxPrice === "") {
