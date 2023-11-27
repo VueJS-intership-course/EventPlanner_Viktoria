@@ -1,4 +1,4 @@
-<template>
+<template v-if="event">
   <div class="container my-4">
     <h1 class="display-4">Budget for {{ event.name }}</h1>
     <p><strong>Start Budget:</strong> ${{ event.budget }}</p>
@@ -54,7 +54,11 @@
       </div>
 
       <div class="col-md-6">
-        <form @submit.prevent="addExpense" class="mt-4">
+        <Form
+          @submit="addExpense"
+          class="mt-4"
+          :validationSchema="budgetSchema"
+        >
           <div class="mb-3">
             <label for="category" class="form-label">Expense Category</label>
             <select
@@ -72,18 +76,14 @@
               <option value="Other">Other Expenses</option>
             </select>
           </div>
-          <div class="mb-3">
-            <label for="cost" class="form-label">Expense Cost</label>
-            <input
-              type="number"
-              class="form-control"
-              id="cost"
-              v-model="expense.cost"
-              required
-            />
-          </div>
+          <InputField
+            label="Expense Cost"
+            inputId="cost"
+            v-model.number="expense.cost"
+            type="number"
+          />
           <button type="submit" class="btn btn-primary">Add Expense</button>
-        </form>
+        </Form>
       </div>
     </div>
     <div v-if="totalExpenses" class="col-md-6">
@@ -97,13 +97,19 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useEventStore } from "@/store/eventStore";
 import { expenseCategories } from "@/utils/constants.js";
+import { useEventStore } from "@/store/eventStore";
 import ExpensePieChart from "@/components/highcharts/PieChart.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
+import InputField from "@/components/InputField.vue";
+import { budgetSchema } from "@/utils/validationSchemas.js";
+import { Form } from "vee-validate";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);
+
+// console.log(typeof expense.cost);
+
 
 const getCategoryExpense = (category) => {
   const categoryExpenses = groupedExpenses.value[category];
@@ -114,7 +120,7 @@ const getCategoryExpense = (category) => {
 
 // revenue from ticket sales
 const revenue = computed(() => {
-  if (event.value) return event.value.users.length * event.value.price;
+  if (event.value.users) return event.value.users.length * event.value.price;
 });
 
 const totalBudget = computed(() => revenue.value + event.value.budget);
@@ -122,7 +128,7 @@ const expenses = computed(() => event.value.expenses);
 
 const groupedExpenses = computed(() => {
   const grouped = {};
-  if (!expenses.value) return;
+  if (!expenses.value) return grouped;
   expenses.value.forEach((expense) => {
     if (!grouped[expense.category]) {
       grouped[expense.category] = [];
@@ -132,22 +138,23 @@ const groupedExpenses = computed(() => {
   return grouped;
 });
 
-const totalExpenses = computed(() =>
-  expenses.value.reduce((acc, expense) => acc + expense.cost, 0)
-);
+const totalExpenses = computed(() => {
+  if (expenses.value)
+    return Number(expenses.value.reduce((acc, expense) => acc + expense.cost, 0));
+});
 
 const remainingBudget = computed(() => totalBudget.value - totalExpenses.value);
 
 const expense = ref({
-  category: "utilities",
+  category: "",
   cost: 0,
-  id: '',
+  id: "",
 });
 
 const addExpense = async () => {
   try {
     await eventStore.addExpense(event.value, expense.value);
-    expense.value = { category: "utilities", cost: 0, id: generateUniqueKey() };
+    expense.value = { category: "", cost: 0, id: generateUniqueKey() };
     eventStore.selectedEvent = eventStore.getEventById(event.value.id);
   } catch (error) {
     console.error("Error adding expense: ", error);

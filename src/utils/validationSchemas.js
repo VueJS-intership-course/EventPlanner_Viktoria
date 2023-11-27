@@ -83,11 +83,19 @@ export const editUserSchema = Yup.object({
 });
 
 export const filterSchema = Yup.object({
-  // toDate: Yup.date()
-  //   .nullable()
-  //   .min(Yup.ref("fromDate"), "To Date must be after From Date"),
+  toDate: Yup.date()
+    .nullable()
+    .min(Yup.ref("fromDate"), "To Date must be after From Date"),
 
   maxPrice: Yup.number()
     .nullable()
     .min(Yup.ref("minPrice"), "Max Price must be greater than Min Price"),
+});
+
+
+export const budgetSchema = Yup.object({
+  cost: Yup.number()
+    .typeError("Cost must be a number")
+    .required("Cost is required")
+    .min(1, "Cost must be greater than 0"),
 });

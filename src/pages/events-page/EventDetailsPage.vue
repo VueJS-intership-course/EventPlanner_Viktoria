@@ -127,7 +127,6 @@ eventStore.getEventById(eventId.value);
 
 const editEvent = () => {
   eventStore.isEditing = true;
-  console.log(event.value);
   eventStore.editedEvent = { ...event.value };
 };
 
