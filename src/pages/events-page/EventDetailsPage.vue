@@ -65,7 +65,7 @@
                 isBeforeToday(event.utcTime)
               "
               @click="buyTicket"
-              class="btn btn-primary m-2"
+              class="btn btn-warning m-2"
             >
               Buy a Ticket
             </button>
@@ -149,3 +149,36 @@ const isBeforeToday = (date) => {
   return date > today;
 };
 </script>
+
+<style lang="scss" scoped>
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin-bottom: 20px;
+}
+.img-fluid {
+  width: 100%;
+  border-radius: 8px 0 0 8px;
+}
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.lead {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+.text-center {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+</style>
+

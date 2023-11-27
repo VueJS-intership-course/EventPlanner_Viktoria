@@ -92,7 +92,6 @@ export const filterSchema = Yup.object({
     .min(Yup.ref("minPrice"), "Max Price must be greater than Min Price"),
 });
 
-
 export const budgetSchema = Yup.object({
   cost: Yup.number()
     .typeError("Cost must be a number")

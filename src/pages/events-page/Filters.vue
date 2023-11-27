@@ -58,7 +58,8 @@
           label="Search Event"
           type="text"
           inputId="searchQuery"
-          v-model="filterOptions.searchQuery"
+          :value="filterOptions.searchQuery"
+          @update:modelValue="(value) => (filterOptions.searchQuery = value)"
         />
       </div>
       <div class="col-md-12 d-flex justify-content-end">
@@ -82,7 +83,7 @@ import { useRouter } from "vue-router";
 import { computed, watch } from "vue";
 import InputField from "@/components/InputField.vue";
 import { filterSchema } from "@/utils/validationSchemas.js";
-import { Form} from "vee-validate";
+import { Form } from "vee-validate";
 
 const eventStore = useEventStore();
 const router = useRouter();
@@ -126,10 +127,8 @@ const resetFilters = () => {
   eventStore.resetFilters();
   eventStore.filtersApplied = false;
   router.push({ query: null });
+  eventStore.showFilters = false;
 };
-
-
-
 watch(filterOptions.value, (newOptions, oldOptions) => {
   if (newOptions.maxPrice === "") {
     eventStore.filterOptions.maxPrice = null;

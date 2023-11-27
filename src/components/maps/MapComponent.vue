@@ -12,6 +12,7 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
+import Icon from "ol/style/Icon";
 import { fromLonLat, toLonLat } from "ol/proj";
 import 'ol/ol.css';
 
@@ -56,11 +57,10 @@ const handleMapClick = (lonLat, vectorSourceInstance) => {
   });
 
   const pointStyle = new Style({
-    image: new Circle({
-      radius: 7,
-      fill: new Fill({
-        color: "black",
-      }),
+    image: new Icon({
+      src: "https://firebasestorage.googleapis.com/v0/b/event-manager-1329.appspot.com/o/pointer.png?alt=media&token=3ef15299-f3cc-4522-a465-9a0cbc81483a",
+      anchor: [0.5, 1],
+      scale: 0.05,
     }),
   });
 

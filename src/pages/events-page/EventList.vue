@@ -9,7 +9,7 @@
         {{ Object.keys(router.currentRoute.value.query).length }}
       </span>
     </button>
-    <Filters v-if="showFilters" />
+    <Filters v-if="eventStore.showFilters" />
   </div>
   <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
     <div
@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeMount } from "vue";
+import { computed, onBeforeMount } from "vue";
 import Filters from "@/pages/events-page/Filters.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { useEventStore } from "@/store/eventStore.js";
@@ -98,10 +98,8 @@ const isBeforeToday = (date) => {
   return date > today;
 };
 
-const showFilters = ref(false);
-
 const toggleFilters = () => {
-  showFilters.value = !showFilters.value;
+  eventStore.showFilters = !eventStore.showFilters;
 };
 
 const filteredEvents = computed(() => {
@@ -112,10 +110,10 @@ const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;
 
   return (
-    (query.fromDate && query.fromDate !== "undefined") ||
-    (query.toDate && query.toDate !== "undefined") ||
-    (query.minPrice && query.minPrice !== "undefined") ||
-    (query.maxPrice && query.maxPrice !== "undefined") ||
+    query.fromDate ||
+    query.toDate ||
+    query.minPrice ||
+    query.maxPrice ||
     query.availableTickets === "true" ||
     query.availableTickets === "false" ||
     query.soldOut === "true" ||
@@ -160,15 +158,58 @@ const buyTicket = (event) => {
 </script>
 
 <style lang="scss" scoped>
-.card-img-top {
-  width: 100%;
-  height: 12.5rem;
-  object-fit: cover;
+.btn {
+  transition: background-color 0.3s ease;
 }
 
 .sold-out-badge {
   font-size: 1.2rem;
   transform: rotate(20deg);
   padding: 8px 18px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-text {
+  color: #333;
 }
 </style>

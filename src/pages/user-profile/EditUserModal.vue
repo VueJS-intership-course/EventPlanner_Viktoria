@@ -14,7 +14,6 @@
         type="text"
       />
       <div class="form-group">
-        <label for="timezone">New Timezone</label>
         <time-zone-dropdown
           @selected="handleSelectedTimezone"
         ></time-zone-dropdown>

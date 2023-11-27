@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">eVENTS</a>
+      <span class="navbar-brand">eVENTS</span>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <RouterLink class="nav-link active" aria-current="page" to="/"
+            <RouterLink class="nav-link" aria-current="page" to="/"
               >Home</RouterLink
             >
           </li>
@@ -78,7 +78,6 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore.js";
 
-
 const router = useRouter();
 const store = useUserStore();
 
@@ -96,11 +95,49 @@ const logoutUser = () => {
   margin: 1.5rem;
 }
 
-span {
+.btn {
   margin: 1rem;
 }
 
-.btn {
-  margin: 1rem;
+.navbar {
+  background-color: #333;
+  border-bottom: 2px solid #111;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  color: white;
+  transition: color 0.4s ease;
+
+  &:hover {
+    color: #cbcbcb;
+  }
+
+  &:focus {
+    color: #666;
+  }
+}
+.dropdown-menu {
+  background-color: #444;
+  border: none;
+}
+
+.dropdown-item {
+  color: #ccc;
+
+  &:hover {
+    background-color: #333;
+    color: #fff;
+  }
+}
+
+#helloUser {
+  color: #cfcfcf;
+  margin-right: 1rem;
 }
 </style>

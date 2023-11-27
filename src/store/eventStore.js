@@ -16,6 +16,7 @@ export const useEventStore = defineStore("eventStore", {
       ticketStatus: "all",
     },
     filtersApplied: false,
+    showFilters: false,
   }),
 
   actions: {
