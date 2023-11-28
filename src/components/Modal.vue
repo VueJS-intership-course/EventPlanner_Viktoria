@@ -55,7 +55,6 @@ const handleCancel = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1050;
 }
 
 .modal-dialog {
@@ -64,12 +63,6 @@ const handleCancel = () => {
 
 .modal-body {
   padding: 20px;
-}
-
-.modal-footer {
-  padding: 15px 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
 }
 
 .modal-backdrop {

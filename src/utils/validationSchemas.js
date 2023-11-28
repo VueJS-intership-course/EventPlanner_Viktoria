@@ -1,4 +1,3 @@
-import { min } from "moment-timezone";
 import * as Yup from "yup";
 
 export const createEventSchema = Yup.object({

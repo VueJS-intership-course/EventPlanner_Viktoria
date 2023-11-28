@@ -75,3 +75,10 @@ onMounted(() => {
   initMap();
 });
 </script>
+
+<style lang="scss" scoped>
+#map {
+  height: 500px; 
+  width: 600px;
+}
+</style>

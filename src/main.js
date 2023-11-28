@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 import { createPinia } from "pinia";
 import fb from "@/firebase/fbConfig.js";
 import { useUserStore } from "@/store/userStore.js";
-import '@/styles-config.js';
+import "@/styles-config.js";
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import HighchartsMap from "highcharts/modules/map";

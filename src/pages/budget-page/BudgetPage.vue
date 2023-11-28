@@ -112,8 +112,6 @@ import Card from "../../components/Card.vue";
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);
 
-// console.log(typeof expense.cost);
-
 const getCategoryExpense = (category) => {
   const categoryExpenses = groupedExpenses.value[category];
   return categoryExpenses
@@ -151,7 +149,7 @@ const totalExpenses = computed(() => {
 const remainingBudget = computed(() => totalBudget.value - totalExpenses.value);
 
 const expense = ref({
-  category: "",
+  category: "Utilities",
   cost: 0,
   id: "",
 });

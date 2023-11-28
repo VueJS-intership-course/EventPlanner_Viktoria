@@ -57,7 +57,6 @@
               <label class="form-label">Event Location</label>
               <MapComponent
                 :onMapClick="onMapClick"
-                style="height: 500px; width: 600px"
               />
             </div>
             <button type="submit" class="btn btn-primary">Create Event</button>

@@ -90,17 +90,6 @@ export const useEventStore = defineStore("eventStore", {
       }
     },
 
-    applyFilters() {
-      this.filterOptions = {
-        fromDate: this.filterOptions.fromDate,
-        toDate: this.filterOptions.toDate,
-        minPrice: this.filterOptions.minPrice,
-        maxPrice: this.filterOptions.maxPrice,
-        searchQuery: this.filterOptions.searchQuery,
-        ticketStatus: this.filterOptions.ticketStatus,
-      };
-    },
-
     resetFilters() {
       this.filterOptions = {
         fromDate: null,
@@ -110,7 +99,6 @@ export const useEventStore = defineStore("eventStore", {
         searchQuery: "",
         ticketStatus: "all",
       };
-      this.applyFilters();
     },
   },
 

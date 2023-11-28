@@ -31,13 +31,13 @@
           <p v-if="userStore.isAdmin" class="mb-2">
             <strong>Budget:</strong> ${{ event.budget }}
           </p>
-          <p v-if="userStore.isAdmin" class="mb-2">
+          <!-- <p v-if="userStore.isAdmin" class="mb-2">
             <strong>Users with tickets:</strong> {{ event.users }}
-          </p>
+          </p> -->
           <div class="mt-4">
             <button
               v-if="userStore.isAdmin"
-              @click="deleteEvent"
+              @click="confirmDeleteEvent"
               class="btn btn-danger m-2"
             >
               Delete Event
@@ -82,18 +82,18 @@
           <p class="lead">Event Location</p>
           <MapDisplay :location="event.location" />
         </div>
-          <div class="col-md-6">
-            <div v-if="!isBeforeToday(event.utcTime)" class="text-center">
-              <p class="lead">This event has already passed!</p>
-            </div>
-            <div
-              v-if="
-                !userStore.isAdmin && event.users.includes(userStore.user.email)
-              "
-              class="text-center"
-            >
-              <p class="lead">You have a ticket for this event!</p>
-            </div>
+        <div class="col-md-6">
+          <div v-if="!isBeforeToday(event.utcTime)" class="text-center">
+            <p class="lead">This event has already passed!</p>
+          </div>
+          <div
+            v-if="
+              !userStore.isAdmin && event.users.includes(userStore.user.email)
+            "
+            class="text-center"
+          >
+            <p class="lead">You have a ticket for this event!</p>
+          </div>
         </div>
       </div>
     </div>
@@ -130,9 +130,14 @@ const editEvent = () => {
   eventStore.editedEvent = { ...event.value };
 };
 
-const deleteEvent = () => {
-  eventStore.removeEvent(event.value);
-  router.push("/events");
+const confirmDeleteEvent = () => {
+  const confirmation = window.confirm(
+    "Are you sure you want to delete this event?"
+  );
+  if (confirmation) {
+    eventStore.removeEvent(event.value);
+    router.push("/events");
+  }
 };
 
 const viewBudget = () => {
@@ -159,10 +164,9 @@ const isBeforeToday = (date) => {
   transition: transform 0.3s ease;
   margin-bottom: 20px;
 }
-.img-fluid {
-  width: 100%;
-  border-radius: 8px 0 0 8px;
-}
+// .img-fluid {
+//   width: 100%;
+// }
 .display-4 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -181,4 +185,3 @@ const isBeforeToday = (date) => {
   color: #dc3545;
 }
 </style>
-

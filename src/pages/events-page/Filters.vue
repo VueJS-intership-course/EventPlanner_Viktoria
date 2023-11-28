@@ -117,7 +117,6 @@ const applyFilters = () => {
   );
   addQueryParam("searchQuery", searchQuery);
 
-  eventStore.applyFilters();
   eventStore.filtersApplied = true;
 
   router.push({ query });
