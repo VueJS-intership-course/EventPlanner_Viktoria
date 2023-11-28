@@ -160,17 +160,18 @@ const buyTicket = (event) => {
 <style lang="scss" scoped>
 .btn {
   transition: background-color 0.3s ease;
-}
 
+  &:hover {
+    background-color: #0056b3;
+  }
+
+}
 .sold-out-badge {
   font-size: 1.2rem;
   transform: rotate(20deg);
   padding: 8px 18px;
 }
 
-.btn:hover {
-  background-color: #0056b3;
-}
 
 .container {
   display: flex;
@@ -190,10 +191,10 @@ const buyTicket = (event) => {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-}
 
-.card:hover {
-  transform: translateY(-5px);
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 
 .card-img-top {

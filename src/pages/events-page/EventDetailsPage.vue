@@ -164,9 +164,6 @@ const isBeforeToday = (date) => {
   transition: transform 0.3s ease;
   margin-bottom: 20px;
 }
-// .img-fluid {
-//   width: 100%;
-// }
 .display-4 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -181,7 +178,4 @@ const isBeforeToday = (date) => {
   margin-top: 20px;
 }
 
-.text-danger {
-  color: #dc3545;
-}
 </style>

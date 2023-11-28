@@ -86,7 +86,6 @@
             <button type="submit" class="btn btn-primary">Add Expense</button>
           </Form>
         </Card>
-
         <Card class="mt-4">
           <ExpensePieChart
             :groupedExpenses="groupedExpenses"
@@ -107,7 +106,7 @@ import generateUniqueKey from "@/utils/randomUUID.js";
 import InputField from "@/components/InputField.vue";
 import { budgetSchema } from "@/utils/validationSchemas.js";
 import { Form } from "vee-validate";
-import Card from "../../components/Card.vue";
+import Card from "@/components/Card.vue";
 
 const eventStore = useEventStore();
 const event = computed(() => eventStore.selectedEvent);
