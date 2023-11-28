@@ -1,11 +1,9 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="map-container">
-          <HighchartsMap :eventCountByCountry="eventCountByCountry" />
-        </div>
-      </div>
+      <Card style="width: 800px; margin-top: 1rem">
+        <HighchartsMap :eventCountByCountry="eventCountByCountry" />
+      </Card>
     </div>
   </div>
 </template>
@@ -15,6 +13,7 @@ import { ref, onMounted } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { getCountryFromCoords } from "@/utils/coordsUtils.js";
 import HighchartsMap from "@/components/highcharts/MapChart.vue";
+import Card from "@/components/Card.vue";
 
 const store = useEventStore();
 

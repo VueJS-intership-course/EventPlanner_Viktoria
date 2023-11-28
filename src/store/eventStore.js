@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 import { eventService } from "@/services/eventServices.js";
 
-export const useEventStore = defineStore({
-  id: "eventStore",
+export const useEventStore = defineStore("eventStore", {
   state: () => ({
     events: [],
     isEditing: false,
@@ -17,6 +16,7 @@ export const useEventStore = defineStore({
       ticketStatus: "all",
     },
     filtersApplied: false,
+    showFilters: false,
   }),
 
   actions: {
@@ -90,17 +90,6 @@ export const useEventStore = defineStore({
       }
     },
 
-    applyFilters() {
-      this.filterOptions = {
-        fromDate: this.filterOptions.fromDate,
-        toDate: this.filterOptions.toDate,
-        minPrice: this.filterOptions.minPrice,
-        maxPrice: this.filterOptions.maxPrice,
-        searchQuery: this.filterOptions.searchQuery,
-        ticketStatus: this.filterOptions.ticketStatus,
-      };
-    },
-
     resetFilters() {
       this.filterOptions = {
         fromDate: null,
@@ -110,7 +99,6 @@ export const useEventStore = defineStore({
         searchQuery: "",
         ticketStatus: "all",
       };
-      this.applyFilters();
     },
   },
 

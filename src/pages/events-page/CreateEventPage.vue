@@ -47,23 +47,15 @@
               v-model="budget"
               type="number"
             />
-            <div class="mb-3">
-              <label for="eventImage" class="form-label">Event Image</label>
-              <Field
-                type="file"
-                class="form-control"
-                id="eventImage"
-                name="eventImage"
-                @change="handleImageUpload"
-              />
-              <ErrorMessage name="eventImage" class="text-danger" />
-            </div>
+            <InputField
+              label="Event Image"
+              inputId="eventImage"
+              type="file"
+              @change="handleImageUpload"
+            />
             <div class="mb-3">
               <label class="form-label">Event Location</label>
-              <MapComponent
-                :onMapClick="onMapClick"
-                style="height: 500px; width: 600px"
-              />
+              <MapComponent :onMapClick="onMapClick" />
             </div>
             <button type="submit" class="btn btn-primary">Create Event</button>
           </Form>
@@ -78,7 +70,7 @@ import { ref } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
 import moment from "moment-timezone";
-import { Field, Form, ErrorMessage } from "vee-validate";
+import { Form } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import showNotification from "@/utils/toastifyNotification.js";
@@ -86,7 +78,6 @@ import MapComponent from "@/components/maps/MapComponent.vue";
 import Card from "@/components/Card.vue";
 import InputField from "@/components/InputField.vue";
 import fb from "@/firebase/fbConfig.js";
-
 
 const router = useRouter();
 const eventStore = useEventStore();
@@ -113,24 +104,25 @@ const handleImageUpload = async (event) => {
   try {
     await imageRef.put(imageFile);
     imageURL.value = await imageRef.getDownloadURL();
-    console.log("Image uploaded successfully:", imageURL.value);
+    showNotification("Image uploaded successfully");
   } catch (error) {
+    showNotification("Error uploading image! Please try again");
     console.error("Error uploading image:", error);
   }
 };
 
-const createEvent = (formData) => {
+const createEvent = () => {
   const eventTimezone = convertCoordsToTz(location.value);
-  const eventDatetime = `${formData.eventDate}T${formData.eventTime}`;
+  const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
   const event = {
-    name: formData.eventName,
-    description: formData.eventDescription,
+    name: eventName.value,
+    description: eventDescription.value,
     utcTime: moment.tz(eventDatetime, eventTimezone).utc().toISOString(),
-    ticketCount: formData.ticketCount,
+    ticketCount: ticketCount.value,
     location: location.value,
-    price: formData.price,
-    budget: formData.budget,
+    price: price.value,
+    budget: budget.value,
     users: [],
     expenses: [],
     imageURL: imageURL.value,

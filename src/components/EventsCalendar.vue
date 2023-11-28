@@ -81,7 +81,7 @@ watch(
 
 .fc-event-title {
   color: #333;
-  font-size: 12px;
+  font-size: 0.75px;
 }
 
 .fc-today {
@@ -89,7 +89,6 @@ watch(
   border-radius: 3px;
 }
 .container {
-  font-family: "Arial", "Helvetica Neue", "Helvetica", sans-serif;
   font-size: 0.75rem;
 }
 

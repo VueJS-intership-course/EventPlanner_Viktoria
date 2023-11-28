@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -14,6 +14,7 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Style, Circle, Fill } from "ol/style";
+import Icon from "ol/style/Icon";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 
@@ -59,11 +60,10 @@ const displayLocationPoint = (lonLat, vectorSourceInstance) => {
   });
 
   const pointStyle = new Style({
-    image: new Circle({
-      radius: 7,
-      fill: new Fill({
-        color: "blue",
-      }),
+    image: new Icon({
+      src: "https://firebasestorage.googleapis.com/v0/b/event-manager-1329.appspot.com/o/pointer.png?alt=media&token=3ef15299-f3cc-4522-a465-9a0cbc81483a",
+      anchor: [0.5, 1],
+      scale: 0.1,
     }),
   });
 

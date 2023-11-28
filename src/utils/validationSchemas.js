@@ -25,7 +25,7 @@ export const createEventSchema = Yup.object({
     .typeError("Event Budget must be a number")
     .required("Event Budget is required")
     .min(1, "Event Budget must be greater than 0"),
-    eventImage: Yup.mixed().required("Event Image is required"),
+  eventImage: Yup.mixed().required("Event Image is required"),
 });
 
 export const editEventSchema = Yup.object({
@@ -64,7 +64,6 @@ export const registerSchema = Yup.object({
   repeatPassword: Yup.string()
     .required("Repeat Password is required")
     .oneOf([Yup.ref("password")], "Passwords do not match"),
-
 });
 
 export const loginSchema = Yup.object({
@@ -80,4 +79,21 @@ export const editUserSchema = Yup.object({
   username: Yup.string()
     .required("Username is required")
     .min(4, "Username must be at least 4 characters"),
+});
+
+export const filterSchema = Yup.object({
+  toDate: Yup.date()
+    .nullable()
+    .min(Yup.ref("fromDate"), "To Date must be after From Date"),
+
+  maxPrice: Yup.number()
+    .nullable()
+    .min(Yup.ref("minPrice"), "Max Price must be greater than Min Price"),
+});
+
+export const budgetSchema = Yup.object({
+  cost: Yup.number()
+    .typeError("Cost must be a number")
+    .required("Cost is required")
+    .min(1, "Cost must be greater than 0"),
 });

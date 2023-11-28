@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
     <button @click="toggleFilters" class="btn btn-primary position-relative">
-      Toggle Filters
+      <i class="bi bi-funnel-fill"></i> Toggle Filters
       <span
         v-if="hasActiveFilters"
         class="position-absolute top-0 start-100 translate-middle badge bg-danger"
@@ -9,44 +9,47 @@
         {{ Object.keys(router.currentRoute.value.query).length }}
       </span>
     </button>
-    <Filters v-if="showFilters" />
+    <Filters v-if="eventStore.showFilters" />
   </div>
   <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
     <div
       v-for="event in filteredEvents"
       :key="generateUniqueKey"
-      class="card"
+      class="card position-relative"
       style="width: 280px"
     >
+      <span
+        v-if="event.ticketCount <= 0"
+        class="position-absolute top-0 end-0 badge bg-danger sold-out-badge"
+      >
+        SOLD OUT
+      </span>
       <img class="card-img-top" :src="event.imageURL" alt="Event image top" />
       <div class="card-body">
         <h5 class="card-title">{{ event.name }}</h5>
-        <p class="card-text">{{ truncateText(event.description, 100) }}</p>
+        <p class="card-text">{{ truncateText(event.description, 80) }}</p>
       </div>
       <ul class="list-group list-group-flush">
         <li v-if="userStore.user" class="list-group-item">
-          {{ getUserTime(event.utcTime) }}
+          <span v-if="!isBeforeToday(event.utcTime)">
+            <i>*Past event</i>
+          </span>
+          <span v-if="isBeforeToday(event.utcTime)">
+            {{ getUserTime(event.utcTime) }}
+          </span>
         </li>
         <li v-if="!userStore.user" class="list-group-item">
-          {{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}
-        </li>
-        <li class="list-group-item">${{ event.price }}</li>
-        <li v-if="event.ticketCount > 0" class="list-group-item">
-          Tickets left: {{ event.ticketCount }}
-        </li>
-        <li
-          v-if="event.ticketCount <= 0"
-          class="list-group-item"
-          style="color: red"
-        >
-          SOLD OUT
+          <p v-if="!isBeforeToday(event.utcTime)">Past event</p>
+          <p v-if="isBeforeToday(event.utcTime)">
+            {{ getEventTime(event.utcTime, convertCoordsToTz(event.location)) }}
+          </p>
         </li>
       </ul>
       <div v-if="userStore.user" class="card-body">
         <button @click="goToEventDetails(event.id)" class="btn btn-primary">
           Details
         </button>
-        <!-- <p v-if="!isBeforeToday(event.utcTime)" class="text-default">This event has already passed</p> -->
+
         <button
           v-if="
             !userStore.isAdmin &&
@@ -55,7 +58,7 @@
             isBeforeToday(event.utcTime)
           "
           @click="buyTicket(event)"
-          class="btn btn-primary m-2"
+          class="btn btn-warning m-2"
         >
           Buy a ticket
         </button>
@@ -65,7 +68,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeMount } from "vue";
+import { computed, onBeforeMount } from "vue";
 import Filters from "@/pages/events-page/Filters.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { useEventStore } from "@/store/eventStore.js";
@@ -95,10 +98,8 @@ const isBeforeToday = (date) => {
   return date > today;
 };
 
-const showFilters = ref(false);
-
 const toggleFilters = () => {
-  showFilters.value = !showFilters.value;
+  eventStore.showFilters = !eventStore.showFilters;
 };
 
 const filteredEvents = computed(() => {
@@ -109,10 +110,10 @@ const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;
 
   return (
-    (query.fromDate && query.fromDate !== "undefined") ||
-    (query.toDate && query.toDate !== "undefined") ||
-    (query.minPrice && query.minPrice !== "undefined") ||
-    (query.maxPrice && query.maxPrice !== "undefined") ||
+    query.fromDate ||
+    query.toDate ||
+    query.minPrice ||
+    query.maxPrice ||
     query.availableTickets === "true" ||
     query.availableTickets === "false" ||
     query.soldOut === "true" ||
@@ -154,13 +155,62 @@ const buyTicket = (event) => {
   eventStore.buyTicket(event);
   router.push("/events");
 };
-
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+}
+.sold-out-badge {
+  font-size: 1.2rem;
+  transform: rotate(20deg);
+  padding: 8px 18px;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
 .card-img-top {
   width: 100%;
-  height: 12.5rem;
+  height: 200px;
   object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-text {
+  color: #333;
 }
 </style>

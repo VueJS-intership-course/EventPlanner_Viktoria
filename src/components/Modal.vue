@@ -1,4 +1,5 @@
 <template>
+  <div class="modal-backdrop show"></div>
   <div class="modal show" style="display: block">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -46,3 +47,30 @@ const handleCancel = () => {
   emit("cancel");
 };
 </script>
+
+<style scoped>
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-dialog {
+  max-width: 500px;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+</style>
