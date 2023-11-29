@@ -37,6 +37,11 @@ export const routes = [
   {
     path: "/register-admin",
     name: "registerAdmin",
+    meta: {
+      // implement authorization based on meta prop
+      authenticated: true,
+      adminRole: true
+    },
     component: () => import("@/pages/login-register/RegisterAdminPage.vue"),
   },
   {

@@ -105,7 +105,7 @@ export const useEventStore = defineStore("eventStore", {
   getters: {
     eventCountByMonth() {
       const eventCountByMonth = new Array(12).fill(0);
-
+      //  odo this with reduce
       this.events.forEach((event) => {
         const date = new Date(event.utcTime);
         const month = date.getUTCMonth();
@@ -126,6 +126,7 @@ export const useEventStore = defineStore("eventStore", {
 
       return this.events.filter((event) => {
         const eventDate = event.utcTime.split("T")[0];
+        const lowerCaseQuery = searchQuery.toLowerCase();
 
         if (fromDate && eventDate < fromDate) return false;
         if (toDate && eventDate > toDate) return false;
@@ -134,15 +135,7 @@ export const useEventStore = defineStore("eventStore", {
         if (ticketStatus === "available" && event.ticketCount <= 0)
           return false;
         if (ticketStatus === "sold-out" && event.ticketCount > 0) return false;
-        if (searchQuery) {
-          const lowerCaseQuery = searchQuery.toLowerCase();
-          if (
-            !event.name.toLowerCase().includes(lowerCaseQuery) &&
-            !event.description.toLowerCase().includes(lowerCaseQuery)
-          ) {
-            return false;
-          }
-        }
+        if (!event.name.toLowerCase().includes(lowerCaseQuery) && !event.description.toLowerCase().includes(lowerCaseQuery)) return false
 
         return true;
       });

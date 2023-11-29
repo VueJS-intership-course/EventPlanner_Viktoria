@@ -34,10 +34,10 @@ export const authService = {
       if (userDoc) {
         const [doc] = userDoc.docs;
         return doc.data();
-      } else {
-        console.log("User document does not exist.");
-        return null;
-      }
+      } 
+      
+      console.log("User document does not exist.");
+      return null;
     } catch (error) {
       console.error("Error retrieving user data:", error);
       throw error;
@@ -57,7 +57,8 @@ export const authService = {
     await fb.auth.signOut();
   },
 
-  async editUser(user) {
+  // use object destruct in parameters
+  async editUser({username, timezone}) {
     const querySnapshot = await fb.fireStore
       .collection("users")
       .where("email", "==", user.email)
@@ -66,8 +67,8 @@ export const authService = {
     const doc = querySnapshot.docs[0];
     try {
       await doc.ref.update({
-        username: user.username,
-        timezone: user.timezone,
+        username,
+        timezone,
       });
     } catch (error) {
       console.error("Error editing event: ", error);

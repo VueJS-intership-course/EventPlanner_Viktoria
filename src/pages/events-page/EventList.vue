@@ -13,7 +13,7 @@
   </div>
   <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
     <div
-      v-for="event in  eventStore.filteredEvents"
+      v-for="event in eventStore.filteredEvents"
       :key="generateUniqueKey"
       class="card position-relative"
       style="width: 280px"
@@ -88,7 +88,11 @@ const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
 };
 
+// replace this with CSS rules text-overflow: elipsis;
+// see: https://getbootstrap.com/docs/5.0/helpers/text-truncation/
 // trim the text to have the same lenght text in each card
+
+// if we have truncated text set "title" property which will show full text on hover
 const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
@@ -102,19 +106,17 @@ const toggleFilters = () => {
   eventStore.showFilters = !eventStore.showFilters;
 };
 
-
 const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;
-
+  // use some highorder fn to check this
+  // return ['toDate', 'fromDate', etc...].some(item => query[item])
   return (
     query.fromDate ||
     query.toDate ||
     query.minPrice ||
     query.maxPrice ||
-    query.availableTickets === "true" ||
-    query.availableTickets === "false" ||
-    query.soldOut === "true" ||
-    query.soldOut === "false" ||
+    query.availableTickets ||
+    query.soldOut ||
     query.searchQuery
   );
 });
@@ -127,14 +129,23 @@ onBeforeMount(() => {
     eventStore.filterOptions.toDate = query.toDate || null;
     eventStore.filterOptions.minPrice = query.minPrice || null;
     eventStore.filterOptions.maxPrice = query.maxPrice || null;
-    eventStore.filterOptions.ticketStatus =
-      query.availableTickets === "true"
-        ? "available"
-        : query.soldOut === "true"
-        ? "sold-out"
-        : "all";
-    eventStore.filterOptions.searchQuery = query.searchQuery;
 
+    // rewrite this with if construction
+    eventStore.filterOptions.ticketStatus = "all";
+    if (query.availableTickets === "true") {
+      eventStore.filterOptions.ticketStatus = "available";
+    } else {
+      eventStore.filterOptions.ticketStatus = "sold-out";
+    }
+    // eventStore.filterOptions.ticketStatus =
+    //   query.availableTickets === "true"
+    //     ? "available"
+    //     : query.soldOut === "true"
+    //     ? "sold-out"
+    //     : "all";
+    eventStore.filterOptions.searchQuery = query.searchQuery || "";
+
+    // this can be replaced by computed prop "hasActiveFilters"
     const hasQueryParams =
       query.fromDate ||
       query.toDate ||
@@ -161,14 +172,12 @@ const buyTicket = (event) => {
   &:hover {
     background-color: #0056b3;
   }
-
 }
 .sold-out-badge {
   font-size: 1.2rem;
   transform: rotate(20deg);
   padding: 8px 18px;
 }
-
 
 .container {
   display: flex;

@@ -2,6 +2,8 @@ import fb from "@/firebase/fbConfig.js";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { useUserStore } from "@/store/userStore.js";
 
+// handle error globally, call firebase through own custom method
+
 export const eventService = {
   async getAll() {
     try {
@@ -40,7 +42,7 @@ export const eventService = {
       return data;
     } catch (error) {
       console.error("Error fetching events:", error);
-      throw error;
+      throw error
     }
   },
 

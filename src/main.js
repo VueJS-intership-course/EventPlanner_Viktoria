@@ -5,6 +5,8 @@ import { createPinia } from "pinia";
 import fb from "@/firebase/fbConfig.js";
 import { useUserStore } from "@/store/userStore.js";
 import "@/styles-config.js";
+
+// good way to separate this in highcharts setup file
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import HighchartsMap from "highcharts/modules/map";

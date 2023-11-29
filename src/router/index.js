@@ -9,6 +9,7 @@ const router = createRouter({
 
 router.beforeResolve(async (to, from, next) => {
   const store = useUserStore();
+  // rework authorization check based on meta prop of the accessed route
   if (
     (to.name === "login" && store.isLogged) ||
     (to.name === "register" && store.isLogged) ||
@@ -18,7 +19,10 @@ router.beforeResolve(async (to, from, next) => {
     (to.name === "overview" && !store.isAdmin) 
   ) {
     next({ name: "home" });
-  } else next();
+    return;
+  } 
+  
+  next();
 });
 
 export default router;

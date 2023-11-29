@@ -59,13 +59,13 @@
         <RouterLink class="nav-link" to="/profile" v-if="store.user">
           Profile
         </RouterLink>
-        <button @click="logoutUser" v-if="store.user" class="btn btn-danger">
+        <button @click="logoutUser" v-if="store.user" class="btn m-1 btn-danger">
           Logout
         </button>
-        <RouterLink to="/register" v-if="!store.user" class="btn btn-primary">
+        <RouterLink to="/register" v-if="!store.user" class="btn m-1 btn-primary">
           Register
         </RouterLink>
-        <RouterLink to="/login" v-if="!store.user" class="btn btn-primary">
+        <RouterLink to="/login" v-if="!store.user" class="btn m-1 btn-primary">
           Login
         </RouterLink>
       </div>
@@ -89,10 +89,6 @@ const logoutUser = () => {
 <style lang="scss" scoped>
 .container {
   margin: 1.5rem;
-}
-
-.btn {
-  margin: 1rem;
 }
 
 .navbar {
