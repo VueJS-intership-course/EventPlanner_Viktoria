@@ -1,7 +1,7 @@
-<template v-if="event">
+<template v-if="eventStore.selectedEvent">
   <div class="container my-4">
-    <h1 class="display-4">Budget for {{ event.name }}</h1>
-    <p><strong>Start Budget:</strong> ${{ event.budget }}</p>
+    <h1 class="display-4">Budget for {{ eventStore.selectedEvent.name }}</h1>
+    <p><strong>Start Budget:</strong> ${{ eventStore.selectedEvent.budget }}</p>
     <p v-if="revenue"><strong>Revenue from tickets:</strong> ${{ revenue }}</p>
     <p v-if="revenue"><strong>Total Budget:</strong> ${{ totalBudget }}</p>
     <div class="row">
@@ -109,7 +109,6 @@ import { Form } from "vee-validate";
 import Card from "@/components/Card.vue";
 
 const eventStore = useEventStore();
-const event = computed(() => eventStore.selectedEvent);
 
 const getCategoryExpense = (category) => {
   const categoryExpenses = groupedExpenses.value[category];
@@ -120,11 +119,16 @@ const getCategoryExpense = (category) => {
 
 // revenue from ticket sales
 const revenue = computed(() => {
-  if (event.value.users) return event.value.users.length * event.value.price;
+  if (eventStore.selectedEvent.users)
+    return (
+      eventStore.selectedEvent.users.length * eventStore.selectedEvent.price
+    );
 });
 
-const totalBudget = computed(() => revenue.value + event.value.budget);
-const expenses = computed(() => event.value.expenses);
+const totalBudget = computed(
+  () => revenue.value + eventStore.selectedEvent.budget
+);
+const expenses = computed(() => eventStore.selectedEvent.expenses);
 
 const groupedExpenses = computed(() => {
   const grouped = {};
@@ -155,9 +159,11 @@ const expense = ref({
 
 const addExpense = async () => {
   try {
-    await eventStore.addExpense(event.value, expense.value);
+    await eventStore.addExpense(eventStore.selectedEvent, expense.value);
     expense.value = { category: "", cost: 0, id: generateUniqueKey() };
-    eventStore.selectedEvent = eventStore.getEventById(event.value.id);
+    eventStore.selectedEvent = eventStore.getEventById(
+      eventStore.selectedEvent.id
+    );
   } catch (error) {
     console.error("Error adding expense: ", error);
   }
@@ -165,8 +171,14 @@ const addExpense = async () => {
 
 const deleteExpense = async (category, expenseId) => {
   try {
-    await eventStore.deleteExpense(event.value, category, expenseId);
-    eventStore.selectedEvent = eventStore.getEventById(event.value.id);
+    await eventStore.deleteExpense(
+      eventStore.selectedEvent,
+      category,
+      expenseId
+    );
+    eventStore.selectedEvent = eventStore.getEventById(
+      eventStore.selectedEvent.id
+    );
   } catch (error) {
     console.error("Error deleting expense: ", error);
   }

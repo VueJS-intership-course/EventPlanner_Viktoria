@@ -1,39 +1,36 @@
-<template v-if="event">
+<template v-if="eventStore.selectedEvent">
   <div class="card">
     <div class="container my-4">
       <div class="row">
         <div class="col-md-6">
           <img
-            :src="event.imageURL"
+            :src="eventStore.selectedEvent.imageURL"
             alt="Event Image"
             class="img-fluid rounded"
           />
         </div>
         <div class="col-md-6">
-          <h1 class="display-4">{{ event.name }}</h1>
-          <p class="lead">{{ event.description }}</p>
+          <h1 class="display-4">{{ eventStore.selectedEvent.name }}</h1>
+          <p class="lead">{{ eventStore.selectedEvent.description }}</p>
           <p class="mb-2">
             <strong>Event Time in {{ eventTz }}:</strong>
-            {{ getEventTime(event.utcTime, eventTz) }}
+            {{ getEventTime(eventStore.selectedEvent.utcTime, eventTz) }}
           </p>
           <p v-if="userStore.user" class="mb-2">
             <strong>Your Time:</strong>
-            {{ getUserTime(event.utcTime) }}
+            {{ getUserTime(eventStore.selectedEvent.utcTime) }}
           </p>
 
           <p v-if="ticketAvailable" class="mb-2">
-            <strong>Tickets Left:</strong> {{ event.ticketCount }}
+            <strong>Tickets Left:</strong> {{ eventStore.selectedEvent.ticketCount }}
           </p>
           <p v-if="!ticketAvailable" class="mb-2 text-danger">
             <strong>Tickets sold out</strong>
           </p>
-          <p class="mb-2"><strong>Price:</strong> ${{ event.price }}</p>
+          <p class="mb-2"><strong>Price:</strong> ${{ eventStore.selectedEvent.price }}</p>
           <p v-if="userStore.isAdmin" class="mb-2">
-            <strong>Budget:</strong> ${{ event.budget }}
+            <strong>Budget:</strong> ${{ eventStore.selectedEvent.budget }}
           </p>
-          <!-- <p v-if="userStore.isAdmin" class="mb-2">
-            <strong>Users with tickets:</strong> {{ event.users }}
-          </p> -->
           <div class="mt-4">
             <button
               v-if="userStore.isAdmin"
@@ -60,9 +57,9 @@
               v-if="
                 userStore.user &&
                 !userStore.isAdmin &&
-                !event.users.includes(userStore.user.email) &&
+                !eventStore.selectedEvent.users.includes(userStore.user.email) &&
                 ticketAvailable &&
-                isBeforeToday(event.utcTime)
+                isBeforeToday(eventStore.selectedEvent.utcTime)
               "
               @click="buyTicket"
               class="btn btn-warning m-2"
@@ -73,22 +70,22 @@
         </div>
       </div>
     </div>
-    <EditEventModal v-if="isEditing" />
+    <EditEventModal v-if="eventStore.isEditing" />
   </div>
   <div class="card">
     <div class="container my-4">
-      <div class="row" v-if="event.location">
+      <div class="row" v-if="eventStore.selectedEvent.location">
         <div class="col-md-6">
           <p class="lead">Event Location</p>
-          <MapDisplay :location="event.location" />
+          <MapDisplay :location="eventStore.selectedEvent.location" />
         </div>
         <div class="col-md-6">
-          <div v-if="!isBeforeToday(event.utcTime)" class="text-center">
+          <div v-if="!isBeforeToday(eventStore.selectedEvent.utcTime)" class="text-center">
             <p class="lead">This event has already passed!</p>
           </div>
           <div
             v-if="
-              !userStore.isAdmin && event.users.includes(userStore.user.email)
+              !userStore.isAdmin && eventStore.selectedEvent.users.includes(userStore.user.email)
             "
             class="text-center"
           >
@@ -115,19 +112,16 @@ const router = useRouter();
 const eventStore = useEventStore();
 const userStore = useUserStore();
 
-const eventId = computed(() => route.params.id);
-const event = computed(() => eventStore.selectedEvent);
-const isEditing = computed(() => eventStore.isEditing);
-const ticketAvailable = computed(() => event.value.ticketCount > 0);
+const ticketAvailable = computed(() => eventStore.selectedEvent.ticketCount > 0);
 const eventTz = computed(() =>
-  event.value.location ? convertCoordsToTz(event.value.location) : null
+eventStore.selectedEvent.location ? convertCoordsToTz(eventStore.selectedEvent.location) : null
 );
 
-eventStore.getEventById(eventId.value);
+eventStore.getEventById(route.params.id);
 
 const editEvent = () => {
   eventStore.isEditing = true;
-  eventStore.editedEvent = { ...event.value };
+  eventStore.editedEvent = { ...eventStore.selectedEvent };
 };
 
 const confirmDeleteEvent = () => {
@@ -135,17 +129,17 @@ const confirmDeleteEvent = () => {
     "Are you sure you want to delete this event?"
   );
   if (confirmation) {
-    eventStore.removeEvent(event.value);
+    eventStore.removeEvent(eventStore.selectedEvent);
     router.push("/events");
   }
 };
 
 const viewBudget = () => {
-  router.push(`/events/${eventId.value}/budget`);
+  router.push(`/events/${route.params.id}/budget`);
 };
 
 const buyTicket = () => {
-  eventStore.buyTicket(event.value);
+  eventStore.buyTicket(eventStore.selectedEvent);
   router.push("/events");
 };
 

@@ -9,15 +9,15 @@
       <InputField
         label="Event Name"
         inputId="eventName"
-        :value="editedEvent.name"
-        @update:modelValue="(value) => (editedEvent.name = value)"
+        :value="store.editedEvent.name"
+        @update:modelValue="(value) => (store.editedEvent.name = value)"
         type="text"
       />
       <InputField
         label="Event Description"
         inputId="eventDescription"
-        :value="editedEvent.description"
-        @update:modelValue="(value) => (editedEvent.description = value)"
+        :value="store.editedEvent.description"
+        @update:modelValue="(value) => (store.editedEvent.description = value)"
         type="textarea"
       />
       <InputField
@@ -37,15 +37,15 @@
       <InputField
         label="Ticket Count"
         inputId="ticketCount"
-        :value="editedEvent.ticketCount"
-        @update:modelValue="(value) => (editedEvent.ticketCount = value)"
+        :value="store.editedEvent.ticketCount"
+        @update:modelValue="(value) => (store.editedEvent.ticketCount = value)"
         type="number"
       />
       <InputField
         label="Ticket Price"
         inputId="price"
-        :value="editedEvent.price"
-        @update:modelValue="(value) => (editedEvent.price = value)"
+        :value="store.editedEvent.price"
+        @update:modelValue="(value) => (store.editedEvent.price = value)"
         type="number"
       />
       <MapComponent
@@ -72,12 +72,12 @@ import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 const store = useEventStore();
-const editedEvent = computed(() => store.editedEvent);
-const tz = computed(() => convertCoordsToTz(editedEvent.value.location));
+// const editedEvent = computed(() => store.editedEvent);
+const tz = computed(() => convertCoordsToTz(store.editedEvent.location));
 
 const datetime = computed(() =>
   moment(
-    getEventTime(editedEvent.value.utcTime, tz.value),
+    getEventTime(store.editedEvent.utcTime, tz.value),
     "DD MMM YYYY | HH:mm"
   ).format("HH:mm YYYY-MM-DD")
 );
@@ -85,27 +85,27 @@ const eventTime = ref(datetime.value.split(" ")[0]);
 const eventDate = ref(datetime.value.split(" ")[1]);
 
 const onMapClick = (lonLat) => {
-  editedEvent.value.location = lonLat;
+  store.editedEvent.location = lonLat;
 };
 
 const saveClicked = () => {
   editEventSchema
     .validate({
-      eventName: editedEvent.value.name,
-      eventDescription: editedEvent.value.description,
+      eventName: store.editedEvent.name,
+      eventDescription: store.editedEvent.description,
       eventDate: eventDate.value,
       eventTime: eventTime.value,
-      ticketCount: editedEvent.value.ticketCount,
-      price: editedEvent.value.price,
+      ticketCount: store.editedEvent.ticketCount,
+      price: store.editedEvent.price,
     })
     .then(() => {
       const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
-      editedEvent.value.utcTime = moment
+      store.editedEvent.utcTime = moment
         .tz(eventDatetime, tz.value)
         .utc()
         .toISOString();
-      store.editEvent(editedEvent.value);
+      store.editEvent(store.editedEvent);
       store.isEditing = false;
       router.push("/events");
       showNotification("Event edited successfully!");

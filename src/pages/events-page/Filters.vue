@@ -10,8 +10,8 @@
           label="From Date"
           type="date"
           inputId="fromDate"
-          :value="filterOptions.fromDate"
-          @update:modelValue="(value) => (filterOptions.fromDate = value)"
+          :value="eventStore.filterOptions.fromDate"
+          @update:modelValue="(value) => (eventStore.filterOptions.fromDate = value)"
         />
       </div>
       <div class="col-md-2">
@@ -19,8 +19,8 @@
           label="To Date"
           type="date"
           inputId="toDate"
-          :value="filterOptions.toDate"
-          @update:modelValue="(value) => (filterOptions.toDate = value)"
+          :value="eventStore.filterOptions.toDate"
+          @update:modelValue="(value) => (eventStore.filterOptions.toDate = value)"
         />
       </div>
       <div class="col-md-2">
@@ -28,8 +28,8 @@
           label="Min Price"
           type="number"
           inputId="minPrice"
-          :value="filterOptions.minPrice"
-          @update:modelValue="(value) => (filterOptions.minPrice = value)"
+          :value="eventStore.filterOptions.minPrice"
+          @update:modelValue="(value) => (eventStore.filterOptions.minPrice = value)"
         />
       </div>
       <div class="col-md-2">
@@ -37,8 +37,8 @@
           label="Max Price"
           type="number"
           inputId="maxPrice"
-          :value="filterOptions.maxPrice"
-          @update:modelValue="(value) => (filterOptions.maxPrice = value)"
+          :value="eventStore.filterOptions.maxPrice"
+          @update:modelValue="(value) => (eventStore.filterOptions.maxPrice = value)"
         />
       </div>
       <div class="col-md-2">
@@ -46,7 +46,7 @@
         <select
           class="form-select"
           id="ticketStatus"
-          v-model="filterOptions.ticketStatus"
+          v-model="eventStore.filterOptions.ticketStatus"
         >
           <option value="all">All Events</option>
           <option value="available">Available</option>
@@ -58,8 +58,8 @@
           label="Search Event"
           type="text"
           inputId="searchQuery"
-          :value="filterOptions.searchQuery"
-          @update:modelValue="(value) => (filterOptions.searchQuery = value)"
+          :value="eventStore.filterOptions.searchQuery"
+          @update:modelValue="(value) => (eventStore.filterOptions.searchQuery = value)"
         />
       </div>
       <div class="col-md-12 d-flex justify-content-end">
@@ -80,7 +80,6 @@
 <script setup>
 import { useEventStore } from "@/store/eventStore.js";
 import { useRouter } from "vue-router";
-import { computed, watch } from "vue";
 import InputField from "@/components/InputField.vue";
 import { filterSchema } from "@/utils/validationSchemas.js";
 import { Form } from "vee-validate";
@@ -88,11 +87,9 @@ import { Form } from "vee-validate";
 const eventStore = useEventStore();
 const router = useRouter();
 
-const filterOptions = computed(() => eventStore.filterOptions);
-
 const applyFilters = () => {
   const { fromDate, toDate, minPrice, maxPrice, ticketStatus, searchQuery } =
-    filterOptions.value;
+  eventStore.filterOptions;
   const query = {};
 
   const addQueryParam = (key, value) => {
@@ -128,9 +125,4 @@ const resetFilters = () => {
   router.push({ query: null });
   eventStore.showFilters = false;
 };
-watch(filterOptions.value, (newOptions, oldOptions) => {
-  if (newOptions.maxPrice === "") {
-    eventStore.filterOptions.maxPrice = null;
-  }
-});
 </script>

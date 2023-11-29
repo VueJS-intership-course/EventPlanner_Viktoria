@@ -23,12 +23,12 @@
           <li class="nav-item">
             <RouterLink class="nav-link" to="/events">Events</RouterLink>
           </li>
-          <li v-if="isAuthenticated" class="nav-item">
+          <li v-if="store.isAdmin" class="nav-item">
             <RouterLink to="/overview" class="nav-link" href="#"
               >Overview</RouterLink
             >
           </li>
-          <li v-if="isAuthenticated" class="nav-item dropdown">
+          <li v-if="store.isAdmin" class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -52,20 +52,20 @@
             </ul>
           </li>
         </ul>
-        <span id="helloUser" v-if="loggedUser">
-          Hello, {{ loggedUser.username }}
-          <i v-if="isAuthenticated" class="bi bi-database-fill-check"></i>
+        <span id="helloUser" v-if="store.user">
+          Hello, {{ store.user.username }}
+          <i v-if="store.isAdmin" class="bi bi-database-fill-check"></i>
         </span>
-        <RouterLink class="nav-link" to="/profile" v-if="loggedUser">
+        <RouterLink class="nav-link" to="/profile" v-if="store.user">
           Profile
         </RouterLink>
-        <button @click="logoutUser" v-if="loggedUser" class="btn btn-danger">
+        <button @click="logoutUser" v-if="store.user" class="btn btn-danger">
           Logout
         </button>
-        <RouterLink to="/register" v-if="!loggedUser" class="btn btn-primary">
+        <RouterLink to="/register" v-if="!store.user" class="btn btn-primary">
           Register
         </RouterLink>
-        <RouterLink to="/login" v-if="!loggedUser" class="btn btn-primary">
+        <RouterLink to="/login" v-if="!store.user" class="btn btn-primary">
           Login
         </RouterLink>
       </div>
@@ -74,15 +74,11 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore.js";
 
 const router = useRouter();
 const store = useUserStore();
-
-const loggedUser = computed(() => store.user);
-const isAuthenticated = computed(() => store.isAdmin);
 
 const logoutUser = () => {
   store.logout();

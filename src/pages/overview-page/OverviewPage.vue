@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-6 mt-5">
         <Card>
-          <EventByMonthChart :eventCount="eventCountByMonth" />
+          <EventByMonthChart :eventCount="store.eventCountByMonth" />
         </Card>
       </div>
       <div class="col-md-6">
@@ -25,11 +25,8 @@ import Card from "@/components/Card.vue";
 const store = useEventStore();
 store.getEventList();
 
-const allEvents = computed(() => store.events);
-const eventCountByMonth = computed(() => store.eventCountByMonth);
-
 const transformedEvents = computed(() =>
-  allEvents.value.map((event) => ({
+store.events.map((event) => ({
     id: event.id,
     title: event.name,
     start: event.utcTime,

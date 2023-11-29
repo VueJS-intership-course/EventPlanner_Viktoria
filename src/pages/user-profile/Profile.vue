@@ -1,5 +1,5 @@
 <template>
-  <section v-if="currentUser">
+  <section v-if="userStore.user">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-md-12 col-xl-4">
@@ -11,10 +11,10 @@
                 style="width: 100px"
               />
             </div>
-            <h4 class="mb-2">{{ currentUser.username }}</h4>
+            <h4 class="mb-2">{{ userStore.user.username }}</h4>
             <p class="text-muted mb-4">
-              {{ currentUser.email }} <span class="mx-2">|</span>
-              {{ currentUser.timezone }}
+              {{ userStore.user.email }} <span class="mx-2">|</span>
+              {{ userStore.user.timezone }}
             </p>
             <button
               @click="editProfile"
@@ -49,7 +49,7 @@
           </Card>
         </div>
         <div v-if="!userStore.isAdmin" class="col-md-12 col-xl-4">
-          <Card  class="user-info">
+          <Card class="user-info">
             <div class="mt-3 mb-4"></div>
             <h4 class="mb-2">My Events</h4>
             <p class="text-muted mb-4">
@@ -68,9 +68,7 @@
               >
             </p>
             <div>
-              <ul
-                class="list-group"
-              >
+              <ul class="list-group">
                 <li v-for="event in filteredEvents" class="list-group-item">
                   <p class="text-">{{ event.name }}</p>
                   <RouterLink
@@ -85,21 +83,19 @@
           </Card>
         </div>
       </div>
-    </div>    
+    </div>
     <div class="d-flex justify-content-center">
       <Card v-if="!userStore.isAdmin" class="calendar">
-        <EventsCalendar
-          :current-user-events="transformedCuurentUserEvents"
-        />
+        <EventsCalendar :current-user-events="transformedCuurentUserEvents" />
       </Card>
     </div>
   </section>
-  <section v-if="!currentUser">
+  <section v-if="!userStore.user">
     <h3 class="mt-5">You are currently not logged in</h3>
     <RouterLink to="/login" class="btn btn-primary">Log In</RouterLink> or
     <RouterLink to="/register" class="btn btn-secondary">Sign up</RouterLink>
   </section>
-  <EditUserModal v-if="isEditing" />
+  <EditUserModal v-if="userStore.isEditing" />
 </template>
 
 <script setup>
@@ -115,13 +111,9 @@ const eventStore = useEventStore();
 
 eventStore.getEventList();
 
-const currentUser = computed(() => userStore.user);
-const allEvents = computed(() => eventStore.events);
-const isEditing = computed(() => userStore.isEditing);
-
 const currentUserEvents = computed(() => {
-  return allEvents.value.filter((event) =>
-    event.users.includes(currentUser.value.email)
+  return eventStore.events.filter((event) =>
+    event.users.includes(userStore.user.email)
   );
 });
 
@@ -137,6 +129,10 @@ const selectedEventType = ref("upcoming");
 
 const selectEventType = (eventType) => {
   selectedEventType.value = eventType;
+};
+
+const isEventUpcoming = (event) => {
+  return new Date(event.utcTime) > new Date();
 };
 
 const upcomingEvents = computed(() => {
@@ -157,13 +153,9 @@ const filteredEvents = computed(() => {
   return [];
 });
 
-const isEventUpcoming = (event) => {
-  return new Date(event.utcTime) > new Date();
-};
-
 const editProfile = () => {
   userStore.isEditing = true;
-  userStore.editedUser = { ...currentUser.value };
+  userStore.editedUser = { ...userStore.user };
 };
 </script>
 
@@ -217,5 +209,4 @@ const editProfile = () => {
   height: 450px;
   text-align: center;
 }
-
 </style>

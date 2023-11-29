@@ -13,7 +13,7 @@
   </div>
   <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
     <div
-      v-for="event in filteredEvents"
+      v-for="event in  eventStore.filteredEvents"
       :key="generateUniqueKey"
       class="card position-relative"
       style="width: 280px"
@@ -102,9 +102,6 @@ const toggleFilters = () => {
   eventStore.showFilters = !eventStore.showFilters;
 };
 
-const filteredEvents = computed(() => {
-  return eventStore.filteredEvents;
-});
 
 const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;

@@ -9,8 +9,8 @@
       <InputField
         label="Username"
         inputId="username"
-        :value="editedUser.username"
-        @update:modelValue="(value) => (editedUser.username = value)"
+        :value="userStore.editedUser.username"
+        @update:modelValue="(value) => (userStore.editedUser.username = value)"
         type="text"
       />
       <div class="form-group">
@@ -36,19 +36,18 @@ import InputField from "@/components/InputField.vue";
 const router = useRouter();
 
 const userStore = useUserStore();
-const editedUser = computed(() => userStore.editedUser);
 
 const handleSelectedTimezone = (selectedTimezone) => {
-  editedUser.value.timezone = selectedTimezone;
+  userStore.editedUser.timezone = selectedTimezone;
 };
 
 const saveClicked = () => {
   editUserSchema
     .validate({
-      username: editedUser.value.username,
+      username: userStore.editedUser.username,
     })
     .then(() => {
-      userStore.editUser(editedUser.value);
+      userStore.editUser(userStore.editedUser);
       userStore.isEditing = false;
       showNotification("Profile updated successfully!");
       router.push("/profile");
