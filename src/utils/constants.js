@@ -26,3 +26,13 @@ export const months = [
   "Nov",
   "Dec",
 ];
+
+export const queryParamsProperties = [
+  "fromDate",
+  "toDate",
+  "minPrice",
+  "maxPrice",
+  "availableTickets",
+  "soldOut",
+  "searchQuery",
+];

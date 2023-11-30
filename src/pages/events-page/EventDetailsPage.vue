@@ -1,5 +1,5 @@
 <template v-if="eventStore.selectedEvent">
-  <div class="card">
+  <div class="custom-card">
     <div class="container my-4">
       <div class="row">
         <div class="col-md-6">
@@ -10,7 +10,7 @@
           />
         </div>
         <div class="col-md-6">
-          <h1 class="display-4">{{ eventStore.selectedEvent.name }}</h1>
+          <h1 class="display-4 name">{{ eventStore.selectedEvent.name }}</h1>
           <p class="lead">{{ eventStore.selectedEvent.description }}</p>
           <p class="mb-2">
             <strong>Event Time in {{ eventTz }}:</strong>
@@ -22,12 +22,15 @@
           </p>
 
           <p v-if="ticketAvailable" class="mb-2">
-            <strong>Tickets Left:</strong> {{ eventStore.selectedEvent.ticketCount }}
+            <strong>Tickets Left:</strong>
+            {{ eventStore.selectedEvent.ticketCount }}
           </p>
           <p v-if="!ticketAvailable" class="mb-2 text-danger">
             <strong>Tickets sold out</strong>
           </p>
-          <p class="mb-2"><strong>Price:</strong> ${{ eventStore.selectedEvent.price }}</p>
+          <p class="mb-2">
+            <strong>Price:</strong> ${{ eventStore.selectedEvent.price }}
+          </p>
           <p v-if="userStore.isAdmin" class="mb-2">
             <strong>Budget:</strong> ${{ eventStore.selectedEvent.budget }}
           </p>
@@ -57,7 +60,9 @@
               v-if="
                 userStore.user &&
                 !userStore.isAdmin &&
-                !eventStore.selectedEvent.users.includes(userStore.user.email) &&
+                !eventStore.selectedEvent.users.includes(
+                  userStore.user.email
+                ) &&
                 ticketAvailable &&
                 isBeforeToday(eventStore.selectedEvent.utcTime)
               "
@@ -72,7 +77,7 @@
     </div>
     <EditEventModal v-if="eventStore.isEditing" />
   </div>
-  <div class="card">
+  <div class="custom-card">
     <div class="container my-4">
       <div class="row" v-if="eventStore.selectedEvent.location">
         <div class="col-md-6">
@@ -80,12 +85,16 @@
           <MapDisplay :location="eventStore.selectedEvent.location" />
         </div>
         <div class="col-md-6">
-          <div v-if="!isBeforeToday(eventStore.selectedEvent.utcTime)" class="text-center">
+          <div
+            v-if="!isBeforeToday(eventStore.selectedEvent.utcTime)"
+            class="text-center"
+          >
             <p class="lead">This event has already passed!</p>
           </div>
           <div
             v-if="
-              !userStore.isAdmin && eventStore.selectedEvent.users.includes(userStore.user.email)
+              !userStore.isAdmin &&
+              eventStore.selectedEvent.users.includes(userStore.user.email)
             "
             class="text-center"
           >
@@ -112,9 +121,13 @@ const router = useRouter();
 const eventStore = useEventStore();
 const userStore = useUserStore();
 
-const ticketAvailable = computed(() => eventStore.selectedEvent.ticketCount > 0);
+const ticketAvailable = computed(
+  () => eventStore.selectedEvent.ticketCount > 0
+);
 const eventTz = computed(() =>
-eventStore.selectedEvent.location ? convertCoordsToTz(eventStore.selectedEvent.location) : null
+  eventStore.selectedEvent.location
+    ? convertCoordsToTz(eventStore.selectedEvent.location)
+    : null
 );
 
 eventStore.getEventById(route.params.id);
@@ -150,26 +163,16 @@ const isBeforeToday = (date) => {
 </script>
 
 <style lang="scss" scoped>
-.card {
+.custom-card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
   margin-bottom: 20px;
 }
-.display-4 {
+.name {
   font-size: 2.5rem;
-  font-weight: bold;
+  color: rgb(60, 60, 60);
+  font-weight: 500;
   margin-bottom: 20px;
 }
-.lead {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-}
-.text-center {
-  text-align: center;
-  margin-top: 20px;
-}
-
 </style>

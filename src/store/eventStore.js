@@ -104,14 +104,12 @@ export const useEventStore = defineStore("eventStore", {
 
   getters: {
     eventCountByMonth() {
-      const eventCountByMonth = new Array(12).fill(0);
-
-      this.events.forEach((event) => {
+      return this.events.reduce((acc, event) => {
         const date = new Date(event.utcTime);
         const month = date.getUTCMonth();
-        eventCountByMonth[month]++;
-      });
-      return eventCountByMonth;
+        acc[month]++;
+        return acc;
+      }, new Array(12).fill(0));
     },
 
     filteredEvents() {
@@ -126,25 +124,20 @@ export const useEventStore = defineStore("eventStore", {
 
       return this.events.filter((event) => {
         const eventDate = event.utcTime.split("T")[0];
+        const lowerCaseQuery = searchQuery.toLowerCase();
 
-        if (fromDate && eventDate < fromDate) return false;
-        if (toDate && eventDate > toDate) return false;
-        if (minPrice !== null && event.price < minPrice) return false;
-        if (maxPrice !== null && event.price > maxPrice) return false;
-        if (ticketStatus === "available" && event.ticketCount <= 0)
-          return false;
-        if (ticketStatus === "sold-out" && event.ticketCount > 0) return false;
-        if (searchQuery) {
-          const lowerCaseQuery = searchQuery.toLowerCase();
-          if (
-            !event.name.toLowerCase().includes(lowerCaseQuery) &&
-            !event.description.toLowerCase().includes(lowerCaseQuery)
-          ) {
-            return false;
-          }
-        }
-
-        return true;
+        return (
+          (!fromDate || eventDate >= fromDate) &&
+          (!toDate || eventDate <= toDate) &&
+          (minPrice === null || event.price >= minPrice) &&
+          (maxPrice === null || event.price <= maxPrice) &&
+          (ticketStatus === "all" ||
+            (ticketStatus === "available" && event.ticketCount > 0) ||
+            (ticketStatus === "sold-out" && event.ticketCount <= 0)) &&
+          (!searchQuery ||
+            event.name.toLowerCase().includes(lowerCaseQuery) ||
+            event.description.toLowerCase().includes(lowerCaseQuery))
+        );
       });
     },
   },

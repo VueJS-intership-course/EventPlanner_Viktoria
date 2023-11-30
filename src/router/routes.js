@@ -18,11 +18,17 @@ export const routes = [
     path: "/create-event",
     name: "create-event",
     component: () => import("@/pages/events-page/CreateEventPage.vue"),
+    meta: {
+      requiresAdmin: true,
+    },
   },
   {
     path: "/profile",
     name: "profile",
     component: () => import("@/pages/user-profile/Profile.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/login",
@@ -37,17 +43,31 @@ export const routes = [
   {
     path: "/register-admin",
     name: "registerAdmin",
-    component: () => import("@/pages/login-register/RegisterAdminPage.vue"),
+    component: () => import("@/pages/login-register/RegisterPage.vue"),
+    meta: {
+      requiresAdmin: true,
+    },
   },
   {
     path: "/events/:id/budget",
     name: "event-budget",
     component: () => import("@/pages/budget-page/BudgetPage.vue"),
+    meta: {
+      requiresAdmin: true,
+    },
   },
   {
     path: "/overview",
     name: "overview",
     component: () => import("@/pages/overview-page/OverviewPage.vue"),
+    meta: {
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/error",
+    name: "errorPage",
+    component: () => import("@/pages/ErrorPage.vue"),
   },
   {
     path: "/:catchAll(.*)",

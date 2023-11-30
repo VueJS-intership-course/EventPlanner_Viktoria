@@ -46,15 +46,14 @@ export const useUserStore = defineStore("users", {
         console.error("Error editing user:", error);
       }
     },
-
   },
   getters: {
     isAdmin() {
-      if (this.user && this.user.isAdmin) return true;
+      return this.user && this.user.isAdmin;
     },
 
     isLogged() {
-      if (this.user) return true;
+      return Boolean(this.user);
     },
   },
 });

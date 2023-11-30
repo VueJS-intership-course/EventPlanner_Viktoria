@@ -48,23 +48,7 @@ const handleCancel = () => {
 };
 </script>
 
-<style scoped>
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.modal-dialog {
-  max-width: 500px;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
+<style lang="scss" scoped>
 .modal-backdrop {
   position: fixed;
   top: 0;

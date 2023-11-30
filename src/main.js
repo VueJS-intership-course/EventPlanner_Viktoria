@@ -5,17 +5,13 @@ import { createPinia } from "pinia";
 import fb from "@/firebase/fbConfig.js";
 import { useUserStore } from "@/store/userStore.js";
 import "@/styles-config.js";
-import Highcharts from "highcharts";
-import HighchartsVue from "highcharts-vue";
-import HighchartsMap from "highcharts/modules/map";
-
-HighchartsMap(Highcharts);
+import highcharts from "@/plugins/highcharts.js"
 
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
-app.use(HighchartsVue, { Highcharts });
+app.use(highcharts);
 
 const store = useUserStore();
 
