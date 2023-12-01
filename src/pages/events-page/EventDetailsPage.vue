@@ -55,7 +55,8 @@
               class="btn btn-primary m-2"
             >
               View Budget
-            </button>
+            </button>\
+            <!--v-if statements separate it in computed prop -->
             <button
               v-if="
                 userStore.user &&

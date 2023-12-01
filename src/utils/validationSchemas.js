@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 
+// merge edit/create schemas into one and use scenario as param to do different validation
 export const createEventSchema = Yup.object({
   eventName: Yup.string().required("Event Name is required"),
   eventDescription: Yup.string().required("Event Description is required"),
