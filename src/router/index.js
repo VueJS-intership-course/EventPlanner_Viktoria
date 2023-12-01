@@ -20,9 +20,7 @@ router.beforeResolve((to, from, next) => {
     (to.name === "register" && isAuthenticated)
   ) {
     next({ name: "home" });
-  } else {
-    next();
-  }
+  } else next();
 });
 
 export default router;
