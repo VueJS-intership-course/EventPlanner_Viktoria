@@ -1,6 +1,6 @@
 <template v-if="eventStore.selectedEvent">
   <div class="container my-4">
-    <h3 class="display-4 m-3">
+    <h3 class="display-5 m-3">
       Budget for <strong>{{ eventStore.selectedEvent.name }}</strong>
     </h3>
     <p><strong>Start Budget:</strong> ${{ eventStore.selectedEvent.budget }}</p>
