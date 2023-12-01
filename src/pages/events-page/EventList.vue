@@ -1,6 +1,9 @@
 <template>
   <div class="container my-4">
-    <button @click="toggleFilters" class="btn btn-primary position-relative">
+    <button
+      @click="toggleFilters"
+      class="btn custom-btn btn-primary position-relative"
+    >
       <i class="bi bi-funnel-fill"></i> Toggle Filters
       <span
         v-if="hasActiveFilters"
@@ -15,8 +18,8 @@
     <div
       v-for="event in eventStore.filteredEvents"
       :key="generateUniqueKey"
-      class="card position-relative"
-      style="width: 280px"
+      class="card custom-card position-relative"
+      style="width: 300px"
     >
       <span
         v-if="event.ticketCount <= 0"
@@ -24,10 +27,20 @@
       >
         SOLD OUT
       </span>
-      <img class="card-img-top" :src="event.imageURL" alt="Event image top" />
+      <img
+        class="card-img-top card-images"
+        :src="event.imageURL"
+        alt="Event image top"
+      />
       <div class="card-body">
-        <h5 class="card-title">{{ event.name }}</h5>
-        <p class="card-text">{{ truncateText(event.description, 80) }}</p>
+        <h5
+          class="card-title custom-card-title overflow-hidden"
+          data-bs-toggle="tooltip"
+          :title="event.name"
+        >
+          {{ event.name }}
+        </h5>
+        <p class="card-text text-truncate">{{ event.description }}</p>
       </div>
       <ul class="list-group list-group-flush">
         <li v-if="userStore.user" class="list-group-item">
@@ -46,7 +59,10 @@
         </li>
       </ul>
       <div v-if="userStore.user" class="card-body">
-        <button @click="goToEventDetails(event.id)" class="btn btn-primary">
+        <button
+          @click="goToEventDetails(event.id)"
+          class="btn custom-btn btn-primary"
+        >
           Details
         </button>
 
@@ -58,7 +74,7 @@
             isBeforeToday(event.utcTime)
           "
           @click="buyTicket(event)"
-          class="btn btn-warning m-2"
+          class="btn custom-btn btn-warning m-2"
         >
           Buy a ticket
         </button>
@@ -76,6 +92,7 @@ import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
+import { queryParamsProperties } from "@/utils/constants.js";
 
 const router = useRouter();
 
@@ -86,15 +103,6 @@ eventStore.getEventList();
 
 const goToEventDetails = (eventId) => {
   router.push({ name: "event-details", params: { id: eventId } });
-};
-
-// replace this with CSS rules text-overflow: elipsis;
-// see: https://getbootstrap.com/docs/5.0/helpers/text-truncation/
-// trim the text to have the same lenght text in each card
-
-// if we have truncated text set "title" property which will show full text on hover
-const truncateText = (text, maxLength) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 };
 
 const isBeforeToday = (date) => {
@@ -108,17 +116,8 @@ const toggleFilters = () => {
 
 const hasActiveFilters = computed(() => {
   const { query } = router.currentRoute.value;
-  // use some highorder fn to check this
-  // return ['toDate', 'fromDate', etc...].some(item => query[item])
-  return (
-    query.fromDate ||
-    query.toDate ||
-    query.minPrice ||
-    query.maxPrice ||
-    query.availableTickets ||
-    query.soldOut ||
-    query.searchQuery
-  );
+
+  return queryParamsProperties.some((item) => query[item]);
 });
 
 onBeforeMount(() => {
@@ -129,33 +128,15 @@ onBeforeMount(() => {
     eventStore.filterOptions.toDate = query.toDate || null;
     eventStore.filterOptions.minPrice = query.minPrice || null;
     eventStore.filterOptions.maxPrice = query.maxPrice || null;
-
-    // rewrite this with if construction
     eventStore.filterOptions.ticketStatus = "all";
-    if (query.availableTickets === "true") {
+    if (query.ticketStatus === "available") {
       eventStore.filterOptions.ticketStatus = "available";
-    } else {
+    }
+    if (query.availableTickets === "soldout") {
       eventStore.filterOptions.ticketStatus = "sold-out";
     }
-    // eventStore.filterOptions.ticketStatus =
-    //   query.availableTickets === "true"
-    //     ? "available"
-    //     : query.soldOut === "true"
-    //     ? "sold-out"
-    //     : "all";
     eventStore.filterOptions.searchQuery = query.searchQuery || "";
-
-    // this can be replaced by computed prop "hasActiveFilters"
-    const hasQueryParams =
-      query.fromDate ||
-      query.toDate ||
-      query.minPrice ||
-      query.maxPrice ||
-      query.availableTickets ||
-      query.soldOut ||
-      query.searchQuery;
-
-    eventStore.filtersApplied = hasQueryParams ? true : false;
+    eventStore.filtersApplied = hasActiveFilters ? true : false;
   }
 });
 
@@ -166,7 +147,7 @@ const buyTicket = (event) => {
 </script>
 
 <style lang="scss" scoped>
-.btn {
+.custom-btn {
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -179,20 +160,7 @@ const buyTicket = (event) => {
   padding: 8px 18px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.card-container {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.card {
+.custom-card {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -203,20 +171,26 @@ const buyTicket = (event) => {
   }
 }
 
-.card-img-top {
+.card-images {
   width: 100%;
   height: 200px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
 }
 
-.card-title {
+.custom-card-title {
   font-size: 1.2rem;
   font-weight: bold;
+  color: rgb(60, 60, 60);
   margin: 10px 0;
-}
-
-.card-text {
-  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  
+  &:hover {
+    overflow: visible;
+    white-space: normal;
+  }
 }
 </style>

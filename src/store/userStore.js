@@ -46,7 +46,6 @@ export const useUserStore = defineStore("users", {
         console.error("Error editing user:", error);
       }
     },
-
   },
   getters: {
     isAdmin() {

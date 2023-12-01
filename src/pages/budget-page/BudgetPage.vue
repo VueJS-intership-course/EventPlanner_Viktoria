@@ -1,13 +1,15 @@
 <template v-if="eventStore.selectedEvent">
   <div class="container my-4">
-    <h1 class="display-4">Budget for {{ eventStore.selectedEvent.name }}</h1>
+    <h3 class="display-5 m-3">
+      Budget for <strong>{{ eventStore.selectedEvent.name }}</strong>
+    </h3>
     <p><strong>Start Budget:</strong> ${{ eventStore.selectedEvent.budget }}</p>
     <p v-if="revenue"><strong>Revenue from tickets:</strong> ${{ revenue }}</p>
     <p v-if="revenue"><strong>Total Budget:</strong> ${{ totalBudget }}</p>
     <div class="row">
       <div class="col-md-6">
         <Card>
-          <label class="fs-2">Expenses</label>
+          <label class="fs-2 m-2">Expenses</label>
           <ul class="list-group">
             <li
               v-for="category in expenseCategories"
@@ -19,7 +21,7 @@
                 <span
                   v-for="expense in groupedExpenses[category]"
                   :key="generateUniqueKey()"
-                  class="badge bg-secondary rounded-pill mx-1"
+                  class="badge pill-style bg-secondary rounded-pill mx-1"
                   @click="deleteExpense(category, expense.id)"
                   style="cursor: pointer"
                 >
@@ -32,7 +34,7 @@
               class="list-group-item d-flex justify-content-between align-items-center"
             >
               <strong>Total Expenses:</strong>
-              <span class="badge bg-primary rounded-pill"
+              <span class="badge bg-primary pill-style rounded-pill"
                 >${{ totalExpenses }}</span
               >
             </li>
@@ -45,7 +47,7 @@
               <strong v-if="totalExpenses < totalBudget" class="text-primary"
                 >Remaining Budget:</strong
               >
-              <span class="badge bg-danger rounded-pill"
+              <span class="badge bg-danger pill-style rounded-pill"
                 >${{ remainingBudget }}</span
               >
             </li>
@@ -101,11 +103,11 @@
 import { computed, ref } from "vue";
 import { expenseCategories } from "@/utils/constants.js";
 import { useEventStore } from "@/store/eventStore";
+import { Form } from "vee-validate";
+import { budgetSchema } from "@/utils/validationSchemas.js";
 import ExpensePieChart from "@/components/highcharts/PieChart.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import InputField from "@/components/InputField.vue";
-import { budgetSchema } from "@/utils/validationSchemas.js";
-import { Form } from "vee-validate";
 import Card from "@/components/Card.vue";
 
 const eventStore = useEventStore();
@@ -160,7 +162,7 @@ const expense = ref({
 const addExpense = async () => {
   try {
     await eventStore.addExpense(eventStore.selectedEvent, expense.value);
-    expense.value = { category: "", cost: 0, id: generateUniqueKey() };
+    expense.value = { category: "Utilities", cost: 0, id: generateUniqueKey() };
     eventStore.selectedEvent = eventStore.getEventById(
       eventStore.selectedEvent.id
     );
@@ -186,50 +188,10 @@ const deleteExpense = async (category, expenseId) => {
 </script>
 
 <style lang="scss" scoped>
-.display-4 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.lead {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-}
-
-.list-group-item {
-  border: none;
-}
-
-.list-group-item strong {
-  margin-right: 5px;
-}
-
-.badge {
+.pill-style {
   padding: 6px 10px;
   font-size: 0.9rem;
   margin-right: 5px;
   cursor: pointer;
-}
-
-.text-danger {
-  color: #dc3545;
-}
-
-.text-primary {
-  color: #007bff;
-}
-
-.form-select {
-  padding: 8px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.btn {
-  border-radius: 5px;
-  font-size: 1rem;
-  padding: 8px 16px;
-  margin-top: 10px;
 }
 </style>

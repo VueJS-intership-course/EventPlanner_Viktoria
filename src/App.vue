@@ -1,6 +1,5 @@
 <template>
-  <Header />
-  <!-- RouterView set key param to be $route.fullPath for example -->
+  <Header :key="$route.fullPath" />
   <RouterView />
 </template>
 <script setup>

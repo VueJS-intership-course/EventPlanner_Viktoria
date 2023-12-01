@@ -7,22 +7,22 @@ const router = createRouter({
   routes,
 });
 
-router.beforeResolve(async (to, from, next) => {
+router.beforeResolve((to, from, next) => {
   const store = useUserStore();
-  // rework authorization check based on meta prop of the accessed route
-  if (
-    (to.name === "login" && store.isLogged) ||
-    (to.name === "register" && store.isLogged) ||
-    (to.name === "create-event" && !store.isAdmin) ||
-    (to.name === "event-budget" && !store.isAdmin)||
-    (to.name === "registerAdmin" && !store.isAdmin) ||
-    (to.name === "overview" && !store.isAdmin) 
+  const isAuthenticated = store.isLogged;
+  const isAdmin = store.isAdmin;
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: "login" });
+  } else if (
+    (to.meta.requiresAdmin && !isAdmin) ||
+    (to.name === "login" && isAuthenticated) ||
+    (to.name === "register" && isAuthenticated)
   ) {
     next({ name: "home" });
-    return;
-  } 
-  
-  next();
+  } else {
+    next();
+  }
 });
 
 export default router;

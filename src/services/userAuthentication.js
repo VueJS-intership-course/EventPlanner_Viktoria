@@ -1,13 +1,13 @@
 import fb from "@/firebase/fbConfig.js";
+import router from "@/router";
 
 export const authService = {
   async register(user, password) {
     try {
       const userCredential = await fb.auth.createUserWithEmailAndPassword(
-        user.email, 
+        user.email,
         password
       );
-
       if (userCredential && userCredential.user) {
         await fb.fireStore
           .collection("users")
@@ -21,6 +21,7 @@ export const authService = {
       }
     } catch (error) {
       console.error("Error signing up:", error);
+      router.push({ name: "errorPage" });
       throw error;
     }
   },
@@ -34,12 +35,12 @@ export const authService = {
       if (userDoc) {
         const [doc] = userDoc.docs;
         return doc.data();
-      } 
-      
+      }
       console.log("User document does not exist.");
       return null;
     } catch (error) {
       console.error("Error retrieving user data:", error);
+      router.push({ name: "errorPage" });
       throw error;
     }
   },
@@ -57,7 +58,6 @@ export const authService = {
     await fb.auth.signOut();
   },
 
-  // use object destruct in parameters
   async editUser({username, timezone}) {
     const querySnapshot = await fb.fireStore
       .collection("users")
@@ -67,11 +67,12 @@ export const authService = {
     const doc = querySnapshot.docs[0];
     try {
       await doc.ref.update({
-        username,
-        timezone,
+        username: username,
+        timezone: timezone,
       });
     } catch (error) {
       console.error("Error editing event: ", error);
+      router.push({ name: "errorPage" });
     }
   },
 };
