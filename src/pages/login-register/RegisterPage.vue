@@ -14,30 +14,26 @@
             <InputField
               label="Email"
               inputId="email"
-              :value="email"
-              @update:modelValue="(value) => (email = value)"
-              type="email"
+              v-model="email"
+              :inputAttrs="{ type: 'email', name: 'email' }"
             />
             <InputField
               label="Username"
               inputId="username"
-              :value="username"
-              @update:modelValue="(value) => (username = value)"
-              type="text"
+              v-model="username"
+              :inputAttrs="{ type: 'text', name: 'username' }"
             />
             <InputField
               label="Password"
               inputId="password"
-              :value="password"
-              @update:modelValue="(value) => (password = value)"
-              type="password"
+              v-model="password"
+              :inputAttrs="{ type: 'password', name: 'password' }"
             />
             <InputField
               label="Repeat Password"
               inputId="repeatPassword"
-              :value="repeatPassword"
-              @update:modelValue="(value) => (repeatPassword = value)"
-              type="password"
+              v-model="repeatPassword"
+              :inputAttrs="{ type: 'password', name: 'repeatPassword' }"
             />
             <div class="mb-3">
               <time-zone-dropdown

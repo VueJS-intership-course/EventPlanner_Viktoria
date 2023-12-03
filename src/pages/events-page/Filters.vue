@@ -7,47 +7,35 @@
     >
       <div class="col-md-2">
         <InputField
-          label="From Date"
-          type="date"
-          inputId="fromDate"
-          :value="eventStore.filterOptions.fromDate"
-          @update:modelValue="
-            (value) => (eventStore.filterOptions.fromDate = value)
-          "
-        />
+              label="From Date"
+              inputId="fromDate"
+              v-model="eventStore.filterOptions.fromDate"
+              :inputAttrs="{ type: 'date', name: 'fromDate' }"
+            />
       </div>
       <div class="col-md-2">
         <InputField
-          label="To Date"
-          type="date"
-          inputId="toDate"
-          :value="eventStore.filterOptions.toDate"
-          @update:modelValue="
-            (value) => (eventStore.filterOptions.toDate = value)
-          "
-        />
+              label="To Date"
+              inputId="toDate"
+              v-model="eventStore.filterOptions.toDate"
+              :inputAttrs="{ type: 'date', name: 'toDate' }"
+            />
       </div>
       <div class="col-md-2">
         <InputField
-          label="Min Price"
-          type="number"
-          inputId="minPrice"
-          :value="eventStore.filterOptions.minPrice"
-          @update:modelValue="
-            (value) => (eventStore.filterOptions.minPrice = value)
-          "
-        />
+              label="Min Price"
+              inputId="minPrice"
+              v-model="eventStore.filterOptions.minPrice"
+              :inputAttrs="{ type: 'number', name: 'minPrice' }"
+            />
       </div>
       <div class="col-md-2">
         <InputField
-          label="Max Price"
-          type="number"
-          inputId="maxPrice"
-          :value="eventStore.filterOptions.maxPrice"
-          @update:modelValue="
-            (value) => (eventStore.filterOptions.maxPrice = value)
-          "
-        />
+              label="Max Price"
+              inputId="maxPrice"
+              v-model="eventStore.filterOptions.maxPrice"
+              :inputAttrs="{ type: 'number', name: 'maxPrice' }"
+            />
       </div>
       <div class="col-md-2">
         <label for="ticketStatus" class="form-label">Ticket Status:</label>
@@ -63,14 +51,11 @@
       </div>
       <div class="col-md-2">
         <InputField
-          label="Search Event"
-          type="text"
-          inputId="searchQuery"
-          :value="eventStore.filterOptions.searchQuery"
-          @update:modelValue="
-            (value) => (eventStore.filterOptions.searchQuery = value)
-          "
-        />
+              label="Search"
+              inputId="searchQuery"
+              v-model="eventStore.filterOptions.searchQuery"
+              :inputAttrs="{ type: 'text', name: 'searchQuery' }"
+            />
       </div>
       <div class="col-md-12 d-flex justify-content-end">
         <button type="submit" class="btn btn-primary">Apply Filters</button>

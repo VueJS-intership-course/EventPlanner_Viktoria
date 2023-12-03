@@ -83,7 +83,7 @@
               label="Expense Cost"
               inputId="cost"
               v-model.number="expense.cost"
-              type="number"
+              :inputAttrs="{ type: 'number', name: 'cost' }"
             />
             <button type="submit" class="btn btn-primary">Add Expense</button>
           </Form>

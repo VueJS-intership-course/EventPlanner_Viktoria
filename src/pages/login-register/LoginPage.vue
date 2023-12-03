@@ -8,18 +8,18 @@
             <InputField
               label="Email"
               inputId="email"
-              :value="email"
-              @update:modelValue="(value) => (email = value)"
-              type="email"
+              v-model="email"
+              :inputAttrs="{ type: 'email', name: 'email' }"
             />
             <InputField
               label="Password"
               inputId="password"
-              :value="password"
-              @update:modelValue="(value) => (password = value)"
-              type="password"
+              v-model="password"
+              :inputAttrs="{ type: 'password', name: 'password' }"
             />
-            <button type="submit" class="btn btn-primary btn-block">Login</button> 
+            <button type="submit" class="btn btn-primary btn-block">
+              Login
+            </button>
           </Form>
         </Card>
       </div>
@@ -31,7 +31,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Form } from "vee-validate";
-import { useUserStore } from "@/store/userStore.js";  
+import { useUserStore } from "@/store/userStore.js";
 import { loginSchema } from "@/utils/validationSchemas.js";
 import Card from "@/components/Card.vue";
 import InputField from "@/components/InputField.vue";

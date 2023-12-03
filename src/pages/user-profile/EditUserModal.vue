@@ -9,9 +9,8 @@
       <InputField
         label="Username"
         inputId="username"
-        :value="userStore.editedUser.username"
-        @update:modelValue="(value) => (userStore.editedUser.username = value)"
-        type="text"
+        :inputAttrs="{ type: 'text', name: 'username' }"
+        v-model="userStore.editedUser.username"
       />
       <div class="form-group">
         <time-zone-dropdown
@@ -23,7 +22,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { Form } from "vee-validate";

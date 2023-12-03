@@ -9,44 +9,38 @@
       <InputField
         label="Event Name"
         inputId="eventName"
-        :value="store.editedEvent.name"
-        @update:modelValue="(value) => (store.editedEvent.name = value)"
-        type="text"
+        v-model="store.editedEvent.name"
+        :inputAttrs="{ type: 'text', name: 'eventName' }"
       />
       <InputField
         label="Event Description"
         inputId="eventDescription"
-        :value="store.editedEvent.description"
-        @update:modelValue="(value) => (store.editedEvent.description = value)"
-        type="textarea"
+        v-model="store.editedEvent.description"
+        :inputAttrs="{ type: 'textarea', name: 'eventDescription' }"
       />
       <InputField
         label="Event Date"
         inputId="eventDate"
-        :value="eventDate"
-        @update:modelValue="(value) => (eventDate = value)"
-        type="date"
+        v-model="eventDate"
+        :inputAttrs="{ type: 'date', name: 'eventDate' }"
       />
       <InputField
         label="Event Time"
         inputId="eventTime"
-        :value="eventTime"
-        @update:modelValue="(value) => (eventTime = value)"
-        type="time"
+        v-model="eventTime"
+        :inputAttrs="{ type: 'time', name: 'eventTime' }"
       />
       <InputField
         label="Ticket Count"
         inputId="ticketCount"
-        :value="store.editedEvent.ticketCount"
-        @update:modelValue="(value) => (store.editedEvent.ticketCount = value)"
-        type="number"
+        v-model="store.editedEvent.ticketCount"
+        :inputAttrs="{ type: 'number', name: 'ticketCount' }"
       />
       <InputField
         label="Ticket Price"
         inputId="price"
-        :value="store.editedEvent.price"
-        @update:modelValue="(value) => (store.editedEvent.price = value)"
-        type="number"
+        v-model="store.editedEvent.price"
+        :inputAttrs="{ type: 'number', name: 'price' }"
       />
       <MapComponent
         :onMapClick="onMapClick"

@@ -9,50 +9,51 @@
               label="Event Name"
               inputId="eventName"
               v-model="eventName"
-              type="text"
+              :inputAttrs="{ type: 'text', name: 'eventName' }"
             />
             <InputField
               label="Event Description"
               inputId="eventDescription"
               v-model="eventDescription"
-              type="textarea"
+              :inputAttrs="{ type: 'textarea', name: 'eventDescription' }"
             />
             <InputField
               label="Event Date"
               inputId="eventDate"
               v-model="eventDate"
-              type="date"
+              :inputAttrs="{ type: 'date', name: 'eventDate' }"
             />
             <InputField
               label="Event Time"
               inputId="eventTime"
               v-model="eventTime"
-              type="time"
+              :inputAttrs="{ type: 'time', name: 'eventTime' }"
             />
             <InputField
               label="Ticket Count"
               inputId="ticketCount"
               v-model="ticketCount"
-              type="number"
+              :inputAttrs="{ type: 'number', name: 'ticketCount' }"
             />
             <InputField
               label="Ticket Price"
               inputId="price"
               v-model="price"
-              type="number"
+              :inputAttrs="{ type: 'number', name: 'price' }"
             />
             <InputField
               label="Event Budget"
               inputId="budget"
               v-model="budget"
-              type="number"
+              :inputAttrs="{ type: 'number', name: 'budget' }"
             />
             <InputField
               label="Event Image"
               inputId="eventImage"
-              type="file"
+              :inputAttrs="{ type: 'file', name: 'eventImage' }"
               @change="handleImageUpload"
             />
+
             <div class="mb-3">
               <label class="form-label">Event Location</label>
               <MapComponent :onMapClick="onMapClick" />
