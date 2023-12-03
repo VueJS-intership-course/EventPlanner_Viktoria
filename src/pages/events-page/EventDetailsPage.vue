@@ -57,15 +57,7 @@
               View Budget
             </button>
             <button
-              v-if="
-                userStore.user &&
-                !userStore.isAdmin &&
-                !eventStore.selectedEvent.users.includes(
-                  userStore.user.email
-                ) &&
-                ticketAvailable &&
-                isBeforeToday(eventStore.selectedEvent.utcTime)
-              "
+              v-if="buyButtonVisible"
               @click="buyTicket"
               class="btn btn-warning m-2"
             >
@@ -92,10 +84,7 @@
             <p class="lead">This event has already passed!</p>
           </div>
           <div
-            v-if="
-              !userStore.isAdmin &&
-              eventStore.selectedEvent.users.includes(userStore.user.email)
-            "
+            v-if="eventStore.selectedEvent.users.includes(userStore.user.email)"
             class="text-center"
           >
             <p class="lead">You have a ticket for this event!</p>
@@ -128,6 +117,14 @@ const eventTz = computed(() =>
   eventStore.selectedEvent.location
     ? convertCoordsToTz(eventStore.selectedEvent.location)
     : null
+);
+
+const buyButtonVisible = computed(
+  () =>
+    !userStore.isAdmin &&
+    isBeforeToday(eventStore.selectedEvent.utcTime) &&
+    ticketAvailable.value &&
+    !eventStore.selectedEvent.users.includes(userStore.user.email)
 );
 
 eventStore.getEventById(route.params.id);

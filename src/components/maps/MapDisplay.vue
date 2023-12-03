@@ -6,16 +6,14 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
-import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import { Style, Circle, Fill } from "ol/style";
+import { Style } from "ol/style";
 import Icon from "ol/style/Icon";
 import { fromLonLat } from "ol/proj";
+import { initializeMap } from "@/utils/MapUtils.js";
+
 import "ol/ol.css";
 
 const { location } = defineProps({
@@ -29,29 +27,9 @@ const map = ref(null);
 const vectorSource = ref(null);
 
 const initMap = () => {
-  const vectorSourceInstance = new VectorSource();
-  const vectorLayer = new VectorLayer({
-    source: vectorSourceInstance,
-  });
-
-  const mapInstance = new Map({
-    target: "eventDetailsMap",
-    layers: [
-      new TileLayer({
-        source: new OSM(),
-      }),
-      vectorLayer,
-    ],
-    view: new View({
-      center: fromLonLat(location),
-      zoom: 4,
-    }),
-  });
-
-  displayLocationPoint(location, vectorSourceInstance);
-
-  map.value = mapInstance;
-  vectorSource.value = vectorSourceInstance;
+  vectorSource.value = new VectorSource();
+  map.value = initializeMap("eventDetailsMap", location, 4, vectorSource.value);
+  displayLocationPoint(location, vectorSource.value);
 };
 
 const displayLocationPoint = (lonLat, vectorSourceInstance) => {
@@ -79,6 +57,4 @@ onMounted(() => {
 onUnmounted(() => {
   map.value.setTarget(null);
 });
-
-
 </script>

@@ -11,7 +11,9 @@
           type="date"
           inputId="fromDate"
           :value="eventStore.filterOptions.fromDate"
-          @update:modelValue="(value) => (eventStore.filterOptions.fromDate = value)"
+          @update:modelValue="
+            (value) => (eventStore.filterOptions.fromDate = value)
+          "
         />
       </div>
       <div class="col-md-2">
@@ -20,7 +22,9 @@
           type="date"
           inputId="toDate"
           :value="eventStore.filterOptions.toDate"
-          @update:modelValue="(value) => (eventStore.filterOptions.toDate = value)"
+          @update:modelValue="
+            (value) => (eventStore.filterOptions.toDate = value)
+          "
         />
       </div>
       <div class="col-md-2">
@@ -29,7 +33,9 @@
           type="number"
           inputId="minPrice"
           :value="eventStore.filterOptions.minPrice"
-          @update:modelValue="(value) => (eventStore.filterOptions.minPrice = value)"
+          @update:modelValue="
+            (value) => (eventStore.filterOptions.minPrice = value)
+          "
         />
       </div>
       <div class="col-md-2">
@@ -38,7 +44,9 @@
           type="number"
           inputId="maxPrice"
           :value="eventStore.filterOptions.maxPrice"
-          @update:modelValue="(value) => (eventStore.filterOptions.maxPrice = value)"
+          @update:modelValue="
+            (value) => (eventStore.filterOptions.maxPrice = value)
+          "
         />
       </div>
       <div class="col-md-2">
@@ -59,7 +67,9 @@
           type="text"
           inputId="searchQuery"
           :value="eventStore.filterOptions.searchQuery"
-          @update:modelValue="(value) => (eventStore.filterOptions.searchQuery = value)"
+          @update:modelValue="
+            (value) => (eventStore.filterOptions.searchQuery = value)
+          "
         />
       </div>
       <div class="col-md-12 d-flex justify-content-end">
@@ -83,13 +93,15 @@ import { useRouter } from "vue-router";
 import InputField from "@/components/InputField.vue";
 import { filterSchema } from "@/utils/validationSchemas.js";
 import { Form } from "vee-validate";
+import { onBeforeMount, computed } from "vue";
+import { queryParamsProperties } from "@/utils/constants.js";
 
 const eventStore = useEventStore();
 const router = useRouter();
 
 const applyFilters = () => {
   const { fromDate, toDate, minPrice, maxPrice, ticketStatus, searchQuery } =
-  eventStore.filterOptions;
+    eventStore.filterOptions;
   const query = {};
 
   const addQueryParam = (key, value) => {
@@ -125,4 +137,29 @@ const resetFilters = () => {
   router.push({ query: null });
   eventStore.showFilters = false;
 };
+
+const hasActiveFilters = computed(() => {
+  const { query } = router.currentRoute.value;
+  return queryParamsProperties.some((item) => query[item]);
+});
+
+onBeforeMount(() => {
+  const { query } = router.currentRoute.value;
+
+  if (query) {
+    eventStore.filterOptions.fromDate = query.fromDate || null;
+    eventStore.filterOptions.toDate = query.toDate || null;
+    eventStore.filterOptions.minPrice = query.minPrice || null;
+    eventStore.filterOptions.maxPrice = query.maxPrice || null;
+    eventStore.filterOptions.ticketStatus = "all";
+    if (query.ticketStatus === "available") {
+      eventStore.filterOptions.ticketStatus = "available";
+    }
+    if (query.availableTickets === "sold-out") {
+      eventStore.filterOptions.ticketStatus = "sold-out";
+    }
+    eventStore.filterOptions.searchQuery = query.searchQuery || "";
+    eventStore.filtersApplied = hasActiveFilters ? true : false;
+  }
+});
 </script>

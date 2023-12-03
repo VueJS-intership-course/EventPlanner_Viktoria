@@ -70,13 +70,13 @@
                 v-model="expense.category"
                 required
               >
-                <option value="Utilities">Utilities</option>
-                <option value="Rent">Rent</option>
-                <option value="Promotion">Promotion and Marketing</option>
-                <option value="Equipment">Equipment and Supplies</option>
-                <option value="Catering">Catering</option>
-                <option value="Staff">Staff</option>
-                <option value="Other">Other Expenses</option>
+                <option
+                  v-for="(category, index) in expenseCategories"
+                  :key="index"
+                  :value="category"
+                >
+                  {{ category }}
+                </option>
               </select>
             </div>
             <InputField

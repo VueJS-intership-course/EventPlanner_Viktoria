@@ -6,20 +6,22 @@
     >
       <i class="bi bi-funnel-fill"></i> Toggle Filters
       <span
-        v-if="hasActiveFilters"
+        v-if="
+          eventStore.filtersApplied &&
+          Object.keys(router.currentRoute.value.query).length > 0
+        "
         class="position-absolute top-0 start-100 translate-middle badge bg-danger"
       >
         {{ Object.keys(router.currentRoute.value.query).length }}
       </span>
     </button>
-    <Filters v-if="eventStore.showFilters" />
+    <Filters v-show="eventStore.showFilters" />
   </div>
   <div class="card-container d-flex justify-content-center gap-3 flex-wrap">
     <div
       v-for="event in eventStore.filteredEvents"
       :key="generateUniqueKey"
       class="card custom-card position-relative"
-      style="width: 300px"
     >
       <span
         v-if="event.ticketCount <= 0"
@@ -84,7 +86,6 @@
 </template>
 
 <script setup>
-import { computed, onBeforeMount } from "vue";
 import Filters from "@/pages/events-page/Filters.vue";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { useEventStore } from "@/store/eventStore.js";
@@ -92,7 +93,6 @@ import { useUserStore } from "@/store/userStore.js";
 import { useRouter } from "vue-router";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
-import { queryParamsProperties } from "@/utils/constants.js";
 
 const router = useRouter();
 
@@ -113,32 +113,6 @@ const isBeforeToday = (date) => {
 const toggleFilters = () => {
   eventStore.showFilters = !eventStore.showFilters;
 };
-
-const hasActiveFilters = computed(() => {
-  const { query } = router.currentRoute.value;
-
-  return queryParamsProperties.some((item) => query[item]);
-});
-
-onBeforeMount(() => {
-  const { query } = router.currentRoute.value;
-
-  if (query) {
-    eventStore.filterOptions.fromDate = query.fromDate || null;
-    eventStore.filterOptions.toDate = query.toDate || null;
-    eventStore.filterOptions.minPrice = query.minPrice || null;
-    eventStore.filterOptions.maxPrice = query.maxPrice || null;
-    eventStore.filterOptions.ticketStatus = "all";
-    if (query.ticketStatus === "available") {
-      eventStore.filterOptions.ticketStatus = "available";
-    }
-    if (query.availableTickets === "soldout") {
-      eventStore.filterOptions.ticketStatus = "sold-out";
-    }
-    eventStore.filterOptions.searchQuery = query.searchQuery || "";
-    eventStore.filtersApplied = hasActiveFilters ? true : false;
-  }
-});
 
 const buyTicket = (event) => {
   eventStore.buyTicket(event);
@@ -165,6 +139,7 @@ const buyTicket = (event) => {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  width: 300px;
 
   &:hover {
     transform: translateY(-5px);
@@ -187,7 +162,7 @@ const buyTicket = (event) => {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  
+
   &:hover {
     overflow: visible;
     white-space: normal;

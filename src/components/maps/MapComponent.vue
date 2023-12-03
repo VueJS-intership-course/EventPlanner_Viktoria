@@ -4,17 +4,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
-import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
+import { initializeMap } from "@/utils/MapUtils.js"; 
+import { fromLonLat, toLonLat } from "ol/proj";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import { Style, Circle, Fill } from "ol/style";
+import { Style } from "ol/style";
 import Icon from "ol/style/Icon";
-import { fromLonLat, toLonLat } from "ol/proj";
-import 'ol/ol.css';
+import "ol/ol.css";
 
 
 const emit = defineEmits(["mapClick"]);
@@ -23,32 +20,13 @@ const map = ref(null);
 const vectorSource = ref(null);
 
 const initMap = () => {
-  const vectorSourceInstance = new VectorSource();
-  const vectorLayer = new VectorLayer({
-    source: vectorSourceInstance,
-  });
+  vectorSource.value = new VectorSource();
+  map.value = initializeMap("map", [0, 0], 2, vectorSource.value);
 
-  const mapInstance = new Map({
-    target: "map",
-    layers: [
-      new TileLayer({
-        source: new OSM(),
-      }),
-      vectorLayer,
-    ],
-    view: new View({
-      center: fromLonLat([0, 0]),
-      zoom: 2,
-    }),
-  });
-
-  mapInstance.on("click", (event) => {
+  map.value.on("click", (event) => {
     const lonLat = toLonLat(event.coordinate);
-    handleMapClick(lonLat, vectorSourceInstance);
+    handleMapClick(lonLat, vectorSource.value);
   });
-
-  map.value = mapInstance;
-  vectorSource.value = vectorSourceInstance;
 };
 
 const handleMapClick = (lonLat, vectorSourceInstance) => {

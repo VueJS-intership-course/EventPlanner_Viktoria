@@ -58,7 +58,7 @@ export const authService = {
     await fb.auth.signOut();
   },
 
-  async editUser({username, timezone}) {
+  async editUser(user) {
     const querySnapshot = await fb.fireStore
       .collection("users")
       .where("email", "==", user.email)
@@ -67,8 +67,8 @@ export const authService = {
     const doc = querySnapshot.docs[0];
     try {
       await doc.ref.update({
-        username: username,
-        timezone: timezone,
+        username: user.username,
+        timezone: user.timezone,
       });
     } catch (error) {
       console.error("Error editing event: ", error);
