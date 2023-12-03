@@ -54,7 +54,7 @@
               <li>
                 <RouterLink
                   class="dropdown-item dropdown-item-style"
-                  to="/create-event"
+                  to="/event-form"
                   >Add new events</RouterLink
                 >
               </li>

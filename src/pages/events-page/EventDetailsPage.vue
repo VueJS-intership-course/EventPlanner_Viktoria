@@ -67,7 +67,6 @@
         </div>
       </div>
     </div>
-    <EditEventModal v-if="eventStore.isEditing" />
   </div>
   <div class="custom-card">
     <div class="container my-4">
@@ -103,7 +102,6 @@ import { useUserStore } from "@/store/userStore";
 import { getUserTime, getEventTime } from "@/utils/timeUtils.js";
 import { convertCoordsToTz } from "@/utils/coordsUtils.js";
 import MapDisplay from "@/components/maps/MapDisplay.vue";
-import EditEventModal from "@/pages/events-page/EditEventModal.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -130,8 +128,9 @@ const buyButtonVisible = computed(
 eventStore.getEventById(route.params.id);
 
 const editEvent = () => {
-  eventStore.isEditing = true;
-  eventStore.editedEvent = { ...eventStore.selectedEvent };
+  // eventStore.isEditing = true;
+  // eventStore.editedEvent = { ...eventStore.selectedEvent };
+  router.push(`/event-form/${route.params.id}`);
 };
 
 const confirmDeleteEvent = () => {

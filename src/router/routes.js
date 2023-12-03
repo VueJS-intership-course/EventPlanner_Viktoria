@@ -15,9 +15,9 @@ export const routes = [
     component: () => import("@/pages/events-page/EventDetailsPage.vue"),
   },
   {
-    path: "/create-event",
-    name: "create-event",
-    component: () => import("@/pages/events-page/CreateEventPage.vue"),
+    path: "/event-form/:id?",
+    name: "event-form",
+    component: () => import("@/pages/events-page/EventForm.vue"),
     meta: {
       requiresAdmin: true,
     },

@@ -3,8 +3,13 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
         <Card>
-          <h2 class="card-title text-center mb-4">Create a new Event</h2>
-          <Form @submit="createEvent" :validationSchema="createEventSchema">
+          <h2 class="card-title text-center mb-4">
+            {{ eventId ? "Edit" : "Create" }} Event
+          </h2>
+          <Form
+            @submit="handleSubmit"
+            :validationSchema="eventId ? editEventSchema : createEventSchema"
+          >
             <InputField
               label="Event Name"
               inputId="eventName"
@@ -42,23 +47,26 @@
               :inputAttrs="{ type: 'number', name: 'price' }"
             />
             <InputField
+              v-if="!eventId"
               label="Event Budget"
               inputId="budget"
               v-model="budget"
               :inputAttrs="{ type: 'number', name: 'budget' }"
             />
             <InputField
+              v-if="!eventId"
               label="Event Image"
               inputId="eventImage"
               :inputAttrs="{ type: 'file', name: 'eventImage' }"
               @change="handleImageUpload"
             />
-
             <div class="mb-3">
               <label class="form-label">Event Location</label>
               <MapComponent :onMapClick="onMapClick" />
             </div>
-            <button type="submit" class="btn btn-primary">Create Event</button>
+            <button type="submit" class="btn btn-primary">
+              {{ eventId ? "Save Changes" : "Create Event" }}
+            </button>
           </Form>
         </Card>
       </div>
@@ -67,12 +75,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { getEventTime } from "@/utils/timeUtils.js";
 import moment from "moment-timezone";
 import { Form } from "vee-validate";
-import { createEventSchema } from "@/utils/validationSchemas.js";
+import {
+  createEventSchema,
+  editEventSchema,
+} from "@/utils/validationSchemas.js";
 import {
   convertCoordsToTz,
   getCountryFromCoords,
@@ -84,6 +96,8 @@ import InputField from "@/components/InputField.vue";
 import fb from "@/firebase/fbConfig.js";
 
 const router = useRouter();
+const route = useRoute();
+
 const eventStore = useEventStore();
 
 const eventName = ref("");
@@ -96,10 +110,16 @@ const budget = ref("");
 const location = ref([]);
 const imageURL = ref("");
 
+const eventId = ref(route.params.id || null);
+if (eventId.value) {
+  eventStore.getEventById(eventId.value);
+}
+
 const onMapClick = (lonLat) => {
   location.value = lonLat;
 };
 
+// create event logic
 const handleImageUpload = async (event) => {
   const imageFile = event.target.files[0];
   const storageRef = fb.storage.ref();
@@ -115,12 +135,10 @@ const handleImageUpload = async (event) => {
   }
 };
 
-const createEvent = async () => {
+const handleCreate = async () => {
   const eventTimezone = await convertCoordsToTz(location.value);
   const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
-  console.log("Event Timezone:", eventTimezone);
-  console.log("Event Datetime:", eventDatetime);
   const event = {
     name: eventName.value,
     description: eventDescription.value,
@@ -135,7 +153,6 @@ const createEvent = async () => {
     imageURL: imageURL.value,
   };
   try {
-    console.log("Event:", event);
     eventStore.addEvent(event);
     router.push("/events");
   } catch (error) {
@@ -143,4 +160,67 @@ const createEvent = async () => {
     showNotification("Error adding the event");
   }
 };
+
+// edit event logic
+const handleEdit = async () => {
+  editEventSchema
+    .validate({
+      eventName: eventName.value,
+      eventDescription: eventDescription.value,
+      eventDate: eventDate.value,
+      eventTime: eventTime.value,
+      ticketCount: ticketCount.value,
+      price: price.value,
+    })
+    .then(async () => {
+      const eventDatetime = `${eventDate.value}T${eventTime.value}`;
+      const eventTimezone = await convertCoordsToTz(location.value);
+
+      eventStore.selectedEvent.name = eventName.value;
+      eventStore.selectedEvent.description = eventDescription.value;
+      eventStore.selectedEvent.utcTime = moment
+        .tz(eventDatetime, eventTimezone)
+        .utc()
+        .toISOString();
+      eventStore.selectedEvent.ticketCount = ticketCount.value;
+      eventStore.selectedEvent.location = location.value;
+      eventStore.selectedEvent.country = await getCountryFromCoords(
+        location.value
+      );
+      eventStore.selectedEvent.price = price.value;
+      eventStore.editEvent(eventStore.selectedEvent);
+      router.push("/events");
+      showNotification("Event edited successfully!");
+    });
+};
+
+const handleSubmit = () => {
+  if (eventId.value) {
+    handleEdit();
+  } else {
+    handleCreate();
+  }
+};
+
+onMounted(async () => {
+  if (eventId.value) {
+    const tz = computed(() =>
+      convertCoordsToTz(eventStore.selectedEvent.location)
+    );
+
+    const datetime = computed(() =>
+      moment(
+        getEventTime(eventStore.selectedEvent.utcTime, tz.value),
+        "DD MMM YYYY | HH:mm"
+      ).format("HH:mm YYYY-MM-DD")
+    );
+    eventName.value = eventStore.selectedEvent.name;
+    eventDescription.value = eventStore.selectedEvent.description;
+    eventTime.value = datetime.value.split(" ")[0];
+    eventDate.value = datetime.value.split(" ")[1];
+    location.value = eventStore.selectedEvent.location;
+    ticketCount.value = eventStore.selectedEvent.ticketCount;
+    price.value = eventStore.selectedEvent.price;
+  }
+});
 </script>
