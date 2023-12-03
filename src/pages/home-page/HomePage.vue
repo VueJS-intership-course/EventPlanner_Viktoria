@@ -11,7 +11,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useEventStore } from "@/store/eventStore.js";
-import { getCountryFromCoords } from "@/utils/coordsUtils.js";
 import HighchartsMap from "@/components/highcharts/MapChart.vue";
 import Card from "@/components/Card.vue";
 
@@ -20,14 +19,13 @@ const store = useEventStore();
 const events = ref([]);
 const eventCountByCountry = ref({});
 
-const countEventsByCountry = async () => {
+const countEventsByCountry = () => {
   for (const event of events.value) {
-    let country = await getCountryFromCoords(event.location);
-    if (country === "United States") {
-      country = "United States of America";
+    if (event.country === "United States") {
+      event.country = "United States of America";
     }
-    eventCountByCountry.value[country] =
-      (eventCountByCountry.value[country] || 0) + 1;
+    eventCountByCountry.value[event.country] =
+      (eventCountByCountry.value[event.country] || 0) + 1;
   }
 };
 

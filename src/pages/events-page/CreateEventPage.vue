@@ -72,7 +72,10 @@ import { useRouter } from "vue-router";
 import moment from "moment-timezone";
 import { Form } from "vee-validate";
 import { createEventSchema } from "@/utils/validationSchemas.js";
-import { convertCoordsToTz } from "@/utils/coordsUtils.js";
+import {
+  convertCoordsToTz,
+  getCountryFromCoords,
+} from "@/utils/coordsUtils.js";
 import showNotification from "@/utils/toastifyNotification.js";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import Card from "@/components/Card.vue";
@@ -111,16 +114,19 @@ const handleImageUpload = async (event) => {
   }
 };
 
-const createEvent = () => {
-  const eventTimezone = convertCoordsToTz(location.value);
+const createEvent = async () => {
+  const eventTimezone = await convertCoordsToTz(location.value);
   const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
+  console.log("Event Timezone:", eventTimezone);
+  console.log("Event Datetime:", eventDatetime);
   const event = {
     name: eventName.value,
     description: eventDescription.value,
     utcTime: moment.tz(eventDatetime, eventTimezone).utc().toISOString(),
     ticketCount: ticketCount.value,
     location: location.value,
+    country: await getCountryFromCoords(location.value),
     price: price.value,
     budget: budget.value,
     users: [],
@@ -128,6 +134,7 @@ const createEvent = () => {
     imageURL: imageURL.value,
   };
   try {
+    console.log("Event:", event);
     eventStore.addEvent(event);
     router.push("/events");
   } catch (error) {

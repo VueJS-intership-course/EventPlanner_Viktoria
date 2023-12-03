@@ -66,13 +66,16 @@ import moment from "moment-timezone";
 import { Form } from "vee-validate";
 import MapComponent from "@/components/maps/MapComponent.vue";
 import { getEventTime } from "@/utils/timeUtils.js";
-import { convertCoordsToTz } from "@/utils/coordsUtils.js";
+import {
+  convertCoordsToTz,
+  getCountryFromCoords,
+} from "@/utils/coordsUtils.js";
 import { editEventSchema } from "@/utils/validationSchemas.js";
 import showNotification from "@/utils/toastifyNotification.js";
 
 const router = useRouter();
 const store = useEventStore();
-// const editedEvent = computed(() => store.editedEvent);
+
 const tz = computed(() => convertCoordsToTz(store.editedEvent.location));
 
 const datetime = computed(() =>
@@ -98,13 +101,16 @@ const saveClicked = () => {
       ticketCount: store.editedEvent.ticketCount,
       price: store.editedEvent.price,
     })
-    .then(() => {
+    .then(async () => {
       const eventDatetime = `${eventDate.value}T${eventTime.value}`;
 
       store.editedEvent.utcTime = moment
         .tz(eventDatetime, tz.value)
         .utc()
         .toISOString();
+      store.editedEvent.country = await getCountryFromCoords(
+        store.editedEvent.location
+      );
       store.editEvent(store.editedEvent);
       store.isEditing = false;
       router.push("/events");

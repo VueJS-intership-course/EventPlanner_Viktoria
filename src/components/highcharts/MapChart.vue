@@ -3,9 +3,9 @@
 </template>
 
 <script setup>
+import { onMounted, watch, computed } from "vue";
 import Highcharts from "highcharts";
 import mapData from "@highcharts/map-collection/custom/world.geo.json";
-import { computed, watch } from "vue";
 
 const eventCountByCountry = defineProps({
   eventCountByCountry: {
@@ -20,8 +20,10 @@ const transformedArray = computed(() => {
   );
 });
 
-const initMap = () => {
-  Highcharts.mapChart("world-map", {
+let chart = null;
+
+onMounted(() => {
+  chart = Highcharts.mapChart("world-map", {
     chart: {
       map: mapData,
     },
@@ -37,16 +39,20 @@ const initMap = () => {
           hover: {
             color: "#808080",
           },
-        }, 
+        },
       },
     ],
     accessibility: {
       enabled: false,
     },
   });
-};
-
-watch(transformedArray, () => {
-    initMap();
 });
+
+watch(
+  () => transformedArray.value,
+  () => {
+    chart.series[0].setData(transformedArray.value);
+  },
+  { deep: true }
+);
 </script>
