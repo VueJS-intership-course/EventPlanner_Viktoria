@@ -3,7 +3,6 @@ import Modal from "@/components/Modal.vue";
 
 describe("Modal.vue", () => {
   let wrapper;
-
   beforeEach(() => {
     wrapper = mount(Modal, {
       propsData: {
