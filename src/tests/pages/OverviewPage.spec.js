@@ -1,8 +1,7 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import OverviewPage from "@/pages/overview-page/OverviewPage.vue";
-
-
-jest.mock("@/store/eventStore");
+import EventByMonthChart from "@/components/highcharts/EventByMonthChart.vue";
+import EventsCalendar from "@/components/EventsCalendar.vue";
 
 jest.mock("@/firebase/fbConfig.js", () => {
   return {
@@ -32,21 +31,8 @@ jest.mock("@/components/EventsCalendar.vue", () => {
 
 jest.mock("@/store/eventStore.js", () => ({
   useEventStore: jest.fn(() => ({
-    events: [
-      {
-        id: "123",
-        name: "Test Event",
-        description: "Test Description",
-        utcTime: "2024-12-21T21:30:00.000Z",
-        location: [139.27363969923982, -26.580511354696327],
-        ticketCount: 0,
-        price: 20,
-        budget: 1500,
-        users: ["test@test.test"],
-      },
-    ],
     getEventList: jest.fn(),
-    eventCountByMonth: [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    events: [],
   })),
 }));
 
@@ -55,16 +41,6 @@ describe("OverviewPage.vue", () => {
   wrapper = mount(OverviewPage, {
     global: {
       stubs: ["router-link"],
-      components: {
-        EventByMonthChart: {
-          template: "<div>Mocked Event By Month Chart</div>",
-          props: ["eventCount"],
-        },
-        EventsCalendar: {
-          template: "<div>Mocked Events Calendar</div>",
-          props: ["currentUserEvents"],
-        },
-      },
     },
   });
 
@@ -74,5 +50,13 @@ describe("OverviewPage.vue", () => {
 
   it('calls "getEventList" when the component is mounted', () => {
     expect(wrapper.vm.store.getEventList).toBeCalled();
+  });
+
+  it("renders the EventByMonthChart component", () => {
+    expect(wrapper.findComponent(EventByMonthChart).exists()).toBe(true);
+  });
+
+  it("renders the EventsCalendar component", () => {
+    expect(wrapper.findComponent(EventsCalendar).exists()).toBe(true);
   });
 });

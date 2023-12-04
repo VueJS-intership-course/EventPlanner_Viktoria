@@ -6,6 +6,7 @@
       :modelValue="modelValue"
       @input="updateInputValue"
       class="form-control"
+      :id="inputId"
     />
     <ErrorMessage :name="inputId" class="text-danger" />
   </div>

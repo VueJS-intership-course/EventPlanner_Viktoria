@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Modal from "../components/Modal.vue";
+import Modal from "@/components/Modal.vue";
 
 describe("Modal.vue", () => {
   let wrapper;

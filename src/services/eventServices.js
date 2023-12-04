@@ -1,6 +1,8 @@
 import fb from "@/firebase/fbConfig.js";
 import generateUniqueKey from "@/utils/randomUUID.js";
 import { customFirebaseOperation } from "@/firebase/fbConfig.js";
+import {useUserStore} from "@/store/userStore.js";
+
 
 export const eventService = {
   async getAll() {
